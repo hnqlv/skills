@@ -1,0 +1,3 @@
+interface:
+  display_name: "Grill Spec"
+  short_description: "Resolve important questions in SPEC.md"

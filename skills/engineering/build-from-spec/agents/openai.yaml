@@ -1,0 +1,3 @@
+interface:
+  display_name: "Build From Spec"
+  short_description: "Build small tested slices from SPEC.md"
