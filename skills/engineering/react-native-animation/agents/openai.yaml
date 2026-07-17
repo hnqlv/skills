@@ -1,0 +1,4 @@
+interface:
+  display_name: "React Native Animation"
+  short_description: "Choose performant React Native animation tools"
+  default_prompt: "Use $react-native-animation to choose and implement the right animation approach."

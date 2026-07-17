@@ -34,6 +34,10 @@ Runs the smallest disposable experiment needed to answer one risky technical que
 
 Reproduces a bug with a failing test before changing production code. It reduces the failure, tests one hypothesis at a time, applies a minimal fix, and retains regression coverage.
 
+### `react-native-animation`
+
+Chooses and verifies performant React Native animation approaches based on interaction type and measured cost.
+
 ## Conventions
 
 - Keep communication concise without dropping important context.
@@ -53,6 +57,7 @@ skills/
     grill-spec/
     spike/
     debug-with-proof/
+    react-native-animation/
   personal/
     .gitkeep
 dist/
@@ -60,6 +65,7 @@ dist/
   grill-spec/skill.zip
   spike/skill.zip
   debug-with-proof/skill.zip
+  react-native-animation/skill.zip
 ```
 
 Each skill directory under `skills/engineering/` or `skills/personal/` is editable source. Each ZIP under `dist/` is an individually validated distributable skill. Private skills live outside this repository.
@@ -92,6 +98,7 @@ These skills are original, opinionated adaptations informed by:
 - [Code Simplification](https://github.com/addyosmani/agent-skills/tree/main/skills/code-simplification) — behaviour-preserving simplification
 - [Code Review and Quality](https://github.com/addyosmani/agent-skills/tree/main/skills/code-review-and-quality) — actionable diff review
 - [Grilling](https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling) — round-by-round design-tree interviewing
+- [Which React Native Animation Library Should You Use for Performance?](https://andrei-calazans.com/posts/2026-07-15-which-react-native-animation-library/) — original benchmark and selection guidance by Andrei Calazans
 
 ## License
 
