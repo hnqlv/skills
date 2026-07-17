@@ -1,0 +1,4 @@
+interface:
+  display_name: "Preflight Review"
+  short_description: "Spec-bound review before merging a slice"
+  default_prompt: "Use $preflight-review to check this completed slice before I open a PR."

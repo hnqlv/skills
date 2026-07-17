@@ -71,15 +71,7 @@ After the selected slice passes:
 
 ### 7. Review the complete diff
 
-Review against `SPEC.md`, not personal taste:
-
-1. Correctness and edge cases.
-2. Adequacy of tests and regression coverage.
-3. Needless complexity or speculative design.
-4. Architecture boundaries and data flow.
-5. Security, privacy, permissions, destructive behaviour, performance, and reliability.
-
-Report only actionable findings. Use `blocker`, `major`, and `minor`. Omit nits unless requested.
+Invoke `preflight-review` against the current slice. Address only findings that are necessary to meet `SPEC.md`, preserve behaviour, or prevent a credible regression.
 
 ### 8. Finish
 

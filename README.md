@@ -38,6 +38,10 @@ Reproduces a bug with a failing test before changing production code. It reduces
 
 Chooses and verifies performant React Native animation approaches based on interaction type and measured cost.
 
+### `preflight-review`
+
+Reviews a completed slice against its spec and diff before merge, with a narrow simplification and AI-slop check.
+
 ## Conventions
 
 - Keep communication concise without dropping important context.
@@ -58,6 +62,7 @@ skills/
     spike/
     debug-with-proof/
     react-native-animation/
+    preflight-review/
   personal/
     .gitkeep
 dist/
@@ -66,6 +71,7 @@ dist/
   spike/skill.zip
   debug-with-proof/skill.zip
   react-native-animation/skill.zip
+  preflight-review/skill.zip
 ```
 
 Each skill directory under `skills/engineering/` or `skills/personal/` is editable source. Each ZIP under `dist/` is an individually validated distributable skill. Private skills live outside this repository.
@@ -97,6 +103,7 @@ These skills are original, opinionated adaptations informed by:
 - [Test-Driven Development](https://github.com/addyosmani/agent-skills/tree/main/skills/test-driven-development) — failing tests before implementation and regression proof
 - [Code Simplification](https://github.com/addyosmani/agent-skills/tree/main/skills/code-simplification) — behaviour-preserving simplification
 - [Code Review and Quality](https://github.com/addyosmani/agent-skills/tree/main/skills/code-review-and-quality) — actionable diff review
+- [Cursor Bugbot Reviews in 90 Seconds](https://www.digitalapplied.com/blog/cursor-bugbot-90-second-reviews-june-2026-release) — motivation for an earlier local review gate
 - [Grilling](https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling) — round-by-round design-tree interviewing
 - [Which React Native Animation Library Should You Use for Performance?](https://andrei-calazans.com/posts/2026-07-15-which-react-native-animation-library/) — original benchmark and selection guidance by Andrei Calazans
 
