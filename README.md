@@ -34,6 +34,10 @@ Runs the smallest disposable experiment needed to answer one risky technical que
 
 Reproduces a bug with a failing test before changing production code. It reduces the failure, tests one hypothesis at a time, applies a minimal fix, and retains regression coverage.
 
+### `simplicity`
+
+Simplifies code without changing behaviour, prioritizing clarity and maintainability over fewer lines.
+
 ### `react-native-animation`
 
 Chooses and verifies performant React Native animation approaches based on interaction type and measured cost.
@@ -48,6 +52,9 @@ Reviews a completed slice against its spec and diff before merge, with a narrow 
 - Use complete sentences when compression could create ambiguity.
 - Prefer code that is easy to understand, change, and delete.
 - Prefer small vertical slices over broad horizontal layers.
+- Give agents bounded, closed-loop tasks with focused context, acceptance criteria, and runnable verification.
+- Prefer reversible, low-blast-radius delegation; keep critical decisions and final acceptance with a human.
+- Use agents freely for tedious maintenance, issue reproductions, disposable experiments, and as a sounding board before committing to an idea.
 - Do not generalize for hypothetical future requirements.
 - Use `feat`, `fix`, `refactor`, `test`, `docs`, and `chore` commit types.
 - Use `spike/<topic>` for temporary exploratory branches.
@@ -61,6 +68,7 @@ skills/
     grill-spec/
     spike/
     debug-with-proof/
+    simplicity/
     react-native-animation/
     preflight-review/
   personal/
@@ -70,6 +78,7 @@ dist/
   grill-spec/skill.zip
   spike/skill.zip
   debug-with-proof/skill.zip
+  simplicity/skill.zip
   react-native-animation/skill.zip
   preflight-review/skill.zip
 ```
@@ -94,15 +103,20 @@ Run a spike to determine whether this API supports idempotent retries.
 Use debug-with-proof. Reproduce this bug with a failing test before fixing it.
 ```
 
+```text
+Use simplicity to make this implementation clearer without changing its behaviour.
+```
+
 ## References
 
-These skills are original, opinionated adaptations informed by:
+These skills are opinionated adaptations and inspired by:
 
 - [Caveman](https://github.com/JuliusBrussee/caveman/tree/main/skills/caveman) — concise technical communication
 - [Planning and Task Breakdown](https://github.com/addyosmani/agent-skills/tree/main/skills/planning-and-task-breakdown) — small verifiable tasks and vertical slices
 - [Test-Driven Development](https://github.com/addyosmani/agent-skills/tree/main/skills/test-driven-development) — failing tests before implementation and regression proof
 - [Code Simplification](https://github.com/addyosmani/agent-skills/tree/main/skills/code-simplification) — behaviour-preserving simplification
 - [Code Review and Quality](https://github.com/addyosmani/agent-skills/tree/main/skills/code-review-and-quality) — actionable diff review
+- [Mario Zechner](https://www.youtube.com/watch?v=RjfbvDXpFls) — inspiration for the good-agent-task principles
 - [Cursor Bugbot Reviews in 90 Seconds](https://www.digitalapplied.com/blog/cursor-bugbot-90-second-reviews-june-2026-release) — motivation for an earlier local review gate
 - [Grilling](https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling) — round-by-round design-tree interviewing
 - [Which React Native Animation Library Should You Use for Performance?](https://andrei-calazans.com/posts/2026-07-15-which-react-native-animation-library/) — original benchmark and selection guidance by Andrei Calazans

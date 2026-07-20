@@ -37,6 +37,10 @@ Use `SPEC.md` as the source of truth. Keep the work narrow, testable, easy to ch
 - Prefer user-visible or end-to-end slices over horizontal layers.
 - Split tasks that span independent subsystems or cannot be verified in one focused pass.
 - Put high-risk unknowns early and mark them as spikes.
+- Make each task agent-sized: bound the outcome and relevant context so it does not require broad repository discovery.
+- Close the loop: give the agent enough evidence to evaluate its own result, then report the proof and anything still requiring human judgment.
+- Prefer reversible, low-blast-radius delegation. Require explicit human approval and stronger safeguards for production, security, payments, destructive data changes, or other critical paths.
+- Treat tedious maintenance, isolated issue reproductions, disposable experiments, and using the agent as a sounding board as especially good agent work.
 
 ### 4. Spike risky unknowns
 

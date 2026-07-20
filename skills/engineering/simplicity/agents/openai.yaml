@@ -1,0 +1,4 @@
+interface:
+  display_name: "Simplicity"
+  short_description: "Make code clearer without changing behaviour"
+  default_prompt: "Use $simplicity to make this code easier to understand without changing its behaviour."
