@@ -73,17 +73,9 @@ skills/
     preflight-review/
   personal/
     .gitkeep
-dist/
-  build-from-spec/skill.zip
-  grill-spec/skill.zip
-  spike/skill.zip
-  debug-with-proof/skill.zip
-  simplicity/skill.zip
-  react-native-animation/skill.zip
-  preflight-review/skill.zip
 ```
 
-Each skill directory under `skills/engineering/` or `skills/personal/` is editable source. Each ZIP under `dist/` is an individually validated distributable skill. Private skills live outside this repository.
+Each skill directory under `skills/engineering/` or `skills/personal/` is editable source. Private skills live outside this repository.
 
 ## Usage examples
 
