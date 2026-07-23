@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI Slop Review"
+  short_description: "Remove AI slop without changing meaning"
+  default_prompt: "Use $ai-slop-review to tighten this draft while preserving its facts, intent, and format."

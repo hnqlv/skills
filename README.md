@@ -46,6 +46,10 @@ Chooses and verifies performant React Native animation approaches based on inter
 
 Reviews a completed slice against its spec and diff before merge, with a narrow simplification and AI-slop check.
 
+### `ai-slop-review`
+
+Edits AI-assisted professional prose to remove generic, inflated, or repetitive writing without changing meaning.
+
 ## Conventions
 
 - Keep communication concise without dropping important context.
@@ -72,7 +76,7 @@ skills/
     react-native-animation/
     preflight-review/
   personal/
-    .gitkeep
+    ai-slop-review/
 ```
 
 Each skill directory under `skills/engineering/` or `skills/personal/` is editable source. Private skills live outside this repository.
