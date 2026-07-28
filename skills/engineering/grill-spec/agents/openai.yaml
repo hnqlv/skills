@@ -1,3 +1,4 @@
 interface:
   display_name: "Grill Spec"
-  short_description: "Resolve important questions in SPEC.md"
+  short_description: "Resolve spec decisions one at a time"
+  default_prompt: "Use $grill-spec to stress-test this SPEC.md one decision at a time before planning or coding."

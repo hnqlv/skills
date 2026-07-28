@@ -1,3 +1,4 @@
 interface:
   display_name: "Build From Spec"
-  short_description: "Build small tested slices from SPEC.md"
+  short_description: "Build verified slices from a spec or plan"
+  default_prompt: "Use $build-from-spec to implement the next approved slice, then simplify and run preflight review."

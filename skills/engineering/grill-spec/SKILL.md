@@ -1,21 +1,22 @@
 ---
 name: grill-spec
-description: Interrogate SPEC.md before planning or coding. Use when a specification has open questions, vague behaviour, hidden assumptions, competing options, missing edge cases, or unclear scope. Inspect repository facts, ask dependency-safe decisions in numbered rounds with recommendations, and write confirmed answers back into the specification.
+description: Interrogate SPEC.md before planning or coding. Use when defining or reviewing a specification with open questions, vague behaviour, hidden assumptions, competing options, missing edge cases, or unclear scope, or when asked to grill or stress-test a product decision. Inspect repository facts, ask one dependency-safe decision at a time with a recommendation, and record confirmed answers without erasing useful decision history.
 ---
 
 # Grill Spec
 
-Turn vague requirements into explicit decisions through dependency-safe rounds.
+Turn vague requirements into explicit decisions without overwhelming the user.
 
 ## Rules
 
 - Read `SPEC.md` and relevant repository files first.
 - Separate discoverable facts from decisions only the user can make.
-- Ask every currently unblocked decision in one numbered round.
-- Keep questions concise and include a recommended answer with a brief reason.
+- Ask one currently unblocked decision at a time, then wait.
+- Keep each question concise and include a recommended answer with a brief reason.
 - Prefer bounded options when they represent the real decision space.
 - Do not ask about implementation-irrelevant preferences or discoverable facts.
-- Update `SPEC.md` after each round when editing is available.
+- Update `SPEC.md` after each answer when editing is available.
+- Do not plan or code until the user confirms shared understanding.
 
 ## Process
 
@@ -34,31 +35,30 @@ Map each decision and the decisions that depend on it. Rank unresolved decisions
 
 Omit category 8 from the design tree unless the user specifically wants to choose it.
 
-### 2. Compute the frontier
+### 2. Choose the next decision
 
 The frontier contains every unresolved decision whose prerequisites are settled. Questions that depend on another open question wait for a later round.
 
-Investigate facts from the repository, filesystem, or tools instead of asking the user. When parallel research is available, let it proceed without blocking unrelated frontier questions; only dependent questions wait.
+Investigate facts from the repository, filesystem, or tools instead of asking the user. From the frontier, choose the decision with the greatest effect on the remaining tree.
 
-### 3. Ask one round
+### 3. Ask one question
 
-Ask the whole frontier as a numbered list. Use this structure for each item:
+Use:
 
 ```text
-[Number]. [One concrete question]
-
+[One concrete question]
 Recommendation: [specific option]. [One-sentence reason.]
 ```
 
-Offer two to four bounded options when useful. Avoid broad prompts such as “What do you want?” Then wait for the user's answers.
+Offer two to four bounded options when useful. Avoid broad prompts such as “What do you want?” Wait for the answer before asking anything else.
 
-### 4. Record and recompute
+### 4. Record and continue
 
-After each round:
+After each answer:
 
-1. Record confirmed decisions in the relevant `SPEC.md` sections.
+1. Record the decision and useful rationale in the relevant `SPEC.md` section without deleting prior context that explains the current contract.
 2. Check which branches were resolved, changed, or newly opened.
-3. Recompute the frontier and ask the next round.
+3. Recompute the frontier and ask the next highest-impact question.
 
 Do not repeat confirmed questions in different words.
 
@@ -72,13 +72,14 @@ Stop grilling when the frontier is empty because all remaining uncertainty is ei
 - outside the current scope, or
 - minor enough to choose the simplest default.
 
-Then summarize:
+Then give a short confirmation:
 
-- Decisions added or changed.
-- Assumptions still present.
-- Whether the specification is ready for planning.
+- intended outcome and scope;
+- decisive choices and non-goals;
+- assumptions still present;
+- whether the specification is ready to build directly or needs `plan-from-spec`.
 
-Do not plan or code until the user confirms shared understanding.
+Wait for explicit confirmation. A vague acknowledgment is not permission to reinterpret the contract.
 
 ## Autonomous mode
 

@@ -1,11 +1,11 @@
 ---
 name: preflight-review
-description: Review a completed implementation slice before a PR or merge. Use after tests and simplification to find spec mismatches, regressions, missing coverage, needless complexity, and AI-generated slop without expanding scope or redesigning the feature.
+description: Review a completed implementation slice before a PR or merge. Use after tests and the simplicity pass to find spec mismatches, regressions, missing coverage, needless complexity, and AI-generated code slop without expanding scope or redesigning the feature. Review implementation evidence; use ai-slop-review separately for the human-facing closeout.
 ---
 
 # Preflight Review
 
-Review the current diff against `SPEC.md`, acceptance criteria, tests, and local conventions. Review; do not change code unless asked.
+Review the current diff against `SPEC.md`, the selected plan task when present, acceptance criteria, tests, and local conventions. Review; do not change code unless asked.
 
 ## Order
 
