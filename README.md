@@ -76,11 +76,11 @@ skills/
     simplicity/
     react-native-animation/
     preflight-review/
-  personal/
+  productivity/
     ai-slop-review/
 ```
 
-Each skill directory under `skills/engineering/` or `skills/personal/` is editable source. Private skills live outside this repository.
+Each skill directory under `skills/engineering/` or `skills/productivity/` is editable source. Private skills live outside this repository.
 
 ## Usage examples
 
