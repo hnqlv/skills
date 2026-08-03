@@ -35,6 +35,8 @@ For specifications and runbooks, prioritize semantic precision, identifiers, seq
 
 ## Verify
 
+For technical English, invoke `write-clear-technical-english` once on the revision before verification. Keep its style rules subordinate to the preservation ledger.
+
 Before returning the edit, confirm:
 
 - no fact, citation, requirement, decision, or technical term changed accidentally;

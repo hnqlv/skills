@@ -68,4 +68,6 @@ An inconclusive result is valid. State what evidence is missing instead of guess
 - Rebuild retained code through the normal tested workflow.
 - Keep only a concise spike report when the decision needs an audit trail.
 
+Before returning an English spike note, decision, or report, invoke `write-clear-technical-english` as a light final pass. Preserve exact commands, observations, measurements, rejected approaches, uncertainty, and cleanup status.
+
 Use `spike/<topic>` for a temporary branch. Do not use `spike` as the final commit type for production code.

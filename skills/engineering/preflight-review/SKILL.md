@@ -24,3 +24,5 @@ Review the current diff against `SPEC.md`, the selected plan task when present, 
 ## Output
 
 For each finding: `blocker`, `major`, or `minor`; file and line; concrete impact; smallest fix. Then state the verification evidence and any residual risk.
+
+Before returning an English review, invoke `write-clear-technical-english` as a light final pass. Preserve severity, locations, concrete impact, exact evidence, uncertainty, and residual risk.

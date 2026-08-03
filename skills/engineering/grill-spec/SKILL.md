@@ -79,6 +79,8 @@ Then give a short confirmation:
 - assumptions still present;
 - whether the specification is ready to build directly or needs `plan-from-spec`.
 
+Before returning each English technical question or confirmation, invoke `write-clear-technical-english` as a light final pass. Preserve the decision boundary, recommendation, options, rationale, and unresolved uncertainty.
+
 Wait for explicit confirmation. A vague acknowledgment is not permission to reinterpret the contract.
 
 ## Autonomous mode

@@ -59,4 +59,6 @@ Confirm:
 - unresolved external gates and destructive or security-sensitive steps are explicit;
 - the first task is immediately executable without broad rediscovery.
 
+Before returning English plan artifacts or their summary, invoke `write-clear-technical-english` as a light final pass. Preserve task structure, dependencies, exact verification, risks, gates, and unresolved decisions.
+
 Summarize the plan and ask for one approval before implementation. After approval, hand off to `build-from-spec`, which executes the next unchecked task from the plan while continuing to treat `SPEC.md` as authoritative.

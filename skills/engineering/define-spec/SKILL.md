@@ -40,6 +40,8 @@ Choose the simplest reversible default for minor implementation details and labe
 
 Summarize the outcome, scope, non-goals, acceptance criteria, and remaining assumptions. Do not plan or code until the user confirms the specification, unless they explicitly authorized autonomous continuation.
 
+Before returning English specification text or its handoff summary, invoke `write-clear-technical-english` as a light final pass. Preserve exact requirements, acceptance criteria, non-goals, assumptions, rationale, and obligation levels.
+
 After confirmation:
 
 - invoke `build-from-spec` directly when the change is one bounded slice with clear verification and no material dependency or rollout ordering;

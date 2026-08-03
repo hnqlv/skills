@@ -21,6 +21,8 @@ Prefer the existing project dependency when it fits. Check installed versions an
 - Measure UI and JS frame drops, per-thread CPU, and memory; do not judge only by visual smoothness.
 - Treat the 60-node benchmark's UI-cost ranking as stress-test evidence, not a universal result. Re-measure the real screen; Reanimated is often a strong default for one interactive element.
 
+Before returning an English recommendation or review, invoke `write-clear-technical-english` as a light final pass. Preserve measurements, compatibility constraints, uncertainty, and exact API names.
+
 ## Source
 
 Adapted from Andrei Calazans's original post, [Which React Native Animation Library Should You Use for Performance?](https://andrei-calazans.com/posts/2026-07-15-which-react-native-animation-library/) (July 15, 2026), and its linked reproducible benchmark.

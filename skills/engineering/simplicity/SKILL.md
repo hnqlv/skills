@@ -43,3 +43,5 @@ if (isUrgentMessage) {
 ## Verify
 
 Review the final diff for accidental behaviour changes. Run the repository's focused tests and relevant type, lint, or build checks; do not assume a language-specific command.
+
+Before returning an English technical summary or review, invoke `write-clear-technical-english` as a light final pass. Preserve behaviour claims, exact verification, limitations, and residual risk.

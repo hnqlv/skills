@@ -72,7 +72,7 @@ Draft a factual summary containing:
 - limitations, unrun checks, remaining risks, and open decisions;
 - plan status and the next smallest task when work remains.
 
-Invoke `ai-slop-review` as a light edit on that summary. Reject any edit that removes chronology, implementation history needed to understand the result, exact evidence, limitations, or open work. Concision means shorter wording, not a smaller factual record.
+Invoke `ai-slop-review` as a light edit on that summary. For English technical prose, it must invoke `write-clear-technical-english` once as its final writing pass. Reject any edit that removes chronology, implementation history needed to understand the result, exact evidence, limitations, or open work. Concision means shorter wording, not a smaller factual record.
 
 Use Conventional Commit types (`feat`, `fix`, `refactor`, `test`, `docs`, `chore`). Use `spike/<topic>` only for exploratory branches.
 

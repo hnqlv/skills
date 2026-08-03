@@ -81,6 +81,8 @@ Summarize:
 - Verification commands and results.
 - Remaining risk, if any.
 
+Before returning an English technical report, invoke `write-clear-technical-english` as a light final pass. Preserve exact commands, paths, identifiers, errors, evidence, uncertainty, and remaining risk.
+
 Use the `fix` commit type. Use `test` separately only when adding coverage without a production change.
 
 ## Stop conditions
