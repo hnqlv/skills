@@ -1,4 +1,4 @@
 interface:
   display_name: "Clear Technical English"
-  short_description: "Write precise, easy-to-scan technical prose"
-  default_prompt: "Use $write-clear-technical-english to make this technical text precise, consistent, and easy to scan."
+  short_description: "Remove writing slop without losing meaning"
+  default_prompt: "Use $write-clear-technical-english to make this draft concise, credible, and easy to scan without losing facts, history, or uncertainty."

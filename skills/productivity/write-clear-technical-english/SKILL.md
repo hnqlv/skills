@@ -1,29 +1,62 @@
 ---
 name: write-clear-technical-english
-description: Write or revise English technical prose so it is precise, consistent, and easy to scan. Use for technical summaries, reviews, plans, specifications, runbooks, reports, status updates, issue or PR text, and explanations, or as the final writing pass of another skill. Apply an ASD-STE100-inspired house style without claiming compliance. Preserve technical meaning, evidence, commands, identifiers, citations, and obligation levels.
+description: Write, revise, or review English professional and technical prose so it is precise, concise, credible, and easy to scan, including for readers with ADHD. Use for summaries, reviews, plans, specifications, runbooks, reports, memos, RFCs, proposals, research, status updates, issue or PR text, explanations, or AI-assisted drafts with generic framing, inflated claims, repetition, canned transitions, vague recommendations, mechanical rhythm, or recognizable AI phrasing. Apply an ASD-STE100-inspired house style and Zinsser's principles without claiming formal compliance. Preserve facts, history, rationale, requirements, uncertainty, evidence, and technical details.
 ---
 
 # Write Clear Technical English
 
-Write for a reader who must understand the result or act on it without reconstructing missing context.
+Help a specific reader understand the result or act without reconstructing missing context.
 
-Use an [ASD-STE100](https://www.asd-ste100.org/)-inspired house style, not formal compliance. For an explicit compliance request, consult the current official standard and state which checks were performed. Follow the requested language. Apply the structure to non-English prose without labeling it Simplified Technical English.
+Use an [ASD-STE100](https://www.asd-ste100.org/)-inspired house style. For a compliance request, consult the current official standard and report the checks performed. Follow the requested language; apply this structure to non-English prose without calling it Simplified Technical English.
 
-## Preserve meaning
+Default to a light final pass. Use the full review workflow when the user asks for a review or substantial rewrite, or when the draft needs semantic restructuring.
 
-Keep facts, numbers, dates, requirements, obligation levels, negations, uncertainty, rationale, chronology, evidence, citations, commands, paths, identifiers, code, quotations, and domain terms exact. Never invent or strengthen information. Compare revisions with their source.
+## Preserve the record
 
-## Write clearly
+Before editing, record:
 
-1. Lead with the outcome, decision, finding, question, or required action.
+- purpose, audience, scope, voice, and requested action;
+- facts, numbers, dates, terminology, citations, evidence, commands, paths, identifiers, code, and quotations;
+- chronology, decisions, rationale, tradeoffs, causal links, and useful history;
+- requirements, negations, exceptions, assumptions, risks, uncertainty, open questions, and obligation levels;
+- meaningful structure and formatting.
+
+These are semantic invariants. Shorten their wording without erasing a distinct event, decision, reason, requirement, result, limitation, or unresolved point. Preserve history that explains the current state, accountability, learning, or a changed decision. Keep useful repetition in requirements, definitions, policies, runbooks, and safety-critical material. Never invent evidence or strengthen a claim.
+
+## Apply the writing standard
+
+Follow Zinsser's four principles of quality writing:
+
+1. Simplicity: use direct words and constructions.
+2. Brevity: remove excess wording while preserving meaning.
+3. Clarity: make actors, actions, conditions, and relationships explicit.
+4. Humanity: sound like a person helping a specific reader.
+
+Then:
+
+1. Lead with the outcome, decision, finding, question, or required action. Answer a direct question first with `yes`, `no`, a number, or `I don't know`.
 2. Give each sentence one topic and each paragraph one job. Keep connected context together.
-3. Name the actor when it matters. Prefer a direct verb to a noun phrase or vague passive construction.
+3. Name the actor when it matters. Prefer direct verbs and words over noun phrases, vague passives, and inflated constructions.
 4. Put a condition before its action. Give one instruction per procedural step and keep limits or expected results beside it.
 5. Use one stable term per concept. Do not rotate synonyms. Repeat a noun when a pronoun could be ambiguous.
-6. Target at most 20 words for procedural sentences and 25 for descriptive sentences. Exceed these targets when splitting would obscure meaning.
-7. Use lists for real sequences, mappings, or choices. Keep prose when bullets would fragment the reasoning.
-8. Separate evidence, interpretation, recommendation, and open questions. Delete filler and details the reader can safely infer, but keep constraints, exceptions, risks, and useful history.
+6. Keep sentences below 30 words. Target 20 words for procedures and 25 for descriptions; exceed those targets only when splitting would obscure meaning.
+7. Replace adjectives, adverbs, buzzwords, weasel words, and vague qualifiers with available data or observable evidence. Never invent a measurement.
+8. Apply the "so what?" test. Keep claims that help the reader decide, act, or understand.
+9. Use lists for real sequences, mappings, or choices. Keep prose when bullets would fragment the reasoning.
+10. Separate evidence, interpretation, recommendation, and open questions. Delete filler, fake contrasts, decorative caveats, empty importance claims, and useless headings.
+
+In specifications and runbooks, prioritize precision, sequence, interfaces, edge cases, and acceptance criteria. In reports, separate evidence, interpretation, and recommendation. In memos and proposals, surface the decision, rationale, tradeoffs, and requested action early.
+
+## Prevent recurring slop
+
+Read [references/forbidden-patterns.md](references/forbidden-patterns.md) and remove every listed pattern without changing meaning. Add each newly observed recurring pattern immediately with a short cue and replacement rule.
+
+## Control writer context
+
+Keep a writer agent below 50% of its available context window. If the source, instructions, and draft would cross that limit, delegate coherent sections to subagents. Give each only its section, audience, purpose, invariants, and forbidden list. Reconcile their work against one compact preservation ledger.
 
 ## Verify and return
 
-Confirm that terms are consistent, references are unambiguous, instructions remain executable, and no evidence or qualification disappeared. Preserve the calling skill's format. Return only the finished prose unless the user requests notes.
+Compare the revision with the source. Confirm that no invariant changed or disappeared, no claim became stronger, terms remain stable, references remain clear, instructions remain executable, each paragraph has a job, and no forbidden pattern remains.
+
+Preserve the calling skill's format. By default, return only the finished prose in its source format. If the user asks for a review, return two to five consequential problems, the revision, and only the claims or ambiguities that require author verification. If a hard limit cannot fit every invariant, identify the required omission instead of deleting it silently.

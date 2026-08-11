@@ -1,6 +1,6 @@
 ---
 name: build-from-spec
-description: Implement software from an approved SPEC.md or from its approved tasks/plan.md and tasks/todo.md. Use when asked to build, implement, or continue specified work. Build a small bounded change directly from the spec; for multi-slice work, execute the next planned vertical slice. Test the change, invoke simplicity, run preflight-review, and pass the factual closeout through ai-slop-review without losing evidence or history.
+description: Implement software from an approved SPEC.md or from its approved tasks/plan.md and tasks/todo.md. Use when asked to build, implement, or continue specified work. Build a small bounded change directly from the spec; for multi-slice work, execute the next planned vertical slice. Test the change, invoke simplicity, run preflight-review, and pass the factual closeout through write-clear-technical-english without losing evidence or history.
 ---
 
 # Build From Spec
@@ -9,7 +9,7 @@ Use `SPEC.md` as the source of truth. A plan sequences the work but cannot overr
 
 ## Operating principles
 
-- Communicate with short, complete sentences. Remove filler, not meaning.
+- Communicate with short, complete sentences that preserve meaning.
 - Preserve exact technical details and inspect existing conventions first.
 - Prefer the smallest local, explicit change that solves the requirement.
 - Work in vertical slices and leave the system working after each one.
@@ -72,7 +72,7 @@ Draft a factual summary containing:
 - limitations, unrun checks, remaining risks, and open decisions;
 - plan status and the next smallest task when work remains.
 
-Invoke `ai-slop-review` as a light edit on that summary. For English technical prose, it must invoke `write-clear-technical-english` once as its final writing pass. Reject any edit that removes chronology, implementation history needed to understand the result, exact evidence, limitations, or open work. Concision means shorter wording, not a smaller factual record.
+Invoke `write-clear-technical-english` as a light edit on that summary. Reject any edit that removes chronology, implementation history needed to understand the result, exact evidence, limitations, or open work. Concision shortens wording while preserving the full factual record.
 
 Use Conventional Commit types (`feat`, `fix`, `refactor`, `test`, `docs`, `chore`). Use `spike/<topic>` only for exploratory branches.
 

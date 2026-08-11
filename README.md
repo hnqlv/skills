@@ -22,7 +22,7 @@ Creates `tasks/plan.md` and `tasks/todo.md` for multi-slice, dependency-heavy, r
 
 ### `build-from-spec`
 
-Builds the next approved slice from the plan, or a small bounded change directly from `SPEC.md`. It finishes with tests, `simplicity`, `preflight-review`, and an `ai-slop-review` pass over the closeout summary.
+Builds the next approved slice from the plan, or a small bounded change directly from `SPEC.md`. It finishes with tests, `simplicity`, `preflight-review`, and a `write-clear-technical-english` pass over the closeout summary.
 
 ### `spike`
 
@@ -44,19 +44,15 @@ Chooses and verifies performant React Native animation approaches based on inter
 
 Reviews a completed slice against its spec, plan task, tests, and diff after simplification.
 
-### `ai-slop-review`
-
-Makes AI-assisted professional prose concise and easy to scan without losing facts, chronology, history, rationale, or uncertainty.
-
 ### `write-clear-technical-english`
 
-Writes English technical prose with stable terminology, explicit actions, short sentences, and preserved evidence. It uses an ASD-STE100-inspired house style without claiming formal compliance.
+Writes or reviews professional and technical prose with stable terminology, explicit actions, short sentences, and preserved evidence. It combines an ASD-STE100-inspired house style with Zinsser's principles and a growing forbidden-pattern list.
 
 ## Conventions
 
 - Keep communication concise without dropping important context.
 - Pass English technical summaries, reviews, plans, reports, and explanations through `write-clear-technical-english`.
-- Preserve useful history and rationale; concise wording is not permission to erase the record.
+- Preserve useful history and rationale when shortening wording.
 - Use complete sentences when compression could create ambiguity.
 - Prefer code that is easy to understand, change, and delete.
 - Prefer small vertical slices over broad horizontal layers.
@@ -82,7 +78,6 @@ skills/
     react-native-animation/
     preflight-review/
   productivity/
-    ai-slop-review/
     write-clear-technical-english/
 ```
 
@@ -138,6 +133,8 @@ These skills are opinionated adaptations and inspired by:
 - [Grilling](https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling) — one-question-at-a-time decision-tree interviewing
 - [Which React Native Animation Library Should You Use for Performance?](https://andrei-calazans.com/posts/2026-07-15-which-react-native-animation-library/) — original benchmark and selection guidance by Andrei Calazans
 - [ASD-STE100 Simplified Technical English](https://www.asd-ste100.org/) — controlled-language principles adapted for the clear technical English house style
+- William Zinsser, *On Writing Well* — simplicity, brevity, clarity, and humanity
+- Amazon, *Write Like an Amazonian* (2018) — short sentences, objective evidence, direct answers, and the "so what?" test
 
 ## License
 

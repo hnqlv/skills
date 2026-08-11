@@ -1,6 +1,6 @@
 ---
 name: preflight-review
-description: Review a completed implementation slice before a PR or merge. Use after tests and the simplicity pass to find spec mismatches, regressions, missing coverage, needless complexity, and AI-generated code slop without expanding scope or redesigning the feature. Review implementation evidence; use ai-slop-review separately for the human-facing closeout.
+description: Review a completed implementation slice before a PR or merge. Use after tests and the simplicity pass to find spec mismatches, regressions, missing coverage, needless complexity, and AI-generated code slop without expanding scope or redesigning the feature. Review implementation evidence; use write-clear-technical-english separately for the human-facing closeout.
 ---
 
 # Preflight Review
