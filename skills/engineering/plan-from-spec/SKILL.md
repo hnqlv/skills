@@ -1,17 +1,21 @@
 ---
 name: plan-from-spec
-description: Turn an approved SPEC.md into an ordered implementation plan and task queue. Use when work needs multiple vertical slices or sessions, spans independent subsystems, has non-obvious dependencies, contains risky unknowns or rollout steps, or needs durable progress tracking. Produce tasks/plan.md and tasks/todo.md without writing production code. Skip when one bounded slice can be built and verified directly from the specification.
+description: Turn an approved specification artifact into an ordered implementation plan and task queue. Use when work needs multiple vertical slices or sessions, spans independent subsystems, has non-obvious dependencies, contains risky unknowns or rollout steps, or needs durable progress tracking. Use caller-supplied or repository-defined artifact paths when present; otherwise default to SPEC.md, tasks/plan.md, and tasks/todo.md. Do not write production code. Skip when one bounded slice can be built and verified directly from the specification.
 ---
 
 # Plan From Spec
 
 Plan only when the plan reduces execution risk or preserves useful state across slices. Do not turn a small change into ceremony.
 
+Use specification, plan, queue, and decisions paths supplied by the caller or repository instructions. Otherwise reuse existing repository conventions. Use the default paths below only when no convention exists.
+
+When a Herdr-managed handoff supplies a worktree, branch, or artifact paths, treat that context as fixed. Verify it before writing. Do not switch branches, relocate artifacts, or create additional Herdr topology from this skill.
+
 ## Workflow
 
 ### 1. Establish readiness
 
-- Read the approved `SPEC.md` as the contract.
+- Read the selected approved specification as the contract.
 - Inspect the affected code paths, repository instructions, and existing patterns.
 - Reuse the repository's current plan files and conventions when present.
 - Return to `define-spec` or `grill-spec` if a missing product decision would change the plan. Do not hide it as an implementation assumption.
@@ -28,7 +32,7 @@ Do not edit production code during planning.
 
 ### 3. Write the artifacts
 
-Use:
+When no paths or repository conventions were supplied, use:
 
 - `tasks/plan.md` for delivery strategy, dependency order, requirement traceability, risks, and checkpoints;
 - `tasks/todo.md` for the ordered execution queue;
@@ -61,4 +65,4 @@ Confirm:
 
 Before returning English plan artifacts or their summary, invoke `write-clear-technical-english` as a light final pass. Preserve task structure, dependencies, exact verification, risks, gates, and unresolved decisions.
 
-Summarize the plan and ask for one approval before implementation. After approval, hand off to `build-from-spec`, which executes the next unchecked task from the plan while continuing to treat `SPEC.md` as authoritative.
+Summarize the plan and ask for one approval before implementation. After approval, hand off to `build-from-spec`, which executes the next unchecked task from the plan while continuing to treat the selected specification as authoritative.

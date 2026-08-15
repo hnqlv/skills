@@ -1,4 +1,4 @@
 interface:
   display_name: "Preflight Review"
   short_description: "Spec-bound review after simplification"
-  default_prompt: "Use $preflight-review to check this completed slice before I open a PR."
+  default_prompt: "Use $preflight-review to check this completed slice against the selected specification before I open a PR."

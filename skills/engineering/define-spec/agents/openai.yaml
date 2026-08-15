@@ -1,4 +1,4 @@
 interface:
   display_name: "Define Spec"
   short_description: "Turn requirements into an approved spec"
-  default_prompt: "Use $define-spec to turn this feature idea into a concise SPEC.md before implementation."
+  default_prompt: "Use $define-spec to create or refine the approved specification at the path supplied by the caller or repository."

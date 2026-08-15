@@ -1,17 +1,21 @@
 ---
 name: define-spec
-description: Define what to build in SPEC.md before implementation. Use for a new product, feature, or significant change when requirements are vague, scattered, or not yet recorded; when asked to write or refine a specification; or when success, scope, and non-goals need agreement. Inspect the real repository, resolve material decisions through grill-spec, and produce a concise approved contract. Skip for trivial, self-contained edits with explicit acceptance criteria.
+description: Define what to build in an approved specification artifact before implementation. Use for a new product, feature, or significant change when requirements are vague, scattered, or not yet recorded; when asked to write or refine a specification; or when success, scope, and non-goals need agreement. Use a caller-supplied or repository-defined path when present, otherwise default to SPEC.md. Inspect the real repository, resolve material decisions through grill-spec, and produce a concise approved contract. Skip for trivial, self-contained edits with explicit acceptance criteria.
 ---
 
 # Define Spec
 
 Create or refine the smallest specification that makes the intended outcome and completion test explicit. Do not plan or write production code.
 
+Use the specification path supplied by the caller or repository instructions. Otherwise reuse an existing repository convention, and default to `SPEC.md` only when none exists.
+
+When a Herdr-managed handoff supplies a worktree, branch, or artifact path, treat that context as fixed. Verify it before writing. Do not switch branches, move the specification, or create additional Herdr topology from this skill.
+
 ## Workflow
 
 ### 1. Ground the specification
 
-- Confirm the repository root and the authoritative product or task document.
+- Confirm the repository root, authoritative product or task document, and specification path.
 - Inspect only the code, documentation, and conventions needed to distinguish facts from decisions.
 - Update the existing specification when one exists. Preserve still-relevant requirements, rationale, and decision history; do not replace it wholesale for editorial neatness.
 - Surface conflicts between the request, existing behaviour, and prior decisions.

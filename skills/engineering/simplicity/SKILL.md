@@ -7,6 +7,8 @@ description: Simplify or refactor code without changing behaviour. Use when aske
 
 Make the code easier to understand, change, test, and delete. Fewer lines are not a goal.
 
+When a Herdr-managed handoff supplies a worktree or branch, verify and preserve that context. Review only the selected workstream diff. Do not switch branches or create additional Herdr topology from this skill.
+
 ## Rules
 
 - Preserve behaviour, public contracts, security, and performance characteristics.

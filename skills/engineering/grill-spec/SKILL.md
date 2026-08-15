@@ -1,21 +1,25 @@
 ---
 name: grill-spec
-description: Interrogate SPEC.md before planning or coding. Use when defining or reviewing a specification with open questions, vague behaviour, hidden assumptions, competing options, missing edge cases, or unclear scope, or when asked to grill or stress-test a product decision. Inspect repository facts, ask one dependency-safe decision at a time with a recommendation, and record confirmed answers without erasing useful decision history.
+description: Interrogate an approved specification artifact before planning or coding. Use when defining or reviewing a specification with open questions, vague behaviour, hidden assumptions, competing options, missing edge cases, or unclear scope, or when asked to grill or stress-test a product decision. Use a caller-supplied or repository-defined path when present, otherwise default to SPEC.md. Inspect repository facts, ask one dependency-safe decision at a time with a recommendation, and record confirmed answers without erasing useful decision history.
 ---
 
 # Grill Spec
 
 Turn vague requirements into explicit decisions without overwhelming the user.
 
+Use the specification path supplied by the caller or repository instructions. Otherwise reuse an existing repository convention, and default to `SPEC.md` only when none exists.
+
+When a Herdr-managed handoff supplies a worktree, branch, or specification path, treat that context as fixed. Do not switch branches, move the specification, or create additional Herdr topology from this skill.
+
 ## Rules
 
-- Read `SPEC.md` and relevant repository files first.
+- Read the selected specification and relevant repository files first.
 - Separate discoverable facts from decisions only the user can make.
 - Ask one currently unblocked decision at a time, then wait.
 - Keep each question concise and include a recommended answer with a brief reason.
 - Prefer bounded options when they represent the real decision space.
 - Do not ask about implementation-irrelevant preferences or discoverable facts.
-- Update `SPEC.md` after each answer when editing is available.
+- Update the selected specification after each answer when editing is available.
 - Do not plan or code until the user confirms shared understanding.
 
 ## Process
@@ -56,7 +60,7 @@ Offer two to four bounded options when useful. Avoid broad prompts such as “Wh
 
 After each answer:
 
-1. Record the decision and useful rationale in the relevant `SPEC.md` section without deleting prior context that explains the current contract.
+1. Record the decision and useful rationale in the relevant specification section without deleting prior context that explains the current contract.
 2. Check which branches were resolved, changed, or newly opened.
 3. Recompute the frontier and ask the next highest-impact question.
 
@@ -88,6 +92,6 @@ Wait for explicit confirmation. A vague acknowledgment is not permission to rein
 When the user explicitly asks to proceed without interaction, replace the interview loop with these rules:
 
 - Do not fabricate certainty.
-- Add a short `Assumptions` section to `SPEC.md`.
+- Add a short `Assumptions` section to the specification.
 - Choose the simplest reversible defaults.
 - Flag only decisions that create material product, security, data, or cost risk.

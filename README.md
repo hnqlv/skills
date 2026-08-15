@@ -4,25 +4,25 @@ A small collection of opinionated engineering skills for Claude Code, Codex, and
 
 Core approach:
 
-> Define the contract in `SPEC.md`. Resolve important uncertainty one decision at a time. Plan when the work needs multiple slices; otherwise build directly from the spec. Prove behaviour with tests. Finish with `simplicity`, `preflight-review`, and a concise factual summary in clear technical English.
+> Define the contract at the selected specification path. Resolve important uncertainty one decision at a time. Use Herdr and an isolated Git worktree when the workstream needs it. Plan multi-slice work, prove behaviour with tests, then finish with `simplicity`, `preflight-review`, and a concise factual summary in clear technical English.
 
 ## Skills
 
 ### `define-spec`
 
-Defines what to build in `SPEC.md`: outcome, scope, non-goals, constraints, and testable acceptance criteria.
+Defines what to build at the selected specification path: outcome, scope, non-goals, constraints, and testable acceptance criteria.
 
 ### `grill-spec`
 
-Resolves material product decisions one at a time. It investigates repository facts first, recommends a default, and preserves confirmed decisions in `SPEC.md`.
+Resolves material product decisions one at a time. It investigates repository facts first, recommends a default, and preserves confirmed decisions in the selected specification.
 
 ### `plan-from-spec`
 
-Creates `tasks/plan.md` and `tasks/todo.md` for multi-slice, dependency-heavy, risky, or multi-session work. Small bounded changes skip this step.
+Creates a plan and task queue at caller-supplied, repository-defined, or conventional paths for multi-slice, dependency-heavy, risky, or multi-session work. Small bounded changes skip this step.
 
 ### `build-from-spec`
 
-Builds the next approved slice from the plan, or a small bounded change directly from `SPEC.md`. It finishes with tests, `simplicity`, `preflight-review`, and a `write-clear-technical-english` pass over the closeout summary.
+Builds the next approved slice from the selected plan, or a small bounded change directly from the selected specification. It finishes with tests, `simplicity`, `preflight-review`, and a `write-clear-technical-english` pass over the closeout summary.
 
 ### `spike`
 
@@ -56,6 +56,8 @@ Writes or reviews professional and technical prose with stable terminology, expl
 - Use complete sentences when compression could create ambiguity.
 - Prefer code that is easy to understand, change, and delete.
 - Prefer small vertical slices over broad horizontal layers.
+- Use caller- or repository-supplied specification and plan paths. Default to `SPEC.md` and `tasks/` only when no convention exists.
+- When the user explicitly requests Herdr, invoke the installed `herdr` skill for concurrent branches, persistent remote agents, and worktree lifecycle. Keep individual engineering skills inside the supplied worktree and artifact context.
 - Give agents bounded, closed-loop tasks with focused context, acceptance criteria, and runnable verification.
 - Prefer reversible, low-blast-radius delegation; keep critical decisions and final acceptance with a human.
 - Use agents freely for tedious maintenance, issue reproductions, disposable experiments, and as a sounding board before committing to an idea.
@@ -86,19 +88,23 @@ Each skill directory under `skills/engineering/` or `skills/productivity/` is ed
 ## Usage examples
 
 ```text
-Use define-spec to turn this feature idea into a concise SPEC.md.
+Use herdr to create a no-focus worktree from main and hand this task to Codex.
 ```
 
 ```text
-Use grill-spec to resolve the important open questions in SPEC.md.
+Use define-spec to turn this feature idea into a concise specification at <spec-path>.
 ```
 
 ```text
-Use plan-from-spec to break this approved spec into verifiable vertical slices.
+Use grill-spec to resolve the important open questions in <spec-path>.
 ```
 
 ```text
-Use build-from-spec to implement the next slice from the plan, or this small change directly from SPEC.md.
+Use plan-from-spec to break <spec-path> into verifiable vertical slices at <plan-path> and <queue-path>.
+```
+
+```text
+Use build-from-spec to implement the next slice using the supplied specification, plan, and queue paths.
 ```
 
 ```text
@@ -131,6 +137,7 @@ These skills are opinionated adaptations and inspired by:
 - [Mario Zechner](https://www.youtube.com/watch?v=RjfbvDXpFls) — inspiration for the good-agent-task principles
 - [Cursor Bugbot Reviews in 90 Seconds](https://www.digitalapplied.com/blog/cursor-bugbot-90-second-reviews-june-2026-release) — motivation for an earlier local review gate
 - [Grilling](https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling) — one-question-at-a-time decision-tree interviewing
+- [Herdr v0.8.0 skill](https://github.com/herdrdev/herdr/blob/v0.8.0/skills/herdr/SKILL.md) — terminal, workspace, worktree, and agent-control contract
 - [Which React Native Animation Library Should You Use for Performance?](https://andrei-calazans.com/posts/2026-07-15-which-react-native-animation-library/) — original benchmark and selection guidance by Andrei Calazans
 - [ASD-STE100 Simplified Technical English](https://www.asd-ste100.org/) — controlled-language principles adapted for the clear technical English house style
 - William Zinsser, *On Writing Well* — simplicity, brevity, clarity, and humanity

@@ -5,7 +5,9 @@ description: Review a completed implementation slice before a PR or merge. Use a
 
 # Preflight Review
 
-Review the current diff against `SPEC.md`, the selected plan task when present, acceptance criteria, tests, and local conventions. Review; do not change code unless asked.
+Review the current diff against the specification path supplied by the caller or repository instructions, the selected plan task when present, acceptance criteria, tests, and local conventions. Otherwise reuse the repository's specification convention, and default to `SPEC.md` only when none exists. Review; do not change code unless asked.
+
+When a Herdr-managed handoff supplies a worktree, branch, or artifact paths, verify that context and review only that workstream. Do not switch branches, relocate task artifacts, or create additional Herdr topology from this skill.
 
 ## Order
 

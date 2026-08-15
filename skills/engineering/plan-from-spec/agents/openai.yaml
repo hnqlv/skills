@@ -1,4 +1,4 @@
 interface:
   display_name: "Plan From Spec"
   short_description: "Break a spec into verifiable slices"
-  default_prompt: "Use $plan-from-spec to turn SPEC.md into an ordered implementation plan and task queue."
+  default_prompt: "Use $plan-from-spec to turn the selected specification into an ordered plan and task queue at the supplied paths."

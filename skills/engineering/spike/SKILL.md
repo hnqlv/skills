@@ -7,6 +7,8 @@ description: Run a disposable experiment to answer one risky technical question 
 
 Answer one technical question with the smallest experiment that produces credible evidence.
 
+Use specification, plan, and spike-note paths supplied by the caller or repository instructions. Otherwise reuse existing repository conventions. When a Herdr-managed handoff supplies a worktree, branch, or artifact paths, verify and preserve that context. Do not switch branches or create additional Herdr topology from this skill.
+
 ## Principles
 
 - Answer one question with evidence and disposable code.
@@ -25,7 +27,7 @@ Reject broad questions such as “Which architecture is best?” Narrow them to 
 
 ### 2. Inspect before experimenting
 
-- Read `SPEC.md` and the affected code path.
+- Read the selected specification and affected code path.
 - Check existing conventions and dependencies.
 - Read primary documentation when available.
 - State assumptions that could invalidate the result.
@@ -63,7 +65,7 @@ An inconclusive result is valid. State what evidence is missing instead of guess
 
 ### 6. Integrate knowledge, not prototype code
 
-- Update `SPEC.md` and the plan with the confirmed constraint or decision.
+- Update the selected specification and plan with the confirmed constraint or decision.
 - Delete the spike implementation.
 - Rebuild retained code through the normal tested workflow.
 - Keep only a concise spike report when the decision needs an audit trail.

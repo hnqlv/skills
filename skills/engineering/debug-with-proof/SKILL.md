@@ -7,6 +7,8 @@ description: Debug defects with evidence before changing production code. Use fo
 
 Do not fix a bug that has not been reproduced.
 
+Use the specification path supplied by the caller or repository instructions when one is relevant. When a Herdr-managed handoff supplies a worktree, branch, or artifact paths, verify and preserve that context. Do not switch branches or create additional Herdr topology from this skill.
+
 ## Communication
 
 - Keep updates short and factual; preserve decisive commands, paths, identifiers, and errors.
@@ -18,7 +20,7 @@ Do not fix a bug that has not been reproduced.
 
 Capture expected and actual behaviour, the smallest known reproduction, relevant environment and inputs, and whether the failure is deterministic.
 
-Read the relevant `SPEC.md` section when available. Confirm that the reported behaviour is actually a defect rather than an unspecified product decision.
+Read the relevant section of the selected specification when available. Confirm that the reported behaviour is actually a defect rather than an unspecified product decision.
 
 ### 2. Reproduce before editing production code
 
