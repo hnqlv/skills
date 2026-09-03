@@ -9,7 +9,7 @@ Plan only when the plan reduces execution risk or preserves useful state across 
 
 Use specification, plan, queue, and decisions paths supplied by the caller or repository instructions. Otherwise reuse existing repository conventions. Use the default paths below only when no convention exists.
 
-When a Herdr-managed handoff supplies a worktree, branch, or artifact paths, treat that context as fixed. Verify it before writing. Do not switch branches, relocate artifacts, or create additional Herdr topology from this skill.
+When a Herdr-managed handoff supplies a worktree, branch, or artifact paths, treat that context as fixed. Verify it before writing. Do not switch branches or relocate artifacts. Reuse the supplied Herdr workspace and worktree; add only the panes justified by the task.
 
 ## Workflow
 
@@ -66,3 +66,9 @@ Confirm:
 Before returning English plan artifacts or their summary, invoke `write-clear-technical-english` as a light final pass. Preserve task structure, dependencies, exact verification, risks, gates, and unresolved decisions.
 
 Summarize the plan and ask for one approval before implementation. After approval, hand off to `build-from-spec`, which executes the next unchecked task from the plan while continuing to treat the selected specification as authoritative.
+
+## Orchestration and review
+
+For substantive work, load the `herdr` skill, follow its workflow, and use Herdr panes for independent parallel work. Use separate worktrees for concurrent mutations, branch isolation, or preserving an active checkout; skip parallelism when tasks are trivial or dependency-bound.
+
+Before finishing substantive repository work with a diff, run `hunk skill path`, load the returned skill, and review the diff with Hunk. If no session exists, start `hunk diff --watch` in a dedicated Herdr pane, or another persistent interactive terminal, so the user does not need to launch it. Then use `hunk session *` for review control. Skip Hunk when no repository diff exists.

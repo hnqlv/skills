@@ -9,7 +9,7 @@ Use the specification path supplied by the caller or repository instructions. Ot
 
 The selected specification is the source of truth. A plan sequences the work but cannot override it.
 
-When a Herdr-managed handoff supplies a worktree, branch, or artifact paths, verify that context before the first write and preserve it throughout the slice. Do not switch branches, relocate task artifacts, or create additional Herdr topology from this skill. If the current checkout does not match the handoff, stop and report both contexts.
+When a Herdr-managed handoff supplies a worktree, branch, or artifact paths, verify that context before the first write and preserve it throughout the slice. Do not switch branches or relocate task artifacts. Reuse the supplied Herdr workspace and worktree; add only the panes justified by the task. If the current checkout does not match the handoff, stop and report both contexts.
 
 ## Operating principles
 
@@ -91,3 +91,9 @@ Stop and surface the issue when:
 - The plan and specification disagree about scope or acceptance.
 
 Do not stop for minor ambiguity. Choose the simplest reversible default and state it.
+
+## Orchestration and review
+
+For substantive work, load the `herdr` skill, follow its workflow, and use Herdr panes for independent parallel work. Use separate worktrees for concurrent mutations, branch isolation, or preserving an active checkout; skip parallelism when tasks are trivial or dependency-bound.
+
+Before finishing substantive repository work with a diff, run `hunk skill path`, load the returned skill, and review the diff with Hunk. If no session exists, start `hunk diff --watch` in a dedicated Herdr pane, or another persistent interactive terminal, so the user does not need to launch it. Then use `hunk session *` for review control. Skip Hunk when no repository diff exists.

@@ -7,7 +7,7 @@ description: Debug defects with evidence before changing production code. Use fo
 
 Do not fix a bug that has not been reproduced.
 
-Use the specification path supplied by the caller or repository instructions when one is relevant. When a Herdr-managed handoff supplies a worktree, branch, or artifact paths, verify and preserve that context. Do not switch branches or create additional Herdr topology from this skill.
+Use the specification path supplied by the caller or repository instructions when one is relevant. When a Herdr-managed handoff supplies a worktree, branch, or artifact paths, verify and preserve that context. Do not switch branches. Reuse the supplied Herdr workspace and worktree; add only the panes justified by the task.
 
 ## Communication
 
@@ -96,3 +96,9 @@ Stop and surface the uncertainty when:
 - The proposed fix requires destructive migration or security-sensitive changes without approval.
 
 Do not claim a root cause when only correlation was established.
+
+## Orchestration and review
+
+For substantive work, load the `herdr` skill, follow its workflow, and use Herdr panes for independent parallel work. Use separate worktrees for concurrent mutations, branch isolation, or preserving an active checkout; skip parallelism when tasks are trivial or dependency-bound.
+
+Before finishing substantive repository work with a diff, run `hunk skill path`, load the returned skill, and review the diff with Hunk. If no session exists, start `hunk diff --watch` in a dedicated Herdr pane, or another persistent interactive terminal, so the user does not need to launch it. Then use `hunk session *` for review control. Skip Hunk when no repository diff exists.

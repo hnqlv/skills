@@ -9,7 +9,7 @@ Turn vague requirements into explicit decisions without overwhelming the user.
 
 Use the specification path supplied by the caller or repository instructions. Otherwise reuse an existing repository convention, and default to `SPEC.md` only when none exists.
 
-When a Herdr-managed handoff supplies a worktree, branch, or specification path, treat that context as fixed. Do not switch branches, move the specification, or create additional Herdr topology from this skill.
+When a Herdr-managed handoff supplies a worktree, branch, or specification path, treat that context as fixed. Do not switch branches or move the specification. Reuse the supplied Herdr workspace and worktree; add only the panes justified by the task.
 
 ## Rules
 
@@ -95,3 +95,9 @@ When the user explicitly asks to proceed without interaction, replace the interv
 - Add a short `Assumptions` section to the specification.
 - Choose the simplest reversible defaults.
 - Flag only decisions that create material product, security, data, or cost risk.
+
+## Orchestration and review
+
+For substantive work, load the `herdr` skill, follow its workflow, and use Herdr panes for independent parallel work. Use separate worktrees for concurrent mutations, branch isolation, or preserving an active checkout; skip parallelism when tasks are trivial or dependency-bound.
+
+Before finishing substantive repository work with a diff, run `hunk skill path`, load the returned skill, and review the diff with Hunk. If no session exists, start `hunk diff --watch` in a dedicated Herdr pane, or another persistent interactive terminal, so the user does not need to launch it. Then use `hunk session *` for review control. Skip Hunk when no repository diff exists.

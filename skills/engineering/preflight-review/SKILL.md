@@ -7,7 +7,7 @@ description: Review a completed implementation slice before a PR or merge. Use a
 
 Review the current diff against the specification path supplied by the caller or repository instructions, the selected plan task when present, acceptance criteria, tests, and local conventions. Otherwise reuse the repository's specification convention, and default to `SPEC.md` only when none exists. Review; do not change code unless asked.
 
-When a Herdr-managed handoff supplies a worktree, branch, or artifact paths, verify that context and review only that workstream. Do not switch branches, relocate task artifacts, or create additional Herdr topology from this skill.
+When a Herdr-managed handoff supplies a worktree, branch, or artifact paths, verify that context and review only that workstream. Do not switch branches or relocate task artifacts. Reuse the supplied Herdr workspace and worktree; add only the panes justified by the review.
 
 ## Order
 
@@ -28,3 +28,9 @@ When a Herdr-managed handoff supplies a worktree, branch, or artifact paths, ver
 For each finding: `blocker`, `major`, or `minor`; file and line; concrete impact; smallest fix. Then state the verification evidence and any residual risk.
 
 Before returning an English review, invoke `write-clear-technical-english` as a light final pass. Preserve severity, locations, concrete impact, exact evidence, uncertainty, and residual risk.
+
+## Orchestration and review
+
+For substantive work, load the `herdr` skill, follow its workflow, and use Herdr panes for independent parallel work. Use separate worktrees for concurrent mutations, branch isolation, or preserving an active checkout; skip parallelism when tasks are trivial or dependency-bound.
+
+Before finishing substantive repository work with a diff, run `hunk skill path`, load the returned skill, and review the diff with Hunk. If no session exists, start `hunk diff --watch` in a dedicated Herdr pane, or another persistent interactive terminal, so the user does not need to launch it. Then use `hunk session *` for review control. Skip Hunk when no repository diff exists.

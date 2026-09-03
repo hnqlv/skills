@@ -7,7 +7,7 @@ description: Simplify or refactor code without changing behaviour. Use when aske
 
 Make the code easier to understand, change, test, and delete. Fewer lines are not a goal.
 
-When a Herdr-managed handoff supplies a worktree or branch, verify and preserve that context. Review only the selected workstream diff. Do not switch branches or create additional Herdr topology from this skill.
+When a Herdr-managed handoff supplies a worktree or branch, verify and preserve that context. Review only the selected workstream diff. Do not switch branches. Reuse the supplied Herdr workspace and worktree; add only the panes justified by the task.
 
 ## Rules
 
@@ -47,3 +47,9 @@ if (isUrgentMessage) {
 Review the final diff for accidental behaviour changes. Run the repository's focused tests and relevant type, lint, or build checks; do not assume a language-specific command.
 
 Before returning an English technical summary or review, invoke `write-clear-technical-english` as a light final pass. Preserve behaviour claims, exact verification, limitations, and residual risk.
+
+## Orchestration and review
+
+For substantive work, load the `herdr` skill, follow its workflow, and use Herdr panes for independent parallel work. Use separate worktrees for concurrent mutations, branch isolation, or preserving an active checkout; skip parallelism when tasks are trivial or dependency-bound.
+
+Before finishing substantive repository work with a diff, run `hunk skill path`, load the returned skill, and review the diff with Hunk. If no session exists, start `hunk diff --watch` in a dedicated Herdr pane, or another persistent interactive terminal, so the user does not need to launch it. Then use `hunk session *` for review control. Skip Hunk when no repository diff exists.

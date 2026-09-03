@@ -60,3 +60,9 @@ Keep a writer agent below 50% of its available context window. If the source, in
 Compare the revision with the source. Confirm that no invariant changed or disappeared, no claim became stronger, terms remain stable, references remain clear, instructions remain executable, each paragraph has a job, and no forbidden pattern remains.
 
 Preserve the calling skill's format. By default, return only the finished prose in its source format. If the user asks for a review, return two to five consequential problems, the revision, and only the claims or ambiguities that require author verification. If a hard limit cannot fit every invariant, identify the required omission instead of deleting it silently.
+
+## Orchestration and review
+
+For substantive work, load the `herdr` skill, follow its workflow, and use Herdr panes for independent parallel work. Use separate worktrees for concurrent mutations, branch isolation, or preserving an active checkout; skip parallelism when tasks are trivial or dependency-bound.
+
+Before finishing substantive repository work with a diff, run `hunk skill path`, load the returned skill, and review the diff with Hunk. If no session exists, start `hunk diff --watch` in a dedicated Herdr pane, or another persistent interactive terminal, so the user does not need to launch it. Then use `hunk session *` for review control. Skip Hunk when no repository diff exists.
