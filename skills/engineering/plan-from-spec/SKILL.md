@@ -1,6 +1,6 @@
 ---
 name: plan-from-spec
-description: Turn an approved specification artifact into an ordered implementation plan and task queue. Use when work needs multiple vertical slices or sessions, spans independent subsystems, has non-obvious dependencies, contains risky unknowns or rollout steps, or needs durable progress tracking. Use caller-supplied or repository-defined artifact paths when present; otherwise default to SPEC.md, tasks/plan.md, and tasks/todo.md. Do not write production code. Skip when one bounded slice can be built and verified directly from the specification.
+description: Turn an approved specification into an ordered plan and task queue for multi-slice, dependent, risky, or multi-session work. Skip planning when one bounded change can be built and verified directly.
 ---
 
 # Plan From Spec
@@ -9,7 +9,7 @@ Plan only when the plan reduces execution risk or preserves useful state across 
 
 Use specification, plan, queue, and decisions paths supplied by the caller or repository instructions. Otherwise reuse existing repository conventions. Use the default paths below only when no convention exists.
 
-When a Herdr-managed handoff supplies a worktree, branch, or artifact paths, treat that context as fixed. Verify it before writing. Do not switch branches or relocate artifacts. Reuse the supplied Herdr workspace and worktree; add only the panes justified by the task.
+Verify and preserve any supplied worktree, branch, and artifact paths. Do not switch branches or relocate artifacts. If the checkout differs from the handoff, stop and report the mismatch before proceeding.
 
 ## Workflow
 
@@ -65,10 +65,4 @@ Confirm:
 
 Before returning English plan artifacts or their summary, invoke `write-clear-technical-english` as a light final pass. Preserve task structure, dependencies, exact verification, risks, gates, and unresolved decisions.
 
-Summarize the plan and ask for one approval before implementation. After approval, hand off to `build-from-spec`, which executes the next unchecked task from the plan while continuing to treat the selected specification as authoritative.
-
-## Orchestration and review
-
-For substantive work, load the `herdr` skill, follow its workflow, and use Herdr panes for independent parallel work. Use separate worktrees for concurrent mutations, branch isolation, or preserving an active checkout; skip parallelism when tasks are trivial or dependency-bound.
-
-Before finishing substantive repository work with a diff, run `hunk skill path`, load the returned skill, and review the diff with Hunk. If no session exists, start `hunk diff --watch` in a dedicated Herdr pane, or another persistent interactive terminal, so the user does not need to launch it. Then use `hunk session *` for review control. Skip Hunk when no repository diff exists.
+Summarize the plan. Continue under existing user authorization and the calling workflow; do not add another approval gate when implementation is already authorized. Otherwise, ask for approval before handing off to `build-from-spec`. It executes the next unchecked task while treating the specification as authoritative.

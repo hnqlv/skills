@@ -1,6 +1,6 @@
 ---
 name: react-native-animation
-description: Choose, implement, or review performant React Native animations. Use when deciding between Animated, Reanimated, and react-native-ease; building gesture-driven, state-driven, touch-feedback, enter/exit, or looping motion; or diagnosing animation frame, CPU, JS-thread, or memory costs.
+description: Choose, implement, or review React Native animations based on interaction type and measured performance. Use for animation-library decisions, gestures, transitions, or frame, CPU, and memory problems.
 ---
 
 # React Native Animation
@@ -26,9 +26,3 @@ Before returning an English recommendation or review, invoke `write-clear-techni
 ## Source
 
 Adapted from Andrei Calazans's original post, [Which React Native Animation Library Should You Use for Performance?](https://andrei-calazans.com/posts/2026-07-15-which-react-native-animation-library/) (July 15, 2026), and its linked reproducible benchmark.
-
-## Orchestration and review
-
-For substantive work, load the `herdr` skill, follow its workflow, and use Herdr panes for independent parallel work. Use separate worktrees for concurrent mutations, branch isolation, or preserving an active checkout; skip parallelism when tasks are trivial or dependency-bound.
-
-Before finishing substantive repository work with a diff, run `hunk skill path`, load the returned skill, and review the diff with Hunk. If no session exists, start `hunk diff --watch` in a dedicated Herdr pane, or another persistent interactive terminal, so the user does not need to launch it. Then use `hunk session *` for review control. Skip Hunk when no repository diff exists.

@@ -1,13 +1,13 @@
 ---
 name: preflight-review
-description: Review a completed implementation slice before a PR or merge. Use after tests and the simplicity pass to find spec mismatches, regressions, missing coverage, needless complexity, and AI-generated code slop without expanding scope or redesigning the feature. Review implementation evidence; use write-clear-technical-english separately for the human-facing closeout.
+description: Review a completed implementation against its spec, tests, and diff before a PR or merge. Find actionable regressions, missing coverage, and needless complexity without expanding scope.
 ---
 
 # Preflight Review
 
 Review the current diff against the specification path supplied by the caller or repository instructions, the selected plan task when present, acceptance criteria, tests, and local conventions. Otherwise reuse the repository's specification convention, and default to `SPEC.md` only when none exists. Review; do not change code unless asked.
 
-When a Herdr-managed handoff supplies a worktree, branch, or artifact paths, verify that context and review only that workstream. Do not switch branches or relocate task artifacts. Reuse the supplied Herdr workspace and worktree; add only the panes justified by the review.
+Verify and preserve any supplied worktree, branch, and artifact paths. Review only the selected workstream diff. Do not switch branches or relocate artifacts. If the checkout differs from the handoff, stop and report the mismatch before proceeding.
 
 ## Order
 
@@ -15,6 +15,8 @@ When a Herdr-managed handoff supplies a worktree, branch, or artifact paths, ver
 2. Check tests would catch the intended regression.
 3. Flag only local simplifications that preserve behaviour: duplicate logic, needless wrappers, speculative abstractions, dead paths, generic helpers, broad fallbacks, or obvious-comment noise.
 4. Check changed trust, data, and hot-path boundaries for security or performance regressions.
+
+Check that inline comments are sparse, short, and local. Flag obvious narration or incident history in changed code. Preserve comments explaining non-obvious constraints, required directives, and public API documentation.
 
 ## Guardrails
 
@@ -28,9 +30,3 @@ When a Herdr-managed handoff supplies a worktree, branch, or artifact paths, ver
 For each finding: `blocker`, `major`, or `minor`; file and line; concrete impact; smallest fix. Then state the verification evidence and any residual risk.
 
 Before returning an English review, invoke `write-clear-technical-english` as a light final pass. Preserve severity, locations, concrete impact, exact evidence, uncertainty, and residual risk.
-
-## Orchestration and review
-
-For substantive work, load the `herdr` skill, follow its workflow, and use Herdr panes for independent parallel work. Use separate worktrees for concurrent mutations, branch isolation, or preserving an active checkout; skip parallelism when tasks are trivial or dependency-bound.
-
-Before finishing substantive repository work with a diff, run `hunk skill path`, load the returned skill, and review the diff with Hunk. If no session exists, start `hunk diff --watch` in a dedicated Herdr pane, or another persistent interactive terminal, so the user does not need to launch it. Then use `hunk session *` for review control. Skip Hunk when no repository diff exists.

@@ -46,21 +46,20 @@ Reviews a completed slice against its spec, plan task, tests, and diff after sim
 
 ### `write-clear-technical-english`
 
-Writes or reviews professional and technical prose with stable terminology, explicit actions, short sentences, and preserved evidence. It combines an ASD-STE100-inspired house style with Zinsser's principles and a growing forbidden-pattern list.
+Writes or reviews professional and technical prose with stable terminology, explicit actions, short sentences, and preserved evidence. It combines an ASD-STE100-inspired house style with Zinsser's principles and a pinned local adaptation of Unslop.
 
 ## Conventions
 
-- Keep communication concise without dropping important context.
-- Pass English technical summaries, reviews, plans, reports, and explanations through `write-clear-technical-english`.
-- Preserve useful history and rationale when shortening wording.
-- Use complete sentences when compression could create ambiguity.
+- Default replies and closeouts to one short paragraph or up to three bullets. Expand when the deliverable requires it.
+- Use `write-clear-technical-english` and its local Unslop reference while drafting, with one cleanup pass per artifact.
+- Preserve facts, requirements, evidence, and uncertainty. Keep detailed history in the relevant document or PR and link it from summaries.
+- Keep inline comments sparse, short, and local. Explain non-obvious constraints; preserve required directives and public API documentation.
 - Prefer code that is easy to understand, change, and delete.
 - Prefer small vertical slices over broad horizontal layers.
 - Use caller- or repository-supplied specification and plan paths. Default to `SPEC.md` and `tasks/` only when no convention exists.
 - When the user explicitly requests Herdr, invoke the installed `herdr` skill for concurrent branches, persistent remote agents, and worktree lifecycle. Keep individual engineering skills inside the supplied worktree and artifact context.
-- Give agents bounded, closed-loop tasks with focused context, acceptance criteria, and runnable verification.
-- Prefer reversible, low-blast-radius delegation; keep critical decisions and final acceptance with a human.
-- Use agents freely for tedious maintenance, issue reproductions, disposable experiments, and as a sounding board before committing to an idea.
+- Let the calling workflow own Herdr, worktree setup, delegation, and Hunk review. Standalone skills do not start these tools.
+- Reuse existing user authorization; do not add approval gates between skills for already authorized work.
 - Do not generalize for hypothetical future requirements.
 - Use `feat`, `fix`, `refactor`, `test`, `docs`, and `chore` commit types.
 - Use `spike/<topic>` for temporary exploratory branches.
@@ -140,6 +139,7 @@ These skills are opinionated adaptations and inspired by:
 - [Herdr v0.8.0 skill](https://github.com/herdrdev/herdr/blob/v0.8.0/skills/herdr/SKILL.md) — terminal, workspace, worktree, and agent-control contract
 - [Which React Native Animation Library Should You Use for Performance?](https://andrei-calazans.com/posts/2026-07-15-which-react-native-animation-library/) — original benchmark and selection guidance by Andrei Calazans
 - [ASD-STE100 Simplified Technical English](https://www.asd-ste100.org/) — controlled-language principles adapted for the clear technical English house style
+- [Unslop](https://github.com/cursor/plugins/blob/e8d856f0273b42ebafe0ec3546bd645709e7c1b0/pstack/skills/unslop/SKILL.md) — plain language and AI-pattern cleanup; adapted locally with its MIT license
 - William Zinsser, *On Writing Well* — simplicity, brevity, clarity, and humanity
 - Amazon, *Write Like an Amazonian* (2018) — short sentences, objective evidence, direct answers, and the "so what?" test
 

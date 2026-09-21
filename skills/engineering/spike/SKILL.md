@@ -1,13 +1,13 @@
 ---
 name: spike
-description: Run a disposable experiment to answer one risky technical question before implementation. Use when architecture, library behaviour, integration feasibility, performance, migration safety, or an unfamiliar API cannot be decided from documentation and existing code. Define evidence first, test at most three approaches, record the decision, and remove exploratory code.
+description: Run a disposable experiment to answer one risky technical question that existing code and documentation cannot settle. Record the evidence and decision, then remove exploratory code.
 ---
 
 # Spike
 
 Answer one technical question with the smallest experiment that produces credible evidence.
 
-Use specification, plan, and spike-note paths supplied by the caller or repository instructions. Otherwise reuse existing repository conventions. When a Herdr-managed handoff supplies a worktree, branch, or artifact paths, verify and preserve that context. Do not switch branches. Reuse the supplied Herdr workspace and worktree; add only the panes justified by the task.
+Use specification, plan, and spike-note paths supplied by the caller or repository instructions. Otherwise reuse existing repository conventions. Verify and preserve any supplied worktree, branch, and artifact paths. Do not switch branches or relocate artifacts. If the checkout differs from the handoff, stop and report the mismatch before proceeding.
 
 ## Principles
 
@@ -73,9 +73,3 @@ An inconclusive result is valid. State what evidence is missing instead of guess
 Before returning an English spike note, decision, or report, invoke `write-clear-technical-english` as a light final pass. Preserve exact commands, observations, measurements, rejected approaches, uncertainty, and cleanup status.
 
 Use `spike/<topic>` for a temporary branch. Do not use `spike` as the final commit type for production code.
-
-## Orchestration and review
-
-For substantive work, load the `herdr` skill, follow its workflow, and use Herdr panes for independent parallel work. Use separate worktrees for concurrent mutations, branch isolation, or preserving an active checkout; skip parallelism when tasks are trivial or dependency-bound.
-
-Before finishing substantive repository work with a diff, run `hunk skill path`, load the returned skill, and review the diff with Hunk. If no session exists, start `hunk diff --watch` in a dedicated Herdr pane, or another persistent interactive terminal, so the user does not need to launch it. Then use `hunk session *` for review control. Skip Hunk when no repository diff exists.

@@ -1,6 +1,6 @@
 ---
 name: build-from-spec
-description: Implement software from an approved specification artifact or its approved plan and task queue. Use when asked to build, implement, or continue specified work. Use caller-supplied or repository-defined artifact paths when present; otherwise default to SPEC.md, tasks/plan.md, and tasks/todo.md. Build a small bounded change directly from the specification; for multi-slice work, execute the next planned vertical slice. Test the change, invoke simplicity, run preflight-review, and pass the factual closeout through write-clear-technical-english without losing evidence or history.
+description: Implement an approved specification or the next planned slice. Use for specified software work with clear acceptance criteria; finish with verification, simplicity, preflight review, and a concise closeout.
 ---
 
 # Build From Spec
@@ -9,7 +9,7 @@ Use the specification path supplied by the caller or repository instructions. Ot
 
 The selected specification is the source of truth. A plan sequences the work but cannot override it.
 
-When a Herdr-managed handoff supplies a worktree, branch, or artifact paths, verify that context before the first write and preserve it throughout the slice. Do not switch branches or relocate task artifacts. Reuse the supplied Herdr workspace and worktree; add only the panes justified by the task. If the current checkout does not match the handoff, stop and report both contexts.
+Verify and preserve any supplied worktree, branch, and artifact paths. Do not switch branches or relocate artifacts. If the checkout differs from the handoff, stop and report the mismatch before proceeding.
 
 ## Operating principles
 
@@ -18,6 +18,7 @@ When a Herdr-managed handoff supplies a worktree, branch, or artifact paths, ver
 - Prefer the smallest local, explicit change that solves the requirement.
 - Work in vertical slices and leave the system working after each one.
 - Avoid speculative flexibility, premature abstractions, and unrelated cleanup.
+- Keep inline comments sparse. Explain only non-obvious local constraints, invariants, or reasons. Prefer clear names and structure. Put incident history and implementation chronology in the PR description; preserve required directives and public API documentation.
 
 ## Workflow
 
@@ -69,14 +70,13 @@ Invoke `preflight-review` against the complete slice after simplification. Addre
 
 ### 7. Close out clearly
 
-Draft a factual summary containing:
+Use `write-clear-technical-english`, including its Unslop pass. Default to a short paragraph or up to three bullets covering:
 
 - what changed and which spec or plan slice it satisfies;
-- verification commands and results;
-- limitations, unrun checks, remaining risks, and open decisions;
-- plan status and the next smallest task when work remains.
+- verification results and any material unrun checks;
+- material limitations, risks, and open decisions, plus the next task when work remains.
 
-Invoke `write-clear-technical-english` as a light edit on that summary. Reject any edit that removes chronology, implementation history needed to understand the result, exact evidence, limitations, or open work. Concision shortens wording while preserving the full factual record.
+Keep detailed commands, evidence, and useful history in the relevant PR or task artifact. Link supporting detail when needed. Preserve material limitations and open work in the summary; do not narrate the execution history.
 
 Use Conventional Commit types (`feat`, `fix`, `refactor`, `test`, `docs`, `chore`). Use `spike/<topic>` only for exploratory branches.
 
@@ -91,9 +91,3 @@ Stop and surface the issue when:
 - The plan and specification disagree about scope or acceptance.
 
 Do not stop for minor ambiguity. Choose the simplest reversible default and state it.
-
-## Orchestration and review
-
-For substantive work, load the `herdr` skill, follow its workflow, and use Herdr panes for independent parallel work. Use separate worktrees for concurrent mutations, branch isolation, or preserving an active checkout; skip parallelism when tasks are trivial or dependency-bound.
-
-Before finishing substantive repository work with a diff, run `hunk skill path`, load the returned skill, and review the diff with Hunk. If no session exists, start `hunk diff --watch` in a dedicated Herdr pane, or another persistent interactive terminal, so the user does not need to launch it. Then use `hunk session *` for review control. Skip Hunk when no repository diff exists.

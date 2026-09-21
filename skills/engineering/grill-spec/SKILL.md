@@ -1,6 +1,6 @@
 ---
 name: grill-spec
-description: Interrogate an approved specification artifact before planning or coding. Use when defining or reviewing a specification with open questions, vague behaviour, hidden assumptions, competing options, missing edge cases, or unclear scope, or when asked to grill or stress-test a product decision. Use a caller-supplied or repository-defined path when present, otherwise default to SPEC.md. Inspect repository facts, ask one dependency-safe decision at a time with a recommendation, and record confirmed answers without erasing useful decision history.
+description: Resolve material open decisions in a specification before planning or coding. Inspect repository facts first, then ask one unblocked question at a time.
 ---
 
 # Grill Spec
@@ -9,7 +9,7 @@ Turn vague requirements into explicit decisions without overwhelming the user.
 
 Use the specification path supplied by the caller or repository instructions. Otherwise reuse an existing repository convention, and default to `SPEC.md` only when none exists.
 
-When a Herdr-managed handoff supplies a worktree, branch, or specification path, treat that context as fixed. Do not switch branches or move the specification. Reuse the supplied Herdr workspace and worktree; add only the panes justified by the task.
+Verify and preserve any supplied worktree, branch, and artifact paths. Do not switch branches or relocate artifacts. If the checkout differs from the handoff, stop and report the mismatch before proceeding.
 
 ## Rules
 
@@ -20,7 +20,7 @@ When a Herdr-managed handoff supplies a worktree, branch, or specification path,
 - Prefer bounded options when they represent the real decision space.
 - Do not ask about implementation-irrelevant preferences or discoverable facts.
 - Update the selected specification after each answer when editing is available.
-- Do not plan or code until the user confirms shared understanding.
+- Do not plan or code while material product decisions remain unresolved. Respect existing authorization and the autonomous mode below.
 
 ## Process
 
@@ -85,7 +85,7 @@ Then give a short confirmation:
 
 Before returning each English technical question or confirmation, invoke `write-clear-technical-english` as a light final pass. Preserve the decision boundary, recommendation, options, rationale, and unresolved uncertainty.
 
-Wait for explicit confirmation. A vague acknowledgment is not permission to reinterpret the contract.
+Request confirmation when the user has not already authorized continuation. Do not reinterpret the contract from a vague acknowledgment.
 
 ## Autonomous mode
 
@@ -95,9 +95,3 @@ When the user explicitly asks to proceed without interaction, replace the interv
 - Add a short `Assumptions` section to the specification.
 - Choose the simplest reversible defaults.
 - Flag only decisions that create material product, security, data, or cost risk.
-
-## Orchestration and review
-
-For substantive work, load the `herdr` skill, follow its workflow, and use Herdr panes for independent parallel work. Use separate worktrees for concurrent mutations, branch isolation, or preserving an active checkout; skip parallelism when tasks are trivial or dependency-bound.
-
-Before finishing substantive repository work with a diff, run `hunk skill path`, load the returned skill, and review the diff with Hunk. If no session exists, start `hunk diff --watch` in a dedicated Herdr pane, or another persistent interactive terminal, so the user does not need to launch it. Then use `hunk session *` for review control. Skip Hunk when no repository diff exists.

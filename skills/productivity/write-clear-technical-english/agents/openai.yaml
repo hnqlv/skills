@@ -1,4 +1,4 @@
 interface:
   display_name: "Clear Technical English"
   short_description: "Remove writing slop without losing meaning"
-  default_prompt: "Use $write-clear-technical-english to make this draft concise, credible, and easy to scan without losing facts, history, or uncertainty."
+  default_prompt: "Use $write-clear-technical-english and its Unslop pass to make this prose short and easy to understand while preserving facts, requirements, and uncertainty."

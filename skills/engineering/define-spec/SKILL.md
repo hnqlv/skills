@@ -1,6 +1,6 @@
 ---
 name: define-spec
-description: Define what to build in an approved specification artifact before implementation. Use for a new product, feature, or significant change when requirements are vague, scattered, or not yet recorded; when asked to write or refine a specification; or when success, scope, and non-goals need agreement. Use a caller-supplied or repository-defined path when present, otherwise default to SPEC.md. Inspect the real repository, resolve material decisions through grill-spec, and produce a concise approved contract. Skip for trivial, self-contained edits with explicit acceptance criteria.
+description: Define or refine a specification before implementation when requirements, scope, or acceptance criteria need agreement. Skip trivial edits with explicit acceptance criteria.
 ---
 
 # Define Spec
@@ -9,7 +9,7 @@ Create or refine the smallest specification that makes the intended outcome and 
 
 Use the specification path supplied by the caller or repository instructions. Otherwise reuse an existing repository convention, and default to `SPEC.md` only when none exists.
 
-When a Herdr-managed handoff supplies a worktree, branch, or artifact path, treat that context as fixed. Verify it before writing. Do not switch branches or move the specification. Reuse the supplied Herdr workspace and worktree; add only the panes justified by the task.
+Verify and preserve any supplied worktree, branch, and artifact paths. Do not switch branches or relocate artifacts. If the checkout differs from the handoff, stop and report the mismatch before proceeding.
 
 ## Workflow
 
@@ -52,9 +52,3 @@ After confirmation:
 - invoke `plan-from-spec` when the work spans multiple slices or sessions, crosses independent subsystems, has important dependencies or risks, or needs a durable execution queue.
 
 The specification remains authoritative. A later plan may sequence it but must not reinterpret it.
-
-## Orchestration and review
-
-For substantive work, load the `herdr` skill, follow its workflow, and use Herdr panes for independent parallel work. Use separate worktrees for concurrent mutations, branch isolation, or preserving an active checkout; skip parallelism when tasks are trivial or dependency-bound.
-
-Before finishing substantive repository work with a diff, run `hunk skill path`, load the returned skill, and review the diff with Hunk. If no session exists, start `hunk diff --watch` in a dedicated Herdr pane, or another persistent interactive terminal, so the user does not need to launch it. Then use `hunk session *` for review control. Skip Hunk when no repository diff exists.

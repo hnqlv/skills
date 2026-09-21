@@ -1,13 +1,13 @@
 ---
 name: simplicity
-description: Simplify or refactor code without changing behaviour. Use when asked to reduce complexity, clean up an implementation, make code easier to understand, or run a post-implementation simplification pass. Prioritize clarity and maintainability over brevity.
+description: Simplify code without changing behaviour. Use for requested cleanup or a post-implementation pass; prioritize readability and maintenance over fewer lines.
 ---
 
 # Simplicity
 
 Make the code easier to understand, change, test, and delete. Fewer lines are not a goal.
 
-When a Herdr-managed handoff supplies a worktree or branch, verify and preserve that context. Review only the selected workstream diff. Do not switch branches. Reuse the supplied Herdr workspace and worktree; add only the panes justified by the task.
+Verify and preserve any supplied worktree, branch, and artifact paths. Review only the selected workstream diff. Do not switch branches or relocate artifacts. If the checkout differs from the handoff, stop and report the mismatch before proceeding.
 
 ## Rules
 
@@ -16,40 +16,12 @@ When a Herdr-managed handoff supplies a worktree or branch, verify and preserve 
 - Use a single ternary only when both outcomes and the condition are immediately obvious.
 - Remove dead paths, needless wrappers, speculative abstractions, premature configuration, and dependencies that no longer earn their cost.
 - Keep useful duplication when extracting it would couple unrelated behaviour or hide intent.
-- Prefer self-documenting names and structure. Add comments only for non-obvious reasons, constraints, or invariants—not to narrate the code.
+- Keep inline comments sparse and local. Delete comments that narrate obvious code; retain non-obvious reasons, constraints, invariants, required directives, and public API documentation. Put incident history and implementation chronology in the PR description.
 - Reject any change that saves lines but increases the reader's mental work.
 - Stop when further edits would be stylistic churn.
-
-For example, replace branching shaped like this:
-
-```ts
-const shouldNotify = isUrgentMessage
-  ? preferences["notifyUrgent"] === true
-  : isDigestMessage
-    ? preferences["notifyDigest"] === true
-    : true;
-```
-
-with explicit control flow:
-
-```ts
-let shouldNotify = true;
-
-if (isUrgentMessage) {
-  shouldNotify = preferences["notifyUrgent"] === true;
-} else if (isDigestMessage) {
-  shouldNotify = preferences["notifyDigest"] === true;
-}
-```
 
 ## Verify
 
 Review the final diff for accidental behaviour changes. Run the repository's focused tests and relevant type, lint, or build checks; do not assume a language-specific command.
 
 Before returning an English technical summary or review, invoke `write-clear-technical-english` as a light final pass. Preserve behaviour claims, exact verification, limitations, and residual risk.
-
-## Orchestration and review
-
-For substantive work, load the `herdr` skill, follow its workflow, and use Herdr panes for independent parallel work. Use separate worktrees for concurrent mutations, branch isolation, or preserving an active checkout; skip parallelism when tasks are trivial or dependency-bound.
-
-Before finishing substantive repository work with a diff, run `hunk skill path`, load the returned skill, and review the diff with Hunk. If no session exists, start `hunk diff --watch` in a dedicated Herdr pane, or another persistent interactive terminal, so the user does not need to launch it. Then use `hunk session *` for review control. Skip Hunk when no repository diff exists.

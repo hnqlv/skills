@@ -1,13 +1,13 @@
 ---
 name: debug-with-proof
-description: Debug defects with evidence before changing production code. Use for bug reports, regressions, flaky behaviour, failing integrations, or unexpected output. Reproduce the issue, reduce the failing surface, test one hypothesis at a time, apply the minimal fix, and retain regression coverage.
+description: Debug defects, regressions, flaky behaviour, and failing integrations. Reproduce the failure before changing production code, test one hypothesis at a time, and verify the minimal fix.
 ---
 
 # Debug With Proof
 
 Do not fix a bug that has not been reproduced.
 
-Use the specification path supplied by the caller or repository instructions when one is relevant. When a Herdr-managed handoff supplies a worktree, branch, or artifact paths, verify and preserve that context. Do not switch branches. Reuse the supplied Herdr workspace and worktree; add only the panes justified by the task.
+Use the specification path supplied by the caller or repository instructions when one is relevant. Verify and preserve any supplied worktree, branch, and artifact paths. Do not switch branches or relocate artifacts. If the checkout differs from the handoff, stop and report the mismatch before proceeding.
 
 ## Communication
 
@@ -96,9 +96,3 @@ Stop and surface the uncertainty when:
 - The proposed fix requires destructive migration or security-sensitive changes without approval.
 
 Do not claim a root cause when only correlation was established.
-
-## Orchestration and review
-
-For substantive work, load the `herdr` skill, follow its workflow, and use Herdr panes for independent parallel work. Use separate worktrees for concurrent mutations, branch isolation, or preserving an active checkout; skip parallelism when tasks are trivial or dependency-bound.
-
-Before finishing substantive repository work with a diff, run `hunk skill path`, load the returned skill, and review the diff with Hunk. If no session exists, start `hunk diff --watch` in a dedicated Herdr pane, or another persistent interactive terminal, so the user does not need to launch it. Then use `hunk session *` for review control. Skip Hunk when no repository diff exists.
