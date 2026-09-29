@@ -5,11 +5,19 @@ description: Define or refine a specification before implementation when require
 
 # Define Spec
 
+Load `write-clear-technical-english` before the first update. Apply it to all messages, agent prompts and replies, handoffs, summaries, task/PR descriptions, and artifacts. Default messages and summaries to one short paragraph or up to three bullets; preserve evidence, uncertainty, and blockers. Expand artifacts only as their requirements demand.
+
 Create or refine the smallest specification that makes the intended outcome and completion test explicit. Do not plan or write production code.
 
 Use the specification path supplied by the caller or repository instructions. Otherwise reuse an existing repository convention, and default to `SPEC.md` only when none exists.
 
 Verify and preserve any supplied worktree, branch, and artifact paths. Do not switch branches or relocate artifacts. If the checkout differs from the handoff, stop and report the mismatch before proceeding.
+
+## Herdr and Hunk
+
+For substantive repository work, load the [Herdr skill](https://herdr.dev/docs/agent-skill/) and follow its `HERDR_ENV=1` check. Reuse the verified workspace and worktree. Use panes for independent work and persistent commands; use separate workspaces/worktrees for concurrent edits or branch isolation. Preserve user focus and skip needless parallelism. Never control Herdr from outside it.
+
+Use [Hunk](https://www.hunk.dev/docs/agents/review-with-an-agent/) for every repository diff review, including documentation. Run `hunk skill path`, load that skill, and select the exact repository/session with `hunk session *`. If none matches, open the correct diff in a dedicated, persistent Herdr pane for the user; keep agent control in the session CLI. Leave concise inline notes, read user comments, and keep the review open for the user's manual pass. Include the session and pane in the handoff. If unavailable, report the review as pending; do not silently substitute a plain diff review. Skip Hunk only when no repository diff exists.
 
 ## Workflow
 
@@ -44,7 +52,7 @@ Choose the simplest reversible default for minor implementation details and labe
 
 Summarize the outcome, scope, non-goals, acceptance criteria, and remaining assumptions. Do not plan or code until the user confirms the specification, unless they explicitly authorized autonomous continuation.
 
-Before returning English specification text or its handoff summary, invoke `write-clear-technical-english` as a light final pass. Preserve exact requirements, acceptance criteria, non-goals, assumptions, rationale, and obligation levels.
+Preserve exact requirements, acceptance criteria, non-goals, assumptions, rationale, and obligation levels.
 
 After confirmation:
 

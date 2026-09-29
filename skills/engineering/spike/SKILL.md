@@ -5,9 +5,17 @@ description: Run a disposable experiment to answer one risky technical question 
 
 # Spike
 
+Load `write-clear-technical-english` before the first update. Apply it to all messages, agent prompts and replies, handoffs, summaries, task/PR descriptions, and artifacts. Default messages and summaries to one short paragraph or up to three bullets; preserve evidence, uncertainty, and blockers. Expand artifacts only as their requirements demand.
+
 Answer one technical question with the smallest experiment that produces credible evidence.
 
 Use specification, plan, and spike-note paths supplied by the caller or repository instructions. Otherwise reuse existing repository conventions. Verify and preserve any supplied worktree, branch, and artifact paths. Do not switch branches or relocate artifacts. If the checkout differs from the handoff, stop and report the mismatch before proceeding.
+
+## Herdr and Hunk
+
+For substantive repository work, load the [Herdr skill](https://herdr.dev/docs/agent-skill/) and follow its `HERDR_ENV=1` check. Reuse the verified workspace and worktree. Use panes for independent work and persistent commands; use separate workspaces/worktrees for concurrent edits or branch isolation. Preserve user focus and skip needless parallelism. Never control Herdr from outside it.
+
+Use [Hunk](https://www.hunk.dev/docs/agents/review-with-an-agent/) for every repository diff review, including documentation. Run `hunk skill path`, load that skill, and select the exact repository/session with `hunk session *`. If none matches, open the correct diff in a dedicated, persistent Herdr pane for the user; keep agent control in the session CLI. Leave concise inline notes, read user comments, and keep the review open for the user's manual pass. Include the session and pane in the handoff. If unavailable, report the review as pending; do not silently substitute a plain diff review. Skip Hunk only when no repository diff exists.
 
 ## Principles
 
@@ -21,7 +29,7 @@ Use specification, plan, and spike-note paths supplied by the caller or reposito
 
 ### 1. Frame the question
 
-Write a brief spike note with `Question`, `Why it matters`, `Success evidence`, and `Constraints`.
+Keep one compact spike note. State the question, why it matters, success evidence, and constraints; update that note as evidence arrives.
 
 Reject broad questions such as “Which architecture is best?” Narrow them to a decision that evidence can answer.
 
@@ -59,7 +67,7 @@ Do not declare success from code that was not run.
 
 ### 5. Decide
 
-Record `Decision`, `Evidence`, `Rejected approaches`, `Risks and unknowns`, `Required changes`, and `Cleanup`.
+Lead with the decision and decisive evidence. Briefly retain rejected approaches, risks, required changes, and cleanup status when applicable. Do not repeat experiment logs or force a section for each field.
 
 An inconclusive result is valid. State what evidence is missing instead of guessing.
 
@@ -70,6 +78,6 @@ An inconclusive result is valid. State what evidence is missing instead of guess
 - Rebuild retained code through the normal tested workflow.
 - Keep only a concise spike report when the decision needs an audit trail.
 
-Before returning an English spike note, decision, or report, invoke `write-clear-technical-english` as a light final pass. Preserve exact commands, observations, measurements, rejected approaches, uncertainty, and cleanup status.
+Preserve exact commands, observations, measurements, rejected approaches, uncertainty, and cleanup status.
 
 Use `spike/<topic>` for a temporary branch. Do not use `spike` as the final commit type for production code.

@@ -5,9 +5,17 @@ description: Debug defects, regressions, flaky behaviour, and failing integratio
 
 # Debug With Proof
 
+Load `write-clear-technical-english` before the first update. Apply it to all messages, agent prompts and replies, handoffs, summaries, task/PR descriptions, and artifacts. Default messages and summaries to one short paragraph or up to three bullets; preserve evidence, uncertainty, and blockers. Expand artifacts only as their requirements demand.
+
 Do not fix a bug that has not been reproduced.
 
 Use the specification path supplied by the caller or repository instructions when one is relevant. Verify and preserve any supplied worktree, branch, and artifact paths. Do not switch branches or relocate artifacts. If the checkout differs from the handoff, stop and report the mismatch before proceeding.
+
+## Herdr and Hunk
+
+For substantive repository work, load the [Herdr skill](https://herdr.dev/docs/agent-skill/) and follow its `HERDR_ENV=1` check. Reuse the verified workspace and worktree. Use panes for independent work and persistent commands; use separate workspaces/worktrees for concurrent edits or branch isolation. Preserve user focus and skip needless parallelism. Never control Herdr from outside it.
+
+Use [Hunk](https://www.hunk.dev/docs/agents/review-with-an-agent/) for every repository diff review, including documentation. Run `hunk skill path`, load that skill, and select the exact repository/session with `hunk session *`. If none matches, open the correct diff in a dedicated, persistent Herdr pane for the user; keep agent control in the session CLI. Leave concise inline notes, read user comments, and keep the review open for the user's manual pass. Include the session and pane in the handoff. If unavailable, report the review as pending; do not silently substitute a plain diff review. Skip Hunk only when no repository diff exists.
 
 ## Communication
 
@@ -75,15 +83,13 @@ After tests pass:
 
 ### 8. Report
 
-Summarize:
+Use one short paragraph or up to three bullets:
 
-- Root cause.
-- Reproduction added.
-- Minimal fix.
-- Verification commands and results.
-- Remaining risk, if any.
+- Cause and minimal fix, or the unresolved hypothesis.
+- Decisive reproduction and verification results; link detailed commands.
+- Remaining risk or next check, when needed.
 
-Before returning an English technical report, invoke `write-clear-technical-english` as a light final pass. Preserve exact commands, paths, identifiers, errors, evidence, uncertainty, and remaining risk.
+Preserve exact commands, paths, identifiers, errors, evidence, uncertainty, and remaining risk.
 
 Use the `fix` commit type. Use `test` separately only when adding coverage without a production change.
 

@@ -5,11 +5,19 @@ description: Implement an approved specification or the next planned slice. Use 
 
 # Build From Spec
 
+Load `write-clear-technical-english` before the first update. Apply it to all messages, agent prompts and replies, handoffs, summaries, task/PR descriptions, and artifacts. Default messages and summaries to one short paragraph or up to three bullets; preserve evidence, uncertainty, and blockers. Expand artifacts only as their requirements demand.
+
 Use the specification path supplied by the caller or repository instructions. Otherwise reuse an existing repository convention, and default to `SPEC.md` only when none exists. Use supplied or repository-defined plan and queue paths the same way, with `tasks/plan.md` and `tasks/todo.md` as fallbacks.
 
 The selected specification is the source of truth. A plan sequences the work but cannot override it.
 
 Verify and preserve any supplied worktree, branch, and artifact paths. Do not switch branches or relocate artifacts. If the checkout differs from the handoff, stop and report the mismatch before proceeding.
+
+## Herdr and Hunk
+
+For substantive repository work, load the [Herdr skill](https://herdr.dev/docs/agent-skill/) and follow its `HERDR_ENV=1` check. Reuse the verified workspace and worktree. Use panes for independent work and persistent commands; use separate workspaces/worktrees for concurrent edits or branch isolation. Preserve user focus and skip needless parallelism. Never control Herdr from outside it.
+
+Use [Hunk](https://www.hunk.dev/docs/agents/review-with-an-agent/) for every repository diff review, including documentation. Run `hunk skill path`, load that skill, and select the exact repository/session with `hunk session *`. If none matches, open the correct diff in a dedicated, persistent Herdr pane for the user; keep agent control in the session CLI. Leave concise inline notes, read user comments, and keep the review open for the user's manual pass. Include the session and pane in the handoff. If unavailable, report the review as pending; do not silently substitute a plain diff review. Skip Hunk only when no repository diff exists.
 
 ## Operating principles
 
@@ -18,7 +26,7 @@ Verify and preserve any supplied worktree, branch, and artifact paths. Do not sw
 - Prefer the smallest local, explicit change that solves the requirement.
 - Work in vertical slices and leave the system working after each one.
 - Avoid speculative flexibility, premature abstractions, and unrelated cleanup.
-- Keep inline comments sparse. Explain only non-obvious local constraints, invariants, or reasons. Prefer clear names and structure. Put incident history and implementation chronology in the PR description; preserve required directives and public API documentation.
+- Keep inline comments sparse. Explain only non-obvious local constraints, invariants, or reasons. Prefer clear names and structure. Keep detailed incident history in a linked artifact; preserve required directives and public API documentation.
 
 ## Workflow
 
@@ -70,13 +78,13 @@ Invoke `preflight-review` against the complete slice after simplification. Addre
 
 ### 7. Close out clearly
 
-Use `write-clear-technical-english`, including its Unslop pass. Default to a short paragraph or up to three bullets covering:
+Keep using the loaded writing guidance and Unslop pass. Default to a short paragraph or up to three bullets covering:
 
 - what changed and which spec or plan slice it satisfies;
 - verification results and any material unrun checks;
 - material limitations, risks, and open decisions, plus the next task when work remains.
 
-Keep detailed commands, evidence, and useful history in the relevant PR or task artifact. Link supporting detail when needed. Preserve material limitations and open work in the summary; do not narrate the execution history.
+Keep detailed commands, evidence, and useful history in one task artifact. Link it from the concise PR description or summary. Preserve material limitations and open work; do not narrate the execution history.
 
 Use Conventional Commit types (`feat`, `fix`, `refactor`, `test`, `docs`, `chore`). Use `spike/<topic>` only for exploratory branches.
 

@@ -22,7 +22,7 @@ Creates a plan and task queue at caller-supplied, repository-defined, or convent
 
 ### `build-from-spec`
 
-Builds the next approved slice from the selected plan, or a small bounded change directly from the selected specification. It finishes with tests, `simplicity`, `preflight-review`, and a `write-clear-technical-english` pass over the closeout summary.
+Builds the next approved slice from the selected plan, or a small bounded change directly from the selected specification. It finishes with tests, `simplicity`, and Hunk-backed `preflight-review`. It uses `write-clear-technical-english` throughout.
 
 ### `spike`
 
@@ -42,7 +42,7 @@ Chooses and verifies performant React Native animation approaches based on inter
 
 ### `preflight-review`
 
-Reviews a completed slice against its spec, plan task, tests, and diff after simplification.
+Reviews a completed slice against its spec, plan task, tests, and diff in Hunk after simplification. Leaves inline notes and keeps the review open for the user.
 
 ### `write-clear-technical-english`
 
@@ -50,15 +50,17 @@ Writes or reviews professional and technical prose with stable terminology, expl
 
 ## Conventions
 
-- Default replies and closeouts to one short paragraph or up to three bullets. Expand when the deliverable requires it.
-- Use `write-clear-technical-english` and its local Unslop reference while drafting, with one cleanup pass per artifact.
-- Preserve facts, requirements, evidence, and uncertainty. Keep detailed history in the relevant document or PR and link it from summaries.
+- Load `write-clear-technical-english` before the first update. Use it for every message, agent exchange, summary, handoff, task/PR description, and artifact.
+- Default to one short paragraph or up to three bullets, including spike, investigation, and troubleshooting summaries. Keep detailed evidence in one linked artifact; retain blockers and uncertainty.
+- Apply the local Unslop reference while drafting, with one cleanup pass per artifact. Preserve facts, requirements, and evidence.
 - Keep inline comments sparse, short, and local. Explain non-obvious constraints; preserve required directives and public API documentation.
 - Prefer code that is easy to understand, change, and delete.
 - Prefer small vertical slices over broad horizontal layers.
 - Use caller- or repository-supplied specification and plan paths. Default to `SPEC.md` and `tasks/` only when no convention exists.
-- When the user explicitly requests Herdr, invoke the installed `herdr` skill for concurrent branches, persistent remote agents, and worktree lifecycle. Keep individual engineering skills inside the supplied worktree and artifact context.
-- Let the calling workflow own Herdr, worktree setup, delegation, and Hunk review. Standalone skills do not start these tools.
+- For substantive repository work, load the [Herdr skill](https://herdr.dev/docs/agent-skill/) and follow its environment check. Reuse verified workspaces; use panes for independent work and persistent commands, and worktrees for concurrent edits or branch isolation. Preserve focus, supplied paths, and cleanup ownership.
+- Use [Hunk](https://www.hunk.dev/docs/agents/review-with-an-agent/) for every repository diff review, including documentation. Load `hunk skill path`, inspect the exact session, add concise inline notes, and read user comments.
+- If no matching Hunk session exists, open the correct diff in a dedicated, persistent Herdr pane. Keep it open for the user to inspect and add notes; include its session/pane in the handoff. Report unavailable review tooling as pending. Skip Hunk only when no repository diff exists.
+- These rules apply to direct skill invocations as well as composed workflows. Reuse existing tool sessions and loaded writing guidance.
 - Reuse existing user authorization; do not add approval gates between skills for already authorized work.
 - Do not generalize for hypothetical future requirements.
 - Use `feat`, `fix`, `refactor`, `test`, `docs`, and `chore` commit types.
@@ -136,7 +138,8 @@ These skills are opinionated adaptations and inspired by:
 - [Mario Zechner](https://www.youtube.com/watch?v=RjfbvDXpFls) — inspiration for the good-agent-task principles
 - [Cursor Bugbot Reviews in 90 Seconds](https://www.digitalapplied.com/blog/cursor-bugbot-90-second-reviews-june-2026-release) — motivation for an earlier local review gate
 - [Grilling](https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling) — one-question-at-a-time decision-tree interviewing
-- [Herdr v0.8.0 skill](https://github.com/herdrdev/herdr/blob/v0.8.0/skills/herdr/SKILL.md) — terminal, workspace, worktree, and agent-control contract
+- [Herdr agent skill](https://herdr.dev/docs/agent-skill/) — terminal, workspace, worktree, and agent-control contract
+- [Hunk agent review](https://www.hunk.dev/docs/agents/review-with-an-agent/) — shared live reviews and inline notes
 - [Which React Native Animation Library Should You Use for Performance?](https://andrei-calazans.com/posts/2026-07-15-which-react-native-animation-library/) — original benchmark and selection guidance by Andrei Calazans
 - [ASD-STE100 Simplified Technical English](https://www.asd-ste100.org/) — controlled-language principles adapted for the clear technical English house style
 - [Unslop](https://github.com/cursor/plugins/blob/e8d856f0273b42ebafe0ec3546bd645709e7c1b0/pstack/skills/unslop/SKILL.md) — plain language and AI-pattern cleanup; adapted locally with its MIT license

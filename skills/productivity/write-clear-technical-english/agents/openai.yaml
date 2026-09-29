@@ -1,4 +1,4 @@
 interface:
   display_name: "Clear Technical English"
   short_description: "Remove writing slop without losing meaning"
-  default_prompt: "Use $write-clear-technical-english and its Unslop pass to make this prose short and easy to understand while preserving facts, requirements, and uncertainty."
+  default_prompt: "Use $write-clear-technical-english from the first message through agent handoffs, task/PR descriptions, and the final summary. Keep prose ultra-concise, apply Unslop, and preserve evidence, requirements, uncertainty, and blockers."

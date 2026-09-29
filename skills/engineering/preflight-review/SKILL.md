@@ -5,9 +5,27 @@ description: Review a completed implementation against its spec, tests, and diff
 
 # Preflight Review
 
+Load `write-clear-technical-english` before the first update. Apply it to all messages, agent prompts and replies, handoffs, summaries, task/PR descriptions, and artifacts. Default messages and summaries to one short paragraph or up to three bullets; preserve evidence, uncertainty, and blockers. Expand artifacts only as their requirements demand.
+
 Review the current diff against the specification path supplied by the caller or repository instructions, the selected plan task when present, acceptance criteria, tests, and local conventions. Otherwise reuse the repository's specification convention, and default to `SPEC.md` only when none exists. Review; do not change code unless asked.
 
 Verify and preserve any supplied worktree, branch, and artifact paths. Review only the selected workstream diff. Do not switch branches or relocate artifacts. If the checkout differs from the handoff, stop and report the mismatch before proceeding.
+
+## Herdr and Hunk
+
+For substantive repository work, load the [Herdr skill](https://herdr.dev/docs/agent-skill/) and follow its `HERDR_ENV=1` check. Reuse the verified workspace and worktree. Use panes for independent work and persistent commands; use separate workspaces/worktrees for concurrent edits or branch isolation. Preserve user focus and skip needless parallelism. Never control Herdr from outside it.
+
+Use [Hunk](https://www.hunk.dev/docs/agents/review-with-an-agent/) for every repository diff review, including documentation. Run `hunk skill path`, load that skill, and select the exact repository/session with `hunk session *`. If none matches, open the correct diff in a dedicated, persistent Herdr pane for the user; keep agent control in the session CLI. Leave concise inline notes, read user comments, and keep the review open for the user's manual pass. Include the session and pane in the handoff. If unavailable, report the review as pending; do not silently substitute a plain diff review. Skip Hunk only when no repository diff exists.
+
+## Review in Hunk
+
+1. Run `hunk session list --json` and `get` to verify the repository and loaded source. Use the exact session ID when several sessions match.
+2. Confirm the complete scope: unstaged, staged, or pinned base/head refs. Include both staged and unstaged changes when the slice spans both. Reuse a matching review; do not repurpose another task's session. If needed, start `hunk diff --watch`, `hunk diff --staged --watch`, or the selected commit/range review in a dedicated Herdr pane.
+3. Run `hunk session review <id> --json`. Read source and tests as needed; request `--include-patch` only when useful. Check existing notes with `hunk session comment list <id> --type all`.
+4. Add concise findings or non-obvious rationale with `comment add` or `comment apply`, anchored to the correct file and diff side. Preserve user notes; never invent findings to populate the review.
+5. After fixes or staging, verify the source again and reload if needed. Recheck affected findings and read user comments before handing back the review. Do not treat agent review as user approval.
+
+Keep the session open. Hand off its ID, Herdr workspace/pane, reviewed scope, findings, and verification in a short summary. The user can inspect the diff and add notes there.
 
 ## Order
 
@@ -29,4 +47,4 @@ Check that inline comments are sparse, short, and local. Flag obvious narration 
 
 For each finding: `blocker`, `major`, or `minor`; file and line; concrete impact; smallest fix. Then state the verification evidence and any residual risk.
 
-Before returning an English review, invoke `write-clear-technical-english` as a light final pass. Preserve severity, locations, concrete impact, exact evidence, uncertainty, and residual risk.
+Preserve severity, locations, concrete impact, exact evidence, uncertainty, and residual risk.
