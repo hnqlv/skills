@@ -53,18 +53,26 @@ If no approved specification exists at the selected path, hand off to `define-sp
 - Answer one question with disposable, isolated code.
 - Record the decision in the selected specification and plan, then remove the exploratory code unless rebuilt as tested production code.
 
-### 4. Build one slice with TDD
+### 4. Build one slice with meaningful tests
 
-For each behavioural task:
+Select one task and state its acceptance criteria. Inspect existing coverage before writing tests. For each proposed test, identify:
 
-1. Select one task and state its acceptance criteria.
-2. Write the smallest meaningful failing test.
-3. Run it and confirm it fails for the expected reason.
-4. Write the minimum production code needed to pass.
-5. Run the focused test.
-6. Run the relevant broader test suite and checks.
-7. Refactor only while tests remain green.
-8. Update the task status.
+- the observable behaviour, invariant, or independent contract it protects;
+- a credible regression that would make it fail;
+- the gap in existing coverage, preferably filled by extending an existing case;
+- any production export, flag, wrapper, or injection hook needed only by the test; exercise the real boundary instead.
+
+Add the test only when these answers justify it. Additional test layers need distinct risks. Avoid assertions that copy implementation details or source text, expected values calculated by the code under test, and mocks that supply the behaviour being asserted. Source checks are justified when they independently protect a real contract.
+
+For a behaviour change or bug fix:
+
+1. Reuse an existing failing test, or extend or add the smallest justified case where coverage is missing.
+2. Run it before the change and confirm it fails for the intended reason.
+3. Implement the minimum change and rerun the focused test.
+4. Run the relevant broader suite and required checks.
+5. Refactor while tests remain green and update the task status.
+
+For behaviour-preserving changes, run existing coverage without adding duplicates. For documentation or low-impact edits without a meaningful behavioural risk, use appropriate validation instead of inventing tests. Always run repository-required checks and state the verification performed.
 
 Do not implement multiple planned slices at once unless explicitly requested. Keep unrelated worktree changes untouched.
 

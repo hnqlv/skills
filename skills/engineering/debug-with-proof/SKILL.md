@@ -34,6 +34,8 @@ Read the relevant section of the selected specification when available. Confirm 
 
 Prefer a focused regression test, then a deterministic integration test, a minimal executable script, or documented manual steps when automation is impractical.
 
+Inspect existing coverage first. Reuse a failing test or extend an existing case at the boundary responsible for the behaviour. Add another layer only for a distinct risk. Keep expected outcomes independent of the code under test; mocks must not supply the behaviour being proved. Avoid production hooks needed only by tests.
+
 Confirm it fails for the reported reason. Setup errors, unrelated exceptions, and incorrect assertions are not proof.
 
 Do not change production code before this step succeeds, except for temporary observability needed to expose the failure. Remove temporary instrumentation afterward.
@@ -71,7 +73,7 @@ Change one relevant variable at a time. Reject unsupported hypotheses quickly.
 2. Run nearby edge-case tests.
 3. Run the relevant broader suite, type checks, lint, and build checks.
 4. When practical, confirm the test would fail if the fix were reverted.
-5. Keep the regression test unless it asserts an obsolete implementation detail.
+5. Retain meaningful regression coverage. Consolidate duplicates only after confirming the remaining test detects the same failure; rewrite an implementation-coupled test when its contract still matters.
 
 ### 7. Simplify and review
 

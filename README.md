@@ -133,6 +133,7 @@ These skills are opinionated adaptations and inspired by:
 - [Planning and Task Breakdown](https://github.com/addyosmani/agent-skills/tree/main/skills/planning-and-task-breakdown) — small verifiable tasks and vertical slices
 - [Incremental Implementation](https://github.com/addyosmani/agent-skills/tree/main/skills/incremental-implementation) — verified vertical-slice execution
 - [Test-Driven Development](https://github.com/addyosmani/agent-skills/tree/main/skills/test-driven-development) — failing tests before implementation and regression proof
+- [OpenClaw Test Audit](https://github.com/openclaw/openclaw/blob/main/.agents/skills/test-audit/SKILL.md) — test value, distinct coverage, and evidence before deletion
 - [Code Simplification](https://github.com/addyosmani/agent-skills/tree/main/skills/code-simplification) — behaviour-preserving simplification
 - [Code Review and Quality](https://github.com/addyosmani/agent-skills/tree/main/skills/code-review-and-quality) — actionable diff review
 - [Mario Zechner](https://www.youtube.com/watch?v=RjfbvDXpFls) — inspiration for the good-agent-task principles
