@@ -5,7 +5,7 @@ description: Turn an approved specification into an ordered plan and task queue 
 
 # Plan From Spec
 
-Load `write-clear-technical-english` before the first update. Apply it to all messages, agent prompts and replies, handoffs, summaries, task/PR descriptions, and artifacts. Default messages and summaries to one short paragraph or up to three bullets; preserve evidence, uncertainty, and blockers. Expand artifacts only as their requirements demand.
+Load `writing` before the first update. Apply it to all messages, agent prompts and replies, handoffs, summaries, task/PR descriptions, and artifacts. Default messages and summaries to one short paragraph or up to three bullets; preserve evidence, uncertainty, and blockers. Expand artifacts only as their requirements demand.
 
 Plan only when the plan reduces execution risk or preserves useful state across slices. Do not turn a small change into ceremony.
 

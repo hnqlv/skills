@@ -5,7 +5,7 @@ description: Implement an approved specification or the next planned slice. Use 
 
 # Build From Spec
 
-Load `write-clear-technical-english` before the first update. Apply it to all messages, agent prompts and replies, handoffs, summaries, task/PR descriptions, and artifacts. Default messages and summaries to one short paragraph or up to three bullets; preserve evidence, uncertainty, and blockers. Expand artifacts only as their requirements demand.
+Load `writing` before the first update. Apply it to all messages, agent prompts and replies, handoffs, summaries, task/PR descriptions, and artifacts. Default messages and summaries to one short paragraph or up to three bullets; preserve evidence, uncertainty, and blockers. Expand artifacts only as their requirements demand.
 
 Use the specification path supplied by the caller or repository instructions. Otherwise reuse an existing repository convention, and default to `SPEC.md` only when none exists. Use supplied or repository-defined plan and queue paths the same way, with `tasks/plan.md` and `tasks/todo.md` as fallbacks.
 
@@ -86,7 +86,7 @@ Invoke `preflight-review` against the complete slice after simplification. Addre
 
 ### 7. Close out clearly
 
-Keep using the loaded writing guidance and Unslop pass. Default to a short paragraph or up to three bullets covering:
+Keep using the loaded writing guidance. Default to a short paragraph or up to three bullets covering:
 
 - what changed and which spec or plan slice it satisfies;
 - verification results and any material unrun checks;

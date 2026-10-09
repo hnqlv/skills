@@ -22,7 +22,7 @@ Creates a plan and task queue at caller-supplied, repository-defined, or convent
 
 ### `build-from-spec`
 
-Builds the next approved slice from the selected plan, or a small bounded change directly from the selected specification. It finishes with tests, `simplicity`, and Hunk-backed `preflight-review`. It uses `write-clear-technical-english` throughout.
+Builds the next approved slice from the selected plan, or a small bounded change directly from the selected specification. It finishes with tests, `simplicity`, and Hunk-backed `preflight-review`. It uses `writing` throughout.
 
 ### `spike`
 
@@ -44,15 +44,15 @@ Chooses and verifies performant React Native animation approaches based on inter
 
 Reviews a completed slice against its spec, plan task, tests, and diff in Hunk after simplification. Leaves inline notes and keeps the review open for the user.
 
-### `write-clear-technical-english`
+### `writing`
 
-Writes or reviews professional and technical prose with stable terminology, explicit actions, short sentences, and preserved evidence. It combines an ASD-STE100-inspired house style with Zinsser's principles and a pinned local adaptation of Unslop.
+Writes or revises prose using Peter Yang's simple, short, specific framework. Uses ASD-STE100 Simplified Technical English for technical English, with the official rules and dictionary as the authority. Preserves evidence and real uncertainty.
 
 ## Conventions
 
-- Load `write-clear-technical-english` before the first update. Use it for every message, agent exchange, summary, handoff, task/PR description, and artifact.
+- Load `writing` before the first update. Use it for every message, agent exchange, summary, handoff, task/PR description, and artifact.
 - Default to one short paragraph or up to three bullets, including spike, investigation, and troubleshooting summaries. Keep detailed evidence in one linked artifact; retain blockers and uncertainty.
-- Apply the local Unslop reference while drafting, with one cleanup pass per artifact. Preserve facts, requirements, and evidence.
+- Make one editorial pass per artifact. Use the official ASD-STE100 rules and dictionary for technical English; preserve facts, requirements, and evidence.
 - Keep inline comments sparse, short, and local. Explain non-obvious constraints; preserve required directives and public API documentation.
 - Prefer code that is easy to understand, change, and delete.
 - Prefer small vertical slices over broad horizontal layers.
@@ -81,7 +81,7 @@ skills/
     react-native-animation/
     preflight-review/
   productivity/
-    write-clear-technical-english/
+    writing/
 ```
 
 Each skill directory under `skills/engineering/` or `skills/productivity/` is editable source. Private skills live outside this repository.
@@ -121,7 +121,7 @@ Use simplicity to make this implementation clearer without changing its behaviou
 ```
 
 ```text
-Use write-clear-technical-english to make this implementation summary precise and easy to scan.
+Use writing to make this implementation summary precise and easy to scan.
 ```
 
 ## References
@@ -142,10 +142,8 @@ These skills are opinionated adaptations and inspired by:
 - [Herdr agent skill](https://herdr.dev/docs/agent-skill/) — terminal, workspace, worktree, and agent-control contract
 - [Hunk agent review](https://www.hunk.dev/docs/agents/review-with-an-agent/) — shared live reviews and inline notes
 - [Which React Native Animation Library Should You Use for Performance?](https://andrei-calazans.com/posts/2026-07-15-which-react-native-animation-library/) — original benchmark and selection guidance by Andrei Calazans
-- [ASD-STE100 Simplified Technical English](https://www.asd-ste100.org/) — controlled-language principles adapted for the clear technical English house style
-- [Unslop](https://github.com/cursor/plugins/blob/e8d856f0273b42ebafe0ec3546bd645709e7c1b0/pstack/skills/unslop/SKILL.md) — plain language and AI-pattern cleanup; adapted locally with its MIT license
-- William Zinsser, *On Writing Well* — simplicity, brevity, clarity, and humanity
-- Amazon, *Write Like an Amazonian* (2018) — short sentences, objective evidence, direct answers, and the "so what?" test
+- [ASD-STE100 Simplified Technical English, Issue 9](https://www.asd-ste100.org/assets/files/ASD-STE100_ISSUE9.pdf) — authority for technical English rules and vocabulary
+- [The Secret to Effective Written Communication](https://creatoreconomy.so/p/the-secret-to-effective-written-communication) — Peter Yang's simple, short, specific framework
 
 ## License
 

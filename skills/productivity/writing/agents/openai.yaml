@@ -1,0 +1,4 @@
+interface:
+  display_name: "Writing"
+  short_description: "Simple, short, specific writing and technical English"
+  default_prompt: "Use $writing to make this text simple, short, and specific, applying ASD-STE100 to technical English while preserving facts and uncertainty."
