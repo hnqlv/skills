@@ -42,7 +42,7 @@ If no approved specification exists at the selected path, hand off to `define-sp
 
 ### 2. Resolve material questions
 
-- Invoke `grill-spec` when unresolved decisions materially affect behaviour, data, architecture, scope, security, cost, or user experience.
+- Return to `define-spec` when unresolved decisions materially affect behaviour, data, architecture, scope, security, cost, or user experience.
 - Investigate repository facts before asking the user.
 - Do not block on cosmetic or easily reversible decisions.
 - Record confirmed decisions in the selected specification and update the plan when its order or scope changes.
@@ -64,6 +64,8 @@ Select one task and state its acceptance criteria. Inspect existing coverage bef
 
 Add the test only when these answers justify it. Additional test layers need distinct risks. Avoid assertions that copy implementation details or source text, expected values calculated by the code under test, and mocks that supply the behaviour being asserted. Source checks are justified when they independently protect a real contract.
 
+For crash or rollback guarantees, test the real boundary in an isolated environment. Verify recovery after actual process termination or verify database state after a real rollback. An injected exception does not prove crash recovery, and a mocked transaction call does not prove rollback.
+
 For a behaviour change or bug fix:
 
 1. Reuse an existing failing test, or extend or add the smallest justified case where coverage is missing.
@@ -73,6 +75,8 @@ For a behaviour change or bug fix:
 5. Refactor while tests remain green and update the task status.
 
 For behaviour-preserving changes, run existing coverage without adding duplicates. For documentation or low-impact edits without a meaningful behavioural risk, use appropriate validation instead of inventing tests. Always run repository-required checks and state the verification performed.
+
+When adding or changing a CI check, run its actual command against a known violation and a clean control. Confirm that the violation fails, the control passes, and tool errors fail. For severity thresholds, also confirm that a below-threshold finding passes. Record the evidence before claiming enforcement. Repeat this validation only when the check changes.
 
 Do not implement multiple planned slices at once unless explicitly requested. Keep unrelated worktree changes untouched.
 

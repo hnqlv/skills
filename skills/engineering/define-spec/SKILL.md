@@ -44,7 +44,7 @@ Keep small changes small. A short feature section with clear acceptance criteria
 
 ### 3. Resolve material decisions
 
-Invoke `grill-spec` when an open decision changes behaviour, scope, data, security, cost, architecture, or acceptance criteria. Discover repository facts instead of asking the user. Record the confirmed answer and its rationale in the specification.
+Resolve open decisions that change behaviour, scope, data, security, cost, architecture, or acceptance criteria. Discover repository facts before asking the user for missing decisions. Record confirmed decisions and their rationale in the specification.
 
 Choose the simplest reversible default for minor implementation details and label it as an assumption.
 

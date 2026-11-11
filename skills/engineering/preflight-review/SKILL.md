@@ -34,6 +34,8 @@ Keep the session open. Hand off its ID, Herdr workspace/pane, reviewed scope, fi
 3. Flag only local simplifications that preserve behaviour: duplicate logic, needless wrappers, speculative abstractions, dead paths, generic helpers, broad fallbacks, or obvious-comment noise.
 4. Check changed trust, data, and hot-path boundaries for security or performance regressions.
 
+Before reporting a finding, check reachable callers, guards, and tests for evidence that supports or contradicts it. Reject claims that those paths rule out. Compare with the selected base revision and distinguish pre-existing defects from new regressions. If the base is unavailable, state that limit instead of claiming the change introduced the defect.
+
 Check that inline comments are sparse, short, and local. Flag obvious narration or incident history in changed code. Preserve comments explaining non-obvious constraints, required directives, and public API documentation.
 
 ## Test value
@@ -46,6 +48,8 @@ Review changed tests alongside the production path and overlapping coverage. Eac
 - Before recommending deletion, inspect relevant history and identify stronger remaining coverage or explain why the protected contract no longer applies. Slowness, static assertions, or refactoring sensitivity alone do not justify deletion. Preserve independent security, protocol, migration, and compatibility checks, including source checks that protect a real contract.
 
 Keep this review scoped to the slice. Do not start a suite-wide cleanup or use test counts as a quality target.
+
+For new or changed CI checks, inspect evidence from the actual CI command. A known violation must fail, a clean control must pass, and tool errors must fail. For severity thresholds, also require a below-threshold finding to pass. A generated report alone does not prove enforcement.
 
 ## Guardrails
 

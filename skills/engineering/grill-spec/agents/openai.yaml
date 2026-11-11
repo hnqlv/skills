@@ -1,4 +1,0 @@
-interface:
-  display_name: "Grill Spec"
-  short_description: "Resolve spec decisions one at a time"
-  default_prompt: "Use $grill-spec to stress-test the selected specification one decision at a time before planning or coding."

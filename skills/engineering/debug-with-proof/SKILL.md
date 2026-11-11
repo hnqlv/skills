@@ -36,6 +36,8 @@ Prefer a focused regression test, then a deterministic integration test, a minim
 
 Inspect existing coverage first. Reuse a failing test or extend an existing case at the boundary responsible for the behaviour. Add another layer only for a distinct risk. Keep expected outcomes independent of the code under test; mocks must not supply the behaviour being proved. Avoid production hooks needed only by tests.
 
+For crash or rollback guarantees, test the real boundary in an isolated environment. Verify recovery after actual process termination or verify database state after a real rollback. An injected exception does not prove crash recovery, and a mocked transaction call does not prove rollback.
+
 Confirm it fails for the reported reason. Setup errors, unrelated exceptions, and incorrect assertions are not proof.
 
 Do not change production code before this step succeeds, except for temporary observability needed to expose the failure. Remove temporary instrumentation afterward.

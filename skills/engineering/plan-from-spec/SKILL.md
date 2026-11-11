@@ -26,7 +26,7 @@ Use [Hunk](https://www.hunk.dev/docs/agents/review-with-an-agent/) for every rep
 - Read the selected approved specification as the contract.
 - Inspect the affected code paths, repository instructions, and existing patterns.
 - Reuse the repository's current plan files and conventions when present.
-- Return to `define-spec` or `grill-spec` if a missing product decision would change the plan. Do not hide it as an implementation assumption.
+- Return to `define-spec` if a missing product decision would change the plan. Do not hide it as an implementation assumption.
 
 Do not edit production code during planning.
 

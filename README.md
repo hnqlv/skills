@@ -12,10 +12,6 @@ Core approach:
 
 Defines what to build at the selected specification path: outcome, scope, non-goals, constraints, and testable acceptance criteria.
 
-### `grill-spec`
-
-Resolves material product decisions one at a time. It investigates repository facts first, recommends a default, and preserves confirmed decisions in the selected specification.
-
 ### `plan-from-spec`
 
 Creates a plan and task queue at caller-supplied, repository-defined, or conventional paths for multi-slice, dependency-heavy, risky, or multi-session work. Small bounded changes skip this step.
@@ -43,6 +39,10 @@ Chooses and verifies performant React Native animation approaches based on inter
 ### `preflight-review`
 
 Reviews a completed slice against its spec, plan task, tests, and diff in Hunk after simplification. Leaves inline notes and keeps the review open for the user.
+
+### `pr-walkthrough`
+
+Explains a PR one concern at a time, with a pause for the user after each concern. Uses concise technical English and checks the full diff for bugs at the end. Keeps the walkthrough in the conversation.
 
 ### `writing`
 
@@ -74,12 +74,12 @@ skills/
     define-spec/
     plan-from-spec/
     build-from-spec/
-    grill-spec/
     spike/
     debug-with-proof/
     simplicity/
     react-native-animation/
     preflight-review/
+    pr-walkthrough/
   productivity/
     writing/
 ```
@@ -94,10 +94,6 @@ Use herdr to create a no-focus worktree from main and hand this task to Codex.
 
 ```text
 Use define-spec to turn this feature idea into a concise specification at <spec-path>.
-```
-
-```text
-Use grill-spec to resolve the important open questions in <spec-path>.
 ```
 
 ```text
@@ -121,6 +117,10 @@ Use simplicity to make this implementation clearer without changing its behaviou
 ```
 
 ```text
+Use pr-walkthrough to walk me through PR #123, one concern at a time.
+```
+
+```text
 Use writing to make this implementation summary precise and easy to scan.
 ```
 
@@ -138,7 +138,6 @@ These skills are opinionated adaptations and inspired by:
 - [Code Review and Quality](https://github.com/addyosmani/agent-skills/tree/main/skills/code-review-and-quality) — actionable diff review
 - [Mario Zechner](https://www.youtube.com/watch?v=RjfbvDXpFls) — inspiration for the good-agent-task principles
 - [Cursor Bugbot Reviews in 90 Seconds](https://www.digitalapplied.com/blog/cursor-bugbot-90-second-reviews-june-2026-release) — motivation for an earlier local review gate
-- [Grilling](https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling) — one-question-at-a-time decision-tree interviewing
 - [Herdr agent skill](https://herdr.dev/docs/agent-skill/) — terminal, workspace, worktree, and agent-control contract
 - [Hunk agent review](https://www.hunk.dev/docs/agents/review-with-an-agent/) — shared live reviews and inline notes
 - [Which React Native Animation Library Should You Use for Performance?](https://andrei-calazans.com/posts/2026-07-15-which-react-native-animation-library/) — original benchmark and selection guidance by Andrei Calazans

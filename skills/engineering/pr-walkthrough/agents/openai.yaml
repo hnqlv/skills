@@ -1,0 +1,4 @@
+interface:
+  display_name: "PR Walkthrough"
+  short_description: "Understand a PR one concern at a time"
+  default_prompt: "Use $pr-walkthrough to explain this PR one concern at a time, and wait for me between concerns."
