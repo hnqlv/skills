@@ -23,7 +23,7 @@ from pathlib import Path
 
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 ROOT = Path.home() / ".cache" / "herdr-draw"
-CELL_UNITS = 8  # SVG units per terminal column at full size; 14-unit text then matches terminal text
+CELL_UNITS = 8.4  # SVG units per terminal column at full size, so 14-unit text is the size of terminal text
 HERDR_SETTINGS = Path.home() / ".config" / "herdr-app" / "settings.json"
 HUES = ("red", "green", "yellow", "blue", "magenta", "cyan")  # ANSI colors 1 to 6
 FALLBACK_THEME = {"fg": "#d7dae0", "bg": "#17191d", "red": "#f07f7f", "green": "#7fd49e", "yellow": "#e0a458",
@@ -201,7 +201,7 @@ def themed(svg, colors):
         --muted: color-mix(in srgb, var(--fg) 55%, var(--bg));
         --row: color-mix(in srgb, var(--fg) 9%, var(--bg));
         font-family: "{font}", "Geist Mono", ui-monospace, Menlo, monospace;
-        font-size: 16px;
+        font-size: 14px;
         fill: var(--fg);
       }}
     </style>

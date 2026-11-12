@@ -41,9 +41,9 @@ Leave the canvas open. Run `draw --close` only when the user asks. The user can 
 
 The drawing sits beside terminal text and must look like part of it: flat, quiet, and on a grid. It must not look like a slide or a flowchart.
 
-- Build pictures from rows. A row is a flat rectangle 28 units high with one line of text, like a line in a terminal. Inset the text 10 units from each end of the row and put its baseline 19 units below the top of the row. Stack rows with a 2-unit gap. Lists, tables, files, queues, and steps are all stacks of rows.
+- Build pictures from rows. A row is a flat rectangle 24 units high with one line of text, like a line in a terminal. Inset the text 10 units from each end of the row and put its baseline 17 units below the top of the row. Stack rows with a 2-unit gap. Lists, tables, files, queues, and steps are all stacks of rows.
 - Use square corners and flat fills. Do not use borders, rounded corners, dashed outlines, shadows, gradients, icons, emoji, or circled numbers.
-- Use one weight and two sizes: regular 16 for all text and regular 22 for section headings. Do not use bold, italics, capitals for emphasis, or centered text.
+- Use one weight and two sizes: the default size for all text, which is the size of the terminal text, and 18 for section headings. Do not use bold, italics, capitals for emphasis, or centered text.
 - Use only the theme colors below. Show state with fill color, not with outlines. Most rows are plain. Color only the rows that the explanation is about.
 - Show an empty, missing, or not-yet-built item as a hatched row with muted text.
 - Join related rows with a flat band or a 1.5-unit line. A band takes the text color of its hue at 45% opacity. Use an arrowhead only when direction is not clear from the layout.
@@ -55,8 +55,8 @@ The drawing sits beside terminal text and must look like part of it: flat, quiet
 `draw` gives each SVG the terminal's font, its theme colors, and a hatch pattern. Do not set them yourself.
 
 - Set only `xmlns` and `viewBox` on the `<svg>` element. Do not set a background, `font-family`, or hex colors.
-- Text is 16 units and the terminal's text color by default. Set `font-size="22"` on section headings. Do not go below 14.
-- One character is 9.6 units wide at size 16. Check that each text fits its row.
+- Text is 14 units by default, which `draw` shows at the size of the terminal text, in the terminal's text color. Set `font-size="18"` on section headings. Do not set any other size.
+- One character is 8.4 units wide at the default size. Check that each text fits its row.
 - SVG collapses runs of spaces. Align columns inside a row with `<tspan x="…">`, as `example.svg` does.
 - Colors are CSS variables, used as `fill="var(--blue)"`:
 

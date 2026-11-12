@@ -1,51 +1,51 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480">
-  <text x="24" y="40" font-size="22">1. A lookup asks the vendor only on a miss</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 432">
+  <text x="24" y="38" font-size="18">1. A lookup asks the vendor only on a miss</text>
 
-  <text x="24" y="76" fill="var(--yellow)">miss</text>
-  <rect x="24" y="90" width="112" height="28" fill="var(--blue-row)"/>
-  <text x="34" y="109">ask 87110</text>
-  <rect x="24" y="120" width="112" height="28" fill="url(#hatch)"/>
-  <rect x="24" y="150" width="112" height="28" fill="url(#hatch)"/>
-  <rect x="24" y="180" width="112" height="28" fill="url(#hatch)"/>
-  <rect x="154" y="90" width="132" height="28" fill="url(#hatch)"/>
-  <rect x="154" y="120" width="132" height="28" fill="var(--row)"/>
-  <text x="164" y="139">10001<tspan x="226">8.875%</tspan></text>
-  <rect x="154" y="150" width="132" height="28" fill="var(--row)"/>
-  <text x="164" y="169">60601<tspan x="226">10.25%</tspan></text>
-  <rect x="154" y="180" width="132" height="28" fill="var(--yellow-row)"/>
-  <text x="164" y="199">87110<tspan x="226">7.81%</tspan></text>
-  <polygon points="136,90 154,180 154,208 136,118" fill="var(--yellow)" opacity="0.45"/>
-  <text x="24" y="236" fill="var(--yellow)">Not saved. Ask the vendor,</text>
-  <text x="24" y="258" fill="var(--yellow)">then save the row.</text>
+  <text x="24" y="72" fill="var(--yellow)">miss</text>
+  <rect x="24" y="84" width="132" height="24" fill="var(--blue-row)"/>
+  <text x="34" y="101">request 87110</text>
+  <rect x="24" y="110" width="132" height="24" fill="url(#hatch)"/>
+  <rect x="24" y="136" width="132" height="24" fill="url(#hatch)"/>
+  <rect x="24" y="162" width="132" height="24" fill="url(#hatch)"/>
+  <rect x="176" y="84" width="132" height="24" fill="url(#hatch)"/>
+  <rect x="176" y="110" width="132" height="24" fill="var(--row)"/>
+  <text x="186" y="127">10001<tspan x="242">8.875%</tspan></text>
+  <rect x="176" y="136" width="132" height="24" fill="var(--row)"/>
+  <text x="186" y="153">60601<tspan x="242">10.25%</tspan></text>
+  <rect x="176" y="162" width="132" height="24" fill="var(--yellow-row)"/>
+  <text x="186" y="179">87110<tspan x="242">7.81%</tspan></text>
+  <polygon points="156,84 176,162 176,186 156,108" fill="var(--yellow)" opacity="0.45"/>
+  <text x="24" y="212" fill="var(--yellow)">Not saved. Ask the vendor once,</text>
+  <text x="24" y="232" fill="var(--yellow)">then save the row.</text>
 
-  <text x="354" y="76" fill="var(--green)">hit</text>
-  <rect x="354" y="90" width="112" height="28" fill="var(--blue-row)"/>
-  <text x="364" y="109">ask 87110</text>
-  <rect x="354" y="120" width="112" height="28" fill="url(#hatch)"/>
-  <rect x="354" y="150" width="112" height="28" fill="url(#hatch)"/>
-  <rect x="354" y="180" width="112" height="28" fill="url(#hatch)"/>
-  <rect x="484" y="90" width="132" height="28" fill="url(#hatch)"/>
-  <rect x="484" y="120" width="132" height="28" fill="var(--row)"/>
-  <text x="494" y="139">10001<tspan x="556">8.875%</tspan></text>
-  <rect x="484" y="150" width="132" height="28" fill="var(--row)"/>
-  <text x="494" y="169">60601<tspan x="556">10.25%</tspan></text>
-  <rect x="484" y="180" width="132" height="28" fill="var(--blue-row)"/>
-  <text x="494" y="199">87110<tspan x="556">7.81%</tspan></text>
-  <polygon points="466,90 484,180 484,208 466,118" fill="var(--blue)" opacity="0.45"/>
-  <text x="354" y="236" fill="var(--green)">Saved already.</text>
-  <text x="354" y="258" fill="var(--green)">No vendor call.</text>
+  <text x="332" y="72" fill="var(--green)">hit</text>
+  <rect x="332" y="84" width="132" height="24" fill="var(--blue-row)"/>
+  <text x="342" y="101">request 87110</text>
+  <rect x="332" y="110" width="132" height="24" fill="url(#hatch)"/>
+  <rect x="332" y="136" width="132" height="24" fill="url(#hatch)"/>
+  <rect x="332" y="162" width="132" height="24" fill="url(#hatch)"/>
+  <rect x="484" y="84" width="132" height="24" fill="url(#hatch)"/>
+  <rect x="484" y="110" width="132" height="24" fill="var(--row)"/>
+  <text x="494" y="127">10001<tspan x="550">8.875%</tspan></text>
+  <rect x="484" y="136" width="132" height="24" fill="var(--row)"/>
+  <text x="494" y="153">60601<tspan x="550">10.25%</tspan></text>
+  <rect x="484" y="162" width="132" height="24" fill="var(--blue-row)"/>
+  <text x="494" y="179">87110<tspan x="550">7.81%</tspan></text>
+  <polygon points="464,84 484,162 484,186 464,108" fill="var(--blue)" opacity="0.45"/>
+  <text x="332" y="212" fill="var(--green)">Saved already.</text>
+  <text x="332" y="232" fill="var(--green)">No vendor call.</text>
 
-  <text x="24" y="318" font-size="22">2. What each lookup costs</text>
+  <text x="24" y="286" font-size="18">2. What each lookup costs</text>
 
-  <rect x="24" y="340" width="56" height="16" fill="var(--blue-row)"/>
-  <text x="96" y="354">saved row: every later lookup</text>
-  <text x="540" y="354" fill="var(--green)">free</text>
-  <rect x="24" y="370" width="56" height="16" fill="var(--yellow-row)"/>
-  <text x="96" y="384">vendor call: one per zip per month</text>
-  <text x="540" y="384" fill="var(--yellow)">paid</text>
-  <rect x="24" y="400" width="56" height="16" fill="var(--red-row)"/>
-  <text x="96" y="414">no rate and no key</text>
-  <text x="540" y="414" fill="var(--red)">refused</text>
+  <rect x="24" y="308" width="56" height="14" fill="var(--blue-row)"/>
+  <text x="96" y="320">saved row: every later lookup</text>
+  <text x="520" y="320" fill="var(--green)">free</text>
+  <rect x="24" y="334" width="56" height="14" fill="var(--yellow-row)"/>
+  <text x="96" y="346">vendor call: one per zip per month</text>
+  <text x="520" y="346" fill="var(--yellow)">paid</text>
+  <rect x="24" y="360" width="56" height="14" fill="var(--red-row)"/>
+  <text x="96" y="372">no rate and no key</text>
+  <text x="520" y="372" fill="var(--red)">refused</text>
 
-  <text x="24" y="454" fill="var(--muted)">Example rows. The real table has one row per zip.</text>
+  <text x="24" y="408" fill="var(--muted)">The rate rows are examples. The real table has one row per zip.</text>
 </svg>
