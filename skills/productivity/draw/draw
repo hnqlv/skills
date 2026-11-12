@@ -24,6 +24,10 @@ from pathlib import Path
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 ROOT = Path.home() / ".cache" / "herdr-draw"
 CELL_UNITS = 8  # SVG units per terminal column at full size; 14-unit text then matches terminal text
+HERDR_SETTINGS = Path.home() / ".config" / "herdr-app" / "settings.json"
+HUES = ("red", "green", "yellow", "blue", "magenta", "cyan")  # ANSI colors 1 to 6
+FALLBACK_THEME = {"fg": "#d7dae0", "bg": "#17191d", "red": "#f07f7f", "green": "#7fd49e", "yellow": "#e0a458",
+                  "blue": "#7ab0f5", "magenta": "#b59cf0", "cyan": "#7fd0d4"}  # fmt: skip
 
 
 def fail(message):
@@ -172,16 +176,49 @@ def pixel_size(cols, rows):
     return cols * 8, rows * 17  # no answer; assume a common cell
 
 
-def background():
-    """The pane color as RRGGBB, or None when the terminal does not answer."""
-    match = ask("\x1b]11;?\x1b\\", rb"rgb:([0-9a-f]+)/([0-9a-f]+)/([0-9a-f]+)")
-    return "".join(part[:2].decode() for part in match.groups()) if match else None
+def theme():
+    """Ask the terminal for its text color, pane color, and ANSI colors."""
+    names = {"10": "fg", "11": "bg", **{f"4;{index + 1}": hue for index, hue in enumerate(HUES)}}
+    sys.stdout.write("".join(f"\x1b]{code};?\x1b\\" for code in names))
+    sys.stdout.flush()
+    reply = b""
+    while reply.count(b"rgb:") < len(names) and select.select([0], [], [], 0.5)[0]:
+        reply += os.read(0, 4096)
+    colors = dict(FALLBACK_THEME)
+    for code, *rgb in re.findall(rb"\x1b\]([\d;]+);rgb:(\w+)/(\w+)/(\w+)", reply):
+        colors[names[code.decode()]] = "#" + "".join(part[:2].decode() for part in rgb)
+    return colors
 
 
-def render(svg, png, cols, width, height, color):
-    """Render the SVG on the pane color, as large as fits, up to full size. Return an error or None."""
+def themed(svg, colors):
+    """Give the SVG the terminal's font and colors as CSS variables, and a hatch pattern."""
+    font = read_json(HERDR_SETTINGS).get("font") or "JetBrains Mono"
+    variables = [f"--{name}: {color};" for name, color in colors.items()]
+    variables += [f"--{hue}-row: color-mix(in srgb, var(--{hue}) 35%, var(--bg));" for hue in HUES]
+    style = f"""<style>
+      svg {{
+        {" ".join(variables)}
+        --muted: color-mix(in srgb, var(--fg) 55%, var(--bg));
+        --row: color-mix(in srgb, var(--fg) 9%, var(--bg));
+        font-family: "{font}", "Geist Mono", ui-monospace, Menlo, monospace;
+        font-size: 16px;
+        fill: var(--fg);
+      }}
+    </style>
+    <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="8" height="8" style="fill: color-mix(in srgb, var(--fg) 3%, var(--bg))"/>
+      <rect width="2" height="8" style="fill: color-mix(in srgb, var(--fg) 10%, var(--bg))"/>
+    </pattern>"""
+    return re.sub(r"(<svg\b[^>]*>)", lambda tag: tag.group(1) + style, svg.read_text(), count=1, flags=re.S)
+
+
+def render(svg, png, cols, width, height):
+    """Render the SVG in the terminal's theme, as large as fits, up to full size. Return an error or None."""
     try:
         svg_width, svg_height = svg_size(svg)
+        colors = theme()
+        styled = png.with_name("themed.svg")
+        styled.write_text(themed(svg, colors))
     except (OSError, ValueError) as error:
         return str(error)
     scale = min(width / svg_width, height / svg_height, width / cols / CELL_UNITS)
@@ -195,10 +232,10 @@ def render(svg, png, cols, width, height, color):
                 f"--screenshot={staged}",
                 f"--window-size={math.ceil(svg_width)},{math.ceil(svg_height)}",
                 f"--force-device-scale-factor={scale:.4f}",
-                f"--default-background-color={color + 'ff' if color else '00000000'}",
+                f"--default-background-color={colors['bg'][1:]}ff",
                 "--hide-scrollbars",
                 f"--user-data-dir={ROOT / 'chrome'}",
-                svg.resolve().as_uri(),
+                styled.as_uri(),
             ],
             capture_output=True,
             timeout=60,
@@ -245,14 +282,13 @@ def view(state):
             if (cols, rows) != grid:
                 grid = (cols, rows)
                 width, height = pixel_size(cols, rows)
-                color = background()
             source = svg if svg.exists() else png
             now = (grid, source, stamp(source))
             if now != last:
                 last = now
                 error = None
                 if source == svg:
-                    error = render(svg, shown, cols, width, height, color)
+                    error = render(svg, shown, cols, width, height)
                 elif now[2]:
                     shutil.copyfile(png, shown)
                 paint(shown, error, cols, rows, width, height)
