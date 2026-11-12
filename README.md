@@ -50,9 +50,10 @@ Writes or revises prose using Peter Yang's simple, short, specific framework. Us
 
 ### `draw`
 
-Draws what the agent is explaining and shows it in a Herdr pane beside the conversation. The agent writes an SVG; the `draw` script renders it with headless Chrome and paints it with the Kitty graphics protocol. Requires the Herdr app, Google Chrome, and `draw` on `PATH`:
+Draws what the agent is explaining and shows it in a Herdr pane beside the conversation, in the terminal's font and colors. The agent writes a Mermaid file, which [pele](https://pele.run/) lays out, or an SVG of terminal-style rows. The `draw` script renders it with headless Chrome and paints it with the Kitty graphics protocol. Requires the Herdr app, Google Chrome, Node, and `draw` on `PATH`:
 
 ```sh
+npm install --prefix skills/productivity/draw
 ln -s "$PWD/skills/productivity/draw/draw" ~/.local/bin/draw
 ```
 
@@ -157,6 +158,7 @@ These skills are opinionated adaptations and inspired by:
 - [Hunk agent review](https://www.hunk.dev/docs/agents/review-with-an-agent/) — shared live reviews and inline notes
 - [Which React Native Animation Library Should You Use for Performance?](https://andrei-calazans.com/posts/2026-07-15-which-react-native-animation-library/) — original benchmark and selection guidance by Andrei Calazans
 - [ASD-STE100 Simplified Technical English, Issue 9](https://www.asd-ste100.org/assets/files/ASD-STE100_ISSUE9.pdf) — authority for technical English rules and vocabulary
+- [Pele](https://pele.run/) — Mermaid layout for `draw`
 - [Kitty graphics protocol](https://sw.kovidgoyal.net/kitty/graphics-protocol/) — how `draw` paints images in a terminal pane
 - [The Secret to Effective Written Communication](https://creatoreconomy.so/p/the-secret-to-effective-written-communication) — Peter Yang's simple, short, specific framework
 

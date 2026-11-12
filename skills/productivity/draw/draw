@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Show a drawing in a Herdr pane beside the calling agent.
 
+  draw file.mmd    show the Mermaid diagram, laid out by pele
   draw file.svg    show the SVG, rendered to fit the canvas pane
   draw file.png    show the PNG
   draw --close     close the canvas pane
@@ -23,6 +24,8 @@ from pathlib import Path
 
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 ROOT = Path.home() / ".cache" / "herdr-draw"
+HERE = Path(os.path.realpath(__file__)).parent
+KINDS = (".mmd", ".svg", ".png")
 CELL_UNITS = 8.4  # SVG units per terminal column at full size, so 14-unit text is the size of terminal text
 HERDR_SETTINGS = Path.home() / ".config" / "herdr-app" / "settings.json"
 HUES = ("red", "green", "yellow", "blue", "magenta", "cyan")  # ANSI colors 1 to 6
@@ -105,7 +108,7 @@ def open_canvas(state):
     state.mkdir(parents=True, exist_ok=True)
     (state / "viewer.json").unlink(missing_ok=True)
     focus = app("status").get("focused_pane")
-    viewer = [os.path.realpath(__file__), "--view", str(state)]
+    viewer = [str(HERE / "draw"), "--view", str(state)]
     canvas = app("do", "pane.split", json.dumps({"direction": "right", "pane": me, "argv": viewer}))
     (state / "canvas.json").write_text(json.dumps(canvas))
     if focus and app("status").get("focused_pane") != focus:
@@ -114,13 +117,15 @@ def open_canvas(state):
 
 def draw(state, source):
     kind = source.suffix.lower()
-    if kind not in (".svg", ".png"):
-        fail("give an .svg or .png file")
+    if kind not in KINDS:
+        fail("give an .mmd, .svg, or .png file")
     if not source.is_file():
         fail(f"{source} does not exist")
+    if kind != ".png" and not os.path.exists(CHROME):
+        fail(f"rendering needs Google Chrome at {CHROME}")
+    if kind == ".mmd" and not (shutil.which("node") and (HERE / "node_modules" / "pele").exists()):
+        fail(f"Mermaid needs Node and pele: run npm install in {HERE}")
     if kind == ".svg":
-        if not os.path.exists(CHROME):
-            fail(f"SVG rendering needs Google Chrome at {CHROME}")
         try:
             svg_size(source)
         except ValueError as error:
@@ -130,8 +135,9 @@ def draw(state, source):
     staged, current = state / f"staged{kind}", state / f"current{kind}"
     shutil.copyfile(source, staged)
     os.replace(staged, current)
-    if kind == ".png":
-        (state / "current.svg").unlink(missing_ok=True)
+    for other in KINDS:
+        if other != kind:
+            (state / f"current{other}").unlink(missing_ok=True)
 
     # The viewer renders and paints; wait for it, so the preview is ready to read.
     for _ in range(200):
@@ -190,9 +196,24 @@ def theme():
     return colors
 
 
+def font():
+    return read_json(HERDR_SETTINGS).get("font") or "JetBrains Mono"
+
+
+def lay_out(mmd, svg, cols):
+    """Lay out the Mermaid file as an SVG no wider than the pane. Return an error or None."""
+    command = ["node", str(HERE / "mermaid.mjs"), str(mmd), font(), str(int(cols * CELL_UNITS))]
+    try:
+        done = subprocess.run(command, capture_output=True, text=True, timeout=30)
+    except (OSError, subprocess.TimeoutExpired) as error:
+        return f"pele failed: {error}"
+    if done.returncode:
+        return done.stderr.strip() or "pele failed"
+    svg.write_text(done.stdout)
+
+
 def themed(svg, colors):
     """Give the SVG the terminal's font and colors as CSS variables, and a hatch pattern."""
-    font = read_json(HERDR_SETTINGS).get("font") or "JetBrains Mono"
     variables = [f"--{name}: {color};" for name, color in colors.items()]
     variables += [f"--{hue}-row: color-mix(in srgb, var(--{hue}) 35%, var(--bg));" for hue in HUES]
     style = f"""<style>
@@ -200,7 +221,17 @@ def themed(svg, colors):
         {" ".join(variables)}
         --muted: color-mix(in srgb, var(--fg) 55%, var(--bg));
         --row: color-mix(in srgb, var(--fg) 9%, var(--bg));
-        font-family: "{font}", "Geist Mono", ui-monospace, Menlo, monospace;
+        --pele-bg: var(--bg);
+        --pele-fg: var(--fg);
+        --pele-muted: var(--muted);
+        --pele-line: color-mix(in srgb, var(--fg) 70%, var(--bg));
+        --pele-surface: var(--row);
+        --pele-surface-alt: color-mix(in srgb, var(--fg) 16%, var(--bg));
+        --pele-border: color-mix(in srgb, var(--fg) 40%, var(--bg));
+        --pele-accent: var(--blue);
+        --pele-font: "{font()}", monospace;
+        --pele-font-mono: "{font()}", monospace;
+        font-family: "{font()}", "Geist Mono", ui-monospace, Menlo, monospace;
         font-size: 14px;
         fill: var(--fg);
       }}
@@ -271,7 +302,8 @@ def paint(png, error, cols, rows, width, height):
 
 def view(state):
     """Render and paint when the drawing or the pane size changes. Press q to quit."""
-    svg, png, shown = state / "current.svg", state / "current.png", state / "shown.png"
+    sources = [state / f"current{kind}" for kind in KINDS]
+    laid_out, shown = state / "mermaid.svg", state / "shown.png"
     saved = termios.tcgetattr(0)
     tty.setcbreak(0)
     sys.stdout.write("\x1b[?25l")
@@ -282,15 +314,17 @@ def view(state):
             if (cols, rows) != grid:
                 grid = (cols, rows)
                 width, height = pixel_size(cols, rows)
-            source = svg if svg.exists() else png
+            source = max(sources, key=stamp)
             now = (grid, source, stamp(source))
             if now != last:
                 last = now
                 error = None
-                if source == svg:
-                    error = render(svg, shown, cols, width, height)
+                if source.suffix == ".mmd":
+                    error = lay_out(source, laid_out, cols) or render(laid_out, shown, cols, width, height)
+                elif source.suffix == ".svg":
+                    error = render(source, shown, cols, width, height)
                 elif now[2]:
-                    shutil.copyfile(png, shown)
+                    shutil.copyfile(source, shown)
                 paint(shown, error, cols, rows, width, height)
                 report = {"pid": os.getpid(), "shown": now[2], "error": error}
                 (state / "viewer.json").write_text(json.dumps(report))
