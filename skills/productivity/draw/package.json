@@ -4,6 +4,6 @@
   "type": "module",
   "description": "Mermaid layout for the draw skill",
   "dependencies": {
-    "pele": "^1.13.0"
+    "pele": "1.13.0"
   }
 }

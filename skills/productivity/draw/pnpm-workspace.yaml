@@ -1,0 +1,5 @@
+# Supply-chain settings for the one dependency of this skill.
+# Install only versions that are at least 7 days old.
+minimumReleaseAge: 10080
+# Refuse a version whose publish trust is lower than an earlier version's.
+trustPolicy: no-downgrade

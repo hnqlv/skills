@@ -15,6 +15,8 @@ try {
     maxWidth: Number(maxWidth),
     responsive: false,
     padding: 24,
+    links: false,
+    images: false,
   });
   process.stdout.write(svg);
 } catch (error) {

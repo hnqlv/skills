@@ -36,6 +36,7 @@ Leave the canvas open. Run `draw --close` only when the user asks. The user can 
 - Draw the concrete case from the conversation: the real names, lines, states, and values. Do not draw a generic diagram.
 - Show less. Cut every label that the picture already makes clear.
 - Do not set fonts, colors, or themes. `draw` applies the terminal's.
+- A drawing cannot run scripts or load images, fonts, or other files. `draw` renders it without network access.
 
 ## Mermaid diagrams
 

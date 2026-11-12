@@ -1,0 +1,4 @@
+interface:
+  display_name: "Draw"
+  short_description: "Show a drawing in a Herdr pane"
+  default_prompt: "Use $draw to draw what you are explaining and show it in the canvas pane."

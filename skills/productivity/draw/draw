@@ -124,7 +124,7 @@ def draw(state, source):
     if kind != ".png" and not os.path.exists(CHROME):
         fail(f"rendering needs Google Chrome at {CHROME}")
     if kind == ".mmd" and not (shutil.which("node") and (HERE / "node_modules" / "pele").exists()):
-        fail(f"Mermaid needs Node and pele: run npm install in {HERE}")
+        fail(f"Mermaid needs Node and pele: run pnpm install --frozen-lockfile in {HERE}")
     if kind == ".svg":
         try:
             svg_size(source)
@@ -248,8 +248,13 @@ def render(svg, png, cols, width, height):
     try:
         svg_width, svg_height = svg_size(svg)
         colors = theme()
-        styled = png.with_name("themed.svg")
-        styled.write_text(themed(svg, colors))
+        png.with_name("themed.svg").write_text(themed(svg, colors))
+        # A drawing is untrusted. As an image, an SVG cannot run scripts or load other files.
+        page = png.with_name("page.html")
+        page.write_text(
+            f'<!doctype html><body style="margin:0;background:{colors["bg"]}">'
+            f'<img src="themed.svg" style="display:block;width:{svg_width}px;height:{svg_height}px">'
+        )
     except (OSError, ValueError) as error:
         return str(error)
     scale = min(width / svg_width, height / svg_height, width / cols / CELL_UNITS)
@@ -263,10 +268,11 @@ def render(svg, png, cols, width, height):
                 f"--screenshot={staged}",
                 f"--window-size={math.ceil(svg_width)},{math.ceil(svg_height)}",
                 f"--force-device-scale-factor={scale:.4f}",
-                f"--default-background-color={colors['bg'][1:]}ff",
                 "--hide-scrollbars",
+                "--proxy-server=http://127.0.0.1:9",  # a dead proxy: Chrome gets no network
+                "--proxy-bypass-list=<-loopback>",
                 f"--user-data-dir={ROOT / 'chrome'}",
-                styled.as_uri(),
+                page.as_uri(),
             ],
             capture_output=True,
             timeout=60,
