@@ -48,6 +48,16 @@ Explains a PR one concern at a time, with a pause for the user after each concer
 
 Writes or revises prose using Peter Yang's simple, short, specific framework. Uses ASD-STE100 Simplified Technical English for technical English, with the official rules and dictionary as the authority. Preserves evidence and real uncertainty.
 
+### `draw`
+
+Draws what the agent is explaining and shows it in a Herdr pane beside the conversation. The agent writes an SVG; the `draw` script renders it with headless Chrome and paints it with the Kitty graphics protocol. Requires the Herdr app, Google Chrome, and `draw` on `PATH`:
+
+```sh
+ln -s "$PWD/skills/productivity/draw/draw" ~/.local/bin/draw
+```
+
+`draw` controls the Herdr window, so it must run outside a command sandbox. In Codex, approve it on first use or add `prefix_rule(pattern=["draw"], decision="allow")` to `~/.codex/rules/default.rules`.
+
 ## Conventions
 
 - Load `writing` before the first update. Use it for every message, agent exchange, summary, handoff, task/PR description, and artifact.
@@ -82,6 +92,7 @@ skills/
     pr-walkthrough/
   productivity/
     writing/
+    draw/
 ```
 
 Each skill directory under `skills/engineering/` or `skills/productivity/` is editable source. Private skills live outside this repository.
@@ -124,6 +135,10 @@ Use pr-walkthrough to walk me through PR #123, one concern at a time.
 Use writing to make this implementation summary precise and easy to scan.
 ```
 
+```text
+Draw it. Show me the two cases side by side.
+```
+
 ## References
 
 These skills are opinionated adaptations and inspired by:
@@ -142,6 +157,7 @@ These skills are opinionated adaptations and inspired by:
 - [Hunk agent review](https://www.hunk.dev/docs/agents/review-with-an-agent/) — shared live reviews and inline notes
 - [Which React Native Animation Library Should You Use for Performance?](https://andrei-calazans.com/posts/2026-07-15-which-react-native-animation-library/) — original benchmark and selection guidance by Andrei Calazans
 - [ASD-STE100 Simplified Technical English, Issue 9](https://www.asd-ste100.org/assets/files/ASD-STE100_ISSUE9.pdf) — authority for technical English rules and vocabulary
+- [Kitty graphics protocol](https://sw.kovidgoyal.net/kitty/graphics-protocol/) — how `draw` paints images in a terminal pane
 - [The Secret to Effective Written Communication](https://creatoreconomy.so/p/the-secret-to-effective-written-communication) — Peter Yang's simple, short, specific framework
 
 ## License

@@ -1,0 +1,251 @@
+#!/usr/bin/env python3
+"""Show a drawing in a Herdr pane beside the calling agent.
+
+  draw             open the canvas and print its size
+  draw file.svg    render the SVG and show it
+  draw file.png    show the PNG
+  draw --close     close the canvas
+"""
+import base64
+import fcntl
+import json
+import math
+import os
+import re
+import select
+import shutil
+import struct
+import subprocess
+import sys
+import termios
+import time
+import tty
+from pathlib import Path
+
+CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+ROOT = Path.home() / ".cache" / "herdr-draw"
+CELL_UNITS = 8  # SVG units per column in the suggested viewBox; 14-unit text then matches terminal text
+
+
+def fail(message):
+    sys.exit(f"draw: {message}")
+
+
+def app(*args):
+    done = subprocess.run(["herdr-app", *args], capture_output=True, text=True)
+    if done.returncode:
+        fail(f"herdr-app {args[0]} failed: {(done.stderr or done.stdout).strip()}")
+    return json.loads(done.stdout) if done.stdout.strip() else {}
+
+
+def read_json(path):
+    try:
+        return json.loads(path.read_text())
+    except (OSError, ValueError):
+        return None
+
+
+def alive(pid):
+    try:
+        os.kill(pid, 0)
+        return True
+    except (OSError, TypeError):
+        return False
+
+
+def panes():
+    """Map each terminal shown in the window to its pane."""
+    return {
+        terminal["terminal"]: terminal["pane"]
+        for space in app("ls")["spaces"]
+        for tab in space["tabs"]
+        for terminal in tab["terminals"]
+    }
+
+
+# --- the agent's side ---------------------------------------------------
+
+
+def open_canvas(state):
+    """Return the canvas size. Split a pane for the viewer when none is live."""
+    shown = panes()
+    canvas = read_json(state / "canvas.json") or {}
+    size = read_json(state / "size.json") or {}
+    pane_open = canvas.get("pane") in shown.values()
+    if pane_open and alive(size.get("pid")):
+        return size
+    if pane_open:
+        app("do", "pane.close", json.dumps({"pane": canvas["pane"]}))
+
+    me = shown.get(state.name)
+    if not me:
+        fail(f"terminal {state.name} has no pane in the Herdr window")
+    state.mkdir(parents=True, exist_ok=True)
+    (state / "size.json").unlink(missing_ok=True)
+    focus = app("status").get("focused_pane")
+    viewer = [os.path.realpath(__file__), "--view", str(state)]
+    canvas = app("do", "pane.split", json.dumps({"direction": "right", "pane": me, "argv": viewer}))
+    (state / "canvas.json").write_text(json.dumps(canvas))
+    if focus and app("status").get("focused_pane") != focus:
+        app("do", "pane.focus", json.dumps({"pane": focus}))
+
+    for _ in range(50):
+        size = read_json(state / "size.json")
+        if size:
+            return size
+        time.sleep(0.1)
+    fail("the canvas pane did not start")
+
+
+def svg_size(svg):
+    tag = re.search(r"<svg\b[^>]*>", svg.read_text(), re.S)
+    if not tag:
+        fail(f"{svg} has no <svg> element")
+    size = [re.search(rf'\b{name}="([\d.]+)(?:px)?"', tag.group(0)) for name in ("width", "height")]
+    if all(size):
+        return [float(match.group(1)) for match in size]
+    box = re.search(r'\bviewBox="([^"]+)"', tag.group(0))
+    if not box:
+        fail(f"{svg} needs a viewBox, or a width and height")
+    return [float(number) for number in box.group(1).replace(",", " ").split()][2:]
+
+
+def render(svg, png, canvas):
+    """Render the SVG at the largest size that fits the canvas, pixel for pixel."""
+    if not os.path.exists(CHROME):
+        fail(f"SVG rendering needs Google Chrome at {CHROME}")
+    width, height = svg_size(svg)
+    scale = min(canvas["width"] / width, canvas["height"] / height)
+    png.unlink(missing_ok=True)
+    subprocess.run(
+        [
+            CHROME,
+            "--headless",
+            f"--screenshot={png}",
+            f"--window-size={math.ceil(width)},{math.ceil(height)}",
+            f"--force-device-scale-factor={scale:.4f}",
+            "--default-background-color=00000000",
+            "--hide-scrollbars",
+            f"--user-data-dir={ROOT / 'chrome'}",
+            svg.resolve().as_uri(),
+        ],
+        capture_output=True,
+        timeout=60,
+    )
+    if not png.exists():
+        fail(f"Chrome did not render {svg}")
+
+
+def draw(state, source):
+    canvas = open_canvas(state)
+    units = canvas["cols"] * CELL_UNITS
+    print(
+        f"canvas: {canvas['cols']}x{canvas['rows']} cells, {canvas['width']}x{canvas['height']} px. "
+        f'A full-canvas SVG uses viewBox="0 0 {units} {round(units * canvas["height"] / canvas["width"])}".'
+    )
+    if not source:
+        return
+    if not source.is_file():
+        fail(f"{source} does not exist")
+    staged = state / "staged.png"
+    if source.suffix.lower() == ".svg":
+        render(source, staged, canvas)
+    elif source.suffix.lower() == ".png":
+        shutil.copyfile(source, staged)
+    else:
+        fail("give an .svg or .png file")
+    os.replace(staged, state / "current.png")
+    print(f"shown: {source}")
+
+
+def close(state):
+    canvas = read_json(state / "canvas.json") or {}
+    if canvas.get("pane") in panes().values():
+        app("do", "pane.close", json.dumps({"pane": canvas["pane"]}))
+    shutil.rmtree(state, ignore_errors=True)
+
+
+# --- the viewer, which runs in the canvas pane ---------------------------
+
+
+def paint(png, cols, rows, width, height):
+    out = ["\x1b_Ga=d,d=A\x1b\\\x1b[2J\x1b[H"]
+    if not png.exists():
+        out.append("draw: no drawing yet")
+    else:
+        data = png.read_bytes()
+        image_width, image_height = struct.unpack(">II", data[16:24])
+        cell_width, cell_height = width / cols, height / rows
+        scale = min(1, width / image_width, height / image_height)
+        used_cols = min(cols, math.ceil(image_width * scale / cell_width))
+        keys = "a=T,f=100,q=2,C=1"
+        if scale < 1:  # a full-size image stays unscaled, so it stays sharp
+            keys += f",c={used_cols},r={min(rows, math.ceil(image_height * scale / cell_height))}"
+        out.append(f"\x1b[1;{(cols - used_cols) // 2 + 1}H")
+        payload = base64.standard_b64encode(data).decode()
+        chunks = [payload[start : start + 4096] for start in range(0, len(payload), 4096)]
+        for index, chunk in enumerate(chunks):
+            more = int(index < len(chunks) - 1)
+            out.append(f"\x1b_G{keys + ',' if index == 0 else ''}m={more};{chunk}\x1b\\")
+    sys.stdout.write("".join(out))
+    sys.stdout.flush()
+
+
+def pixel_size(cols, rows):
+    """Ask the terminal for its size in pixels. The tty does not report it."""
+    sys.stdout.write("\x1b[14t")
+    sys.stdout.flush()
+    reply = b""
+    while select.select([0], [], [], 0.5)[0]:
+        reply += os.read(0, 64)
+        match = re.search(rb"\x1b\[4;(\d+);(\d+)t", reply)
+        if match:
+            return int(match.group(2)), int(match.group(1))
+    return cols * 8, rows * 17  # no answer; assume a common cell
+
+
+def view(state):
+    """Repaint when the drawing or the pane size changes. Press q to quit."""
+    png = state / "current.png"
+    saved = termios.tcgetattr(0)
+    tty.setcbreak(0)
+    sys.stdout.write("\x1b[?25l")
+    grid = last = None
+    try:
+        while True:
+            rows, cols = struct.unpack("HHHH", fcntl.ioctl(1, termios.TIOCGWINSZ, b"\0" * 8))[:2]
+            if (cols, rows) != grid:
+                grid = (cols, rows)
+                width, height = pixel_size(cols, rows)
+            now = (cols, rows, width, height, png.stat().st_mtime_ns if png.exists() else 0)
+            if now != last:
+                last = now
+                size = {"cols": cols, "rows": rows, "width": width, "height": height, "pid": os.getpid()}
+                (state / "size.json").write_text(json.dumps(size))
+                paint(png, cols, rows, width, height)
+            if select.select([0], [], [], 0.25)[0] and b"q" in os.read(0, 64):
+                break
+    except KeyboardInterrupt:
+        pass
+    finally:
+        termios.tcsetattr(0, termios.TCSADRAIN, saved)
+        sys.stdout.write("\x1b[?25h")
+
+
+def main():
+    args = sys.argv[1:]
+    if args[:1] == ["--view"] and len(args) == 2:
+        return view(Path(args[1]))
+    if args[:1] in (["-h"], ["--help"]) or len(args) > 1:
+        return print(__doc__.strip())
+    terminal = os.environ.get("HC_TERMINAL_ID")
+    if not terminal:
+        fail("not in a Herdr terminal (HC_TERMINAL_ID is not set)")
+    state = ROOT / terminal
+    if args == ["--close"]:
+        return close(state)
+    draw(state, Path(args[0]) if args else None)
+
+
+if __name__ == "__main__":
+    main()
