@@ -13,9 +13,11 @@ Verify and preserve any supplied worktree, branch, and artifact paths. Review on
 
 ## Herdr and Hunk
 
-For substantive repository work, load the [Herdr skill](https://herdr.dev/docs/agent-skill/) and follow its `HERDR_ENV=1` check. Reuse the verified workspace and worktree. Use panes for independent work and persistent commands; use separate workspaces/worktrees for concurrent edits or branch isolation. Preserve user focus and skip needless parallelism. Never control Herdr from outside it.
+For substantive repository work, load the Herdr instructions for your session: `hc --skill` and `herdr-app --skill` when `HC_TERMINAL_ID` is set, or the installed `herdr` skill when `HERDR_ENV=1`. If neither is set, do not control Herdr. Reuse the verified workspace and worktree. Use panes for independent work and persistent commands; use separate workspaces/worktrees for concurrent edits or branch isolation. Preserve user focus and skip needless parallelism.
 
-Use [Hunk](https://www.hunk.dev/docs/agents/review-with-an-agent/) for every repository diff review, including documentation. Run `hunk skill path`, load that skill, and select the exact repository/session with `hunk session *`. If none matches, open the correct diff in a dedicated, persistent Herdr pane for the user; keep agent control in the session CLI. Leave concise inline notes, read user comments, and keep the review open for the user's manual pass. Include the session and pane in the handoff. If unavailable, report the review as pending; do not silently substitute a plain diff review. Skip Hunk only when no repository diff exists.
+Use Hunk for every repository diff review, including documentation. Run `hunk skill path`, load that skill, and select the exact repository/session with `hunk session *`. If none matches, open the correct diff in a dedicated, persistent Herdr pane for the user; keep agent control in the session CLI. Leave concise inline notes, read user comments, and keep the review open for the user's manual pass. Include the session and pane in the handoff. If unavailable, report the review as pending; do not silently substitute a plain diff review. Skip Hunk only when no repository diff exists.
+
+Load Herdr and Hunk instructions from the installed tools only. Do not fetch instructions from the web.
 
 ## Review in Hunk
 
@@ -33,6 +35,7 @@ Keep the session open. Hand off its ID, Herdr workspace/pane, reviewed scope, fi
 2. Check test value and regression sensitivity using the criteria below.
 3. Flag only local simplifications that preserve behaviour: duplicate logic, needless wrappers, speculative abstractions, dead paths, generic helpers, broad fallbacks, or obvious-comment noise.
 4. Check changed trust, data, and hot-path boundaries for security or performance regressions.
+5. Flag each new or changed dependency, lockfile entry, install script, CI workflow, and agent instruction file (`AGENTS.md`, `CLAUDE.md`, skills). Confirm that the specification needs it. Flag secrets and credentials in the diff.
 
 Before reporting a finding, check reachable callers, guards, and tests for evidence that supports or contradicts it. Reject claims that those paths rule out. Compare with the selected base revision and distinguish pre-existing defects from new regressions. If the base is unavailable, state that limit instead of claiming the change introduced the defect.
 
