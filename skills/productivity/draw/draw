@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Show a drawing in a Herdr pane beside the calling agent.
+"""Show a drawing in a Rex pane beside the calling agent.
 
   draw file.mmd    show the Mermaid diagram, laid out by pele
   draw file.svg    show the SVG, rendered to fit the canvas pane
@@ -23,12 +23,12 @@ import tty
 from pathlib import Path
 
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-ROOT = Path.home() / ".cache" / "herdr-draw"
+ROOT = Path.home() / ".cache" / "draw"
 HERE = Path(os.path.realpath(__file__)).parent
 KINDS = (".mmd", ".svg", ".png")
 TEXT_SCALE = 0.85  # the size of drawing text, as a part of the size of terminal text
 CELL_UNITS = 8.4 / TEXT_SCALE  # SVG units per terminal column at full size; a character of 14-unit text is 8.4 units wide
-HERDR_SETTINGS = Path.home() / ".config" / "herdr-app" / "settings.json"
+FONT = os.environ.get("DRAW_FONT") or "JetBrains Mono"  # Rex's default terminal font
 HUES = ("red", "green", "yellow", "blue", "magenta", "cyan")  # ANSI colors 1 to 6
 FALLBACK_THEME = {"fg": "#d7dae0", "bg": "#17191d", "red": "#f07f7f", "green": "#7fd49e", "yellow": "#e0a458",
                   "blue": "#7ab0f5", "magenta": "#b59cf0", "cyan": "#7fd0d4"}  # fmt: skip
@@ -38,10 +38,13 @@ def fail(message):
     sys.exit(f"draw: {message}")
 
 
-def app(*args):
-    done = subprocess.run(["herdr-app", *args], capture_output=True, text=True)
+def rex(*args):
+    try:
+        done = subprocess.run(["rex", *args], capture_output=True, text=True)
+    except OSError:
+        fail("the rex command is not on PATH")
     if done.returncode:
-        fail(f"herdr-app {args[0]} failed: {(done.stderr or done.stdout).strip()}")
+        fail(f"rex {' '.join(args[:2])} failed: {(done.stderr or done.stdout).strip()}")
     return json.loads(done.stdout) if done.stdout.strip() else {}
 
 
@@ -67,14 +70,9 @@ def stamp(path):
         return 0
 
 
-def panes():
-    """Map each terminal shown in the window to its pane."""
-    return {
-        terminal["terminal"]: terminal["pane"]
-        for space in app("ls")["spaces"]
-        for tab in space["tabs"]
-        for terminal in tab["terminals"]
-    }
+def blocks(session):
+    """The IDs of the panes in the session."""
+    return {block["block_id"] for block in rex("block", "ls", "-s", session, "--json")["blocks"]}
 
 
 def svg_size(svg):
@@ -93,30 +91,25 @@ def svg_size(svg):
 # --- the agent's side ---------------------------------------------------
 
 
-def open_canvas(state):
+def open_canvas(state, session, me):
     """Split a pane for the viewer unless one is live."""
-    shown = panes()
-    canvas = read_json(state / "canvas.json")
-    pane_open = canvas.get("pane") in shown.values()
+    canvas = read_json(state / "canvas.json").get("block")
+    pane_open = canvas in blocks(session)
     if pane_open and alive(read_json(state / "viewer.json").get("pid")):
         return
     if pane_open:
-        app("do", "pane.close", json.dumps({"pane": canvas["pane"]}))
+        rex("block", "close", "-s", session, canvas)
 
-    me = shown.get(state.name)
-    if not me:
-        fail(f"terminal {state.name} has no pane in the Herdr window")
     state.mkdir(parents=True, exist_ok=True)
     (state / "viewer.json").unlink(missing_ok=True)
-    focus = app("status").get("focused_pane")
-    viewer = [str(HERE / "draw"), "--view", str(state)]
-    canvas = app("do", "pane.split", json.dumps({"direction": "right", "pane": me, "argv": viewer}))
-    (state / "canvas.json").write_text(json.dumps(canvas))
-    if focus and app("status").get("focused_pane") != focus:
-        app("do", "pane.focus", json.dumps({"pane": focus}))
+    # The viewer gets this PATH, so it finds the same node.
+    viewer = ["/usr/bin/env", f"PATH={os.environ.get('PATH', '')}", str(HERE / "draw"), "--view", str(state)]
+    split = ["split", "-s", session, "-b", me, "--split=right", "--focus=false", "--label", "Draw", "--shell=none"]
+    made = rex(*split, "--json", "--", *viewer)
+    (state / "canvas.json").write_text(json.dumps({"block": made["block_ids"][0]}))
 
 
-def draw(state, source):
+def draw(state, session, me, source):
     kind = source.suffix.lower()
     if kind not in KINDS:
         fail("give an .mmd, .svg, or .png file")
@@ -132,7 +125,7 @@ def draw(state, source):
         except ValueError as error:
             fail(error)
 
-    open_canvas(state)
+    open_canvas(state, session, me)
     staged, current = state / f"staged{kind}", state / f"current{kind}"
     shutil.copyfile(source, staged)
     os.replace(staged, current)
@@ -153,10 +146,10 @@ def draw(state, source):
     print(f"shown: {source}\npreview: {state / 'shown.png'}")
 
 
-def close(state):
-    canvas = read_json(state / "canvas.json")
-    if canvas.get("pane") in panes().values():
-        app("do", "pane.close", json.dumps({"pane": canvas["pane"]}))
+def close(state, session):
+    canvas = read_json(state / "canvas.json").get("block")
+    if canvas in blocks(session):
+        rex("block", "close", "-s", session, canvas)
     shutil.rmtree(state, ignore_errors=True)
 
 
@@ -173,6 +166,13 @@ def ask(query, answer):
         match = re.search(answer, reply)
         if match:
             return match
+
+
+def wait_for_app():
+    """Rex sizes a new pane and answers color queries only after the app shows it."""
+    for _ in range(20):
+        if ask("\x1b]11;?\x1b\\", rb"\x1b\]11;rgb:"):
+            return
 
 
 def pixel_size(cols, rows):
@@ -197,13 +197,9 @@ def theme():
     return colors
 
 
-def font():
-    return read_json(HERDR_SETTINGS).get("font") or "JetBrains Mono"
-
-
 def lay_out(mmd, svg, cols):
     """Lay out the Mermaid file as an SVG no wider than the pane. Return an error or None."""
-    command = ["node", str(HERE / "mermaid.mjs"), str(mmd), font(), str(int(cols * CELL_UNITS))]
+    command = ["node", str(HERE / "mermaid.mjs"), str(mmd), FONT, str(int(cols * CELL_UNITS))]
     try:
         done = subprocess.run(command, capture_output=True, text=True, timeout=30)
     except (OSError, subprocess.TimeoutExpired) as error:
@@ -230,9 +226,9 @@ def themed(svg, colors):
         --pele-surface-alt: color-mix(in srgb, var(--fg) 16%, var(--bg));
         --pele-border: color-mix(in srgb, var(--fg) 40%, var(--bg));
         --pele-accent: var(--blue);
-        --pele-font: "{font()}", monospace;
-        --pele-font-mono: "{font()}", monospace;
-        font-family: "{font()}", "Geist Mono", ui-monospace, Menlo, monospace;
+        --pele-font: "{FONT}", monospace;
+        --pele-font-mono: "{FONT}", monospace;
+        font-family: "{FONT}", "Geist Mono", ui-monospace, Menlo, monospace;
         font-size: 14px;
         fill: var(--fg);
       }}
@@ -316,6 +312,7 @@ def view(state):
     sys.stdout.write("\x1b[?25l")
     grid = last = None
     try:
+        wait_for_app()
         while True:
             rows, cols = struct.unpack("HHHH", fcntl.ioctl(1, termios.TIOCGWINSZ, b"\0" * 8))[:2]
             if (cols, rows) != grid:
@@ -350,13 +347,13 @@ def main():
         return view(Path(args[1]))
     if len(args) != 1 or args[0] in ("-h", "--help"):
         return print(__doc__.strip())
-    terminal = os.environ.get("HC_TERMINAL_ID")
-    if not terminal:
-        fail("not in a Herdr terminal (HC_TERMINAL_ID is not set)")
-    state = ROOT / terminal
+    session, me = os.environ.get("REX_SESSION"), os.environ.get("REX_BLOCK")
+    if not (session and me):
+        fail("not in a Rex terminal (REX_SESSION or REX_BLOCK is not set)")
+    state = ROOT / me.removeprefix("block:")
     if args == ["--close"]:
-        return close(state)
-    draw(state, Path(args[0]))
+        return close(state, session)
+    draw(state, session, me, Path(args[0]))
 
 
 if __name__ == "__main__":

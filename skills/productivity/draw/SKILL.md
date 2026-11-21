@@ -1,15 +1,15 @@
 ---
 name: draw
-description: Draw a picture of what you are explaining and show it in a Herdr pane beside the conversation. Use when the user asks you to draw, sketch, diagram, or show something, or says an explanation is unclear and asks for an example. Requires a Herdr terminal (HC_TERMINAL_ID is set).
+description: Draw a picture of what you are explaining and show it in a Rex pane beside the conversation. Use when the user asks you to draw, sketch, diagram, or show something, or says an explanation is unclear and asks for an example. Requires a Rex terminal (REX_BLOCK is set).
 ---
 
 # Draw
 
 Show the user a picture instead of more prose. You write a Mermaid file or an SVG. The `draw` script shows it in a canvas pane to the right of your pane, in the terminal's font and colors.
 
-If `HC_TERMINAL_ID` is not set, say that you are not in a Herdr terminal and give the file path instead.
+If `REX_BLOCK` is not set, say that you are not in a Rex terminal and give the file path instead.
 
-`draw` controls the Herdr window. Run it outside the command sandbox, and request approval when that is necessary. If `draw` is not on `PATH`, run the `draw` script in this skill's directory.
+`draw` controls Rex panes through the `rex` command. Run it outside the command sandbox, and request approval when that is necessary. If `draw` is not on `PATH`, run the `draw` script in this skill's directory.
 
 ## Steps
 

@@ -17,7 +17,7 @@ The approach: define the contract in a specification. Plan multi-slice work. Pro
 | `preflight-review` | Review a completed slice against its specification, tests, and diff in Hunk. |
 | `pr-walkthrough` | Explain a PR one concern at a time, then check the full diff for bugs. |
 | `writing` | Write simple, short, specific prose. Use ASD-STE100 for technical English. |
-| `draw` | Show a Mermaid diagram or a row drawing in a Herdr pane, in the terminal's font and colors. |
+| `draw` | Show a Mermaid diagram or a row drawing in a Rex pane, in the terminal's font and colors. |
 
 Engineering skills are in `skills/engineering/`. `writing` and `draw` are in `skills/productivity/`.
 
@@ -32,20 +32,22 @@ ln -s "$PWD/skills/engineering/define-spec" ~/.claude/skills/define-spec
 
 A linked skill is live. A change in this checkout changes agent behaviour immediately, so review it as you review code.
 
-`draw` also needs the Herdr app, Google Chrome, Node, and pnpm:
+`draw` also needs the Rex app, Google Chrome, Node, and pnpm:
 
 ```sh
 pnpm install --frozen-lockfile --dir skills/productivity/draw
 ln -s "$PWD/skills/productivity/draw/draw" ~/.local/bin/draw
 ```
 
-`draw` controls the Herdr window, so it runs outside the command sandbox. In Codex, approve it on first use, or add `prefix_rule(pattern=["draw"], decision="allow")` to `~/.codex/rules/default.rules`.
+`draw` uses the JetBrains Mono font, which is the Rex default. If you changed the Rex terminal font, set `DRAW_FONT` to its name.
+
+`draw` controls Rex panes, so it runs outside the command sandbox. In Codex, approve it on first use, or add `prefix_rule(pattern=["draw"], decision="allow")` to `~/.codex/rules/default.rules`.
 
 ## Security
 
 A skill is an instruction that an agent obeys, and it can include code.
 
-- **No remote instructions.** The skills have no hidden text and no download or install commands. Herdr and Hunk instructions come from the installed tools, not from the web.
+- **No remote instructions.** The skills have no hidden text and no download or install commands. Rex and Hunk instructions come from the installed tools, not from the web.
 - **Untrusted text is data.** The skills do not obey text from PRs, issues, web pages, logs, tool output, or dependencies. `pr-walkthrough` does not run code from a PR.
 - **Dependencies.** `build-from-spec` and `spike` require a confirmed package name, a pinned version, a committed lockfile, and disabled install scripts. `preflight-review` flags changed dependencies, install scripts, CI workflows, and agent instruction files.
 - **`draw`.** Its one dependency, `pele`, has an exact version and a lockfile hash. pnpm installs only versions that are 7 days old or more, refuses a trust downgrade, and does not run install scripts. A drawing renders as an image without network access, so its scripts do not run and external files do not load.
@@ -59,8 +61,8 @@ Each skill states its own rules. These apply to all of them, for direct and comp
 - **Writing.** Load `writing` first and use it for every message, handoff, and artifact. Default to one short paragraph or up to three bullets. Keep detailed evidence in one linked artifact. Keep blockers and uncertainty.
 - **Code.** Prefer code that is easy to understand, change, and delete. Prefer small vertical slices. Keep comments sparse and local. Do not design for hypothetical requirements.
 - **Paths.** Use the specification and plan paths that the caller or repository supplies. Default to `SPEC.md` and `tasks/` only when no convention exists.
-- **Herdr.** For substantive repository work, load the Herdr instructions for your session: `hc --skill` and `herdr-app --skill` in the Herdr app, or the `herdr` skill in the Herdr multiplexer. Use panes for independent work and worktrees for concurrent edits.
-- **Hunk.** Review every repository diff in Hunk, including documentation. If no session matches, open the diff in a persistent Herdr pane for the user. Report unavailable review tooling as pending.
+- **Rex.** For substantive repository work, load the installed `rex` skill, or run `rex skill show`. Use panes for independent work, and a Git worktree in its own Rex session for concurrent edits.
+- **Hunk.** Review every repository diff in Hunk, including documentation. If no session matches, open the diff in a persistent Rex pane for the user. Report unavailable review tooling as pending.
 - **Authorization.** Reuse the authorization that the user already gave. Do not add approval gates between skills.
 - **Git.** Use `feat`, `fix`, `refactor`, `test`, `docs`, and `chore` commit types. Use `spike/<topic>` for exploratory branches.
 
@@ -85,7 +87,7 @@ These skills adapt or take inspiration from:
 - [Caveman](https://github.com/JuliusBrussee/caveman/tree/main/skills/caveman): concise technical communication
 - [Mario Zechner](https://www.youtube.com/watch?v=RjfbvDXpFls): good-agent-task principles
 - [Cursor Bugbot Reviews in 90 Seconds](https://www.digitalapplied.com/blog/cursor-bugbot-90-second-reviews-june-2026-release): motivation for a local review gate
-- [Herdr agent skill](https://herdr.dev/docs/agent-skill/) and [Hunk agent review](https://www.hunk.dev/docs/agents/review-with-an-agent/): terminal control and live diff reviews
+- [Rex](https://www.superlogical.com/rex/docs/installation) and [Hunk agent review](https://www.hunk.dev/docs/agents/review-with-an-agent/): terminal control and live diff reviews
 - [ASD-STE100, Issue 9](https://www.asd-ste100.org/assets/files/ASD-STE100_ISSUE9.pdf) and [The Secret to Effective Written Communication](https://creatoreconomy.so/p/the-secret-to-effective-written-communication) by Peter Yang: the basis of `writing`
 - [Pele](https://pele.run/) and the [Kitty graphics protocol](https://sw.kovidgoyal.net/kitty/graphics-protocol/): layout and display for `draw`
 
