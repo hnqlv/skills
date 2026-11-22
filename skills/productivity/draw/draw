@@ -28,7 +28,7 @@ HERE = Path(os.path.realpath(__file__)).parent
 KINDS = (".mmd", ".svg", ".png")
 TEXT_SCALE = 0.85  # the size of drawing text, as a part of the size of terminal text
 CELL_UNITS = 8.4 / TEXT_SCALE  # SVG units per terminal column at full size; a character of 14-unit text is 8.4 units wide
-FONT = os.environ.get("DRAW_FONT") or "JetBrains Mono"  # Rex's default terminal font
+FONT = "JetBrains Mono"  # Rex's default terminal font
 HUES = ("red", "green", "yellow", "blue", "magenta", "cyan")  # ANSI colors 1 to 6
 FALLBACK_THEME = {"fg": "#d7dae0", "bg": "#17191d", "red": "#f07f7f", "green": "#7fd49e", "yellow": "#e0a458",
                   "blue": "#7ab0f5", "magenta": "#b59cf0", "cyan": "#7fd0d4"}  # fmt: skip

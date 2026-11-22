@@ -39,8 +39,6 @@ pnpm install --frozen-lockfile --dir skills/productivity/draw
 ln -s "$PWD/skills/productivity/draw/draw" ~/.local/bin/draw
 ```
 
-`draw` uses the JetBrains Mono font, which is the Rex default. If you changed the Rex terminal font, set `DRAW_FONT` to its name.
-
 `draw` controls Rex panes, so it runs outside the command sandbox. In Codex, approve it on first use, or add `prefix_rule(pattern=["draw"], decision="allow")` to `~/.codex/rules/default.rules`.
 
 ## Security
