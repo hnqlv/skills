@@ -1,0 +1,38 @@
+schema_version: "1.0"
+name: simplify-nested-ternary
+description: A plain "simplify this" request. simplicity should fire instead of the bundled simplify skill.
+tags: [trigger, simplicity]
+execution:
+  max_turns: 8
+  allowed_tools: [Skill, Read, Glob, Grep]
+  prompt: |
+    Simplify this function. Keep its behaviour.
+
+    ```js
+    function shippingLabel(order) {
+      return order.express ? (order.international ? 'EXPRESS-INTL' : 'EXPRESS') : order.international ? (order.weight > 20 ? 'FREIGHT-INTL' : 'STANDARD-INTL') : order.weight > 20 ? 'FREIGHT' : 'STANDARD';
+    }
+    ```
+runs: 3
+graders:
+  - type: tool_used
+    name: simplicity-fired
+    tool: Skill
+    input_match: simplicity
+  - type: llm
+    name: readable-and-same-behaviour
+    criteria: |
+      The user asked to simplify this function and keep its behaviour:
+
+      ```js
+      function shippingLabel(order) {
+        return order.express ? (order.international ? 'EXPRESS-INTL' : 'EXPRESS') : order.international ? (order.weight > 20 ? 'FREIGHT-INTL' : 'STANDARD-INTL') : order.weight > 20 ? 'FREIGHT' : 'STANDARD';
+      }
+      ```
+
+      If the response offers more than one version, judge the first one.
+
+      - The response gives a rewritten `shippingLabel`.
+      - The rewrite has no ternary inside another ternary. It uses if/else, early returns, or named conditions.
+      - For each of the 8 combinations of `express`, `international`, and `weight > 20`, the rewrite returns the same label as the function above.
+      - The rewrite adds no classes, configuration, or new parameters.

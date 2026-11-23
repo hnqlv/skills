@@ -1,0 +1,22 @@
+schema_version: "1.0"
+name: define-spec-csv-export
+description: A feature idea with a request to agree on it first. define-spec should fire and produce a spec or targeted questions, not code.
+tags: [trigger, define-spec]
+execution:
+  max_turns: 12
+  allowed_tools: [Skill, Read, Glob, Grep]
+  prompt: |
+    We want users to export the reports page as CSV. Before anyone writes code, let's pin down what this should do.
+runs: 3
+graders:
+  - type: tool_used
+    name: define-spec-fired
+    tool: Skill
+    input_match: define-spec
+  - type: llm
+    name: spec-not-code
+    criteria: |
+      - The response does not write or propose production code.
+      - It drafts a specification, or asks targeted questions, that covers the outcome, the scope with explicit non-goals, and acceptance criteria that a test could check.
+      - It asks about, or labels as assumptions, at least two material decisions, such as which columns and filters the export includes, the behaviour for large exports, or who may export.
+      - It does not start a plan or an implementation. It ends by asking the user for decisions or for confirmation of the spec.

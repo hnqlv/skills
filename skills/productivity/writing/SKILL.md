@@ -1,49 +1,80 @@
 ---
 name: writing
-description: Write or revise clear, concise prose for messages, documents, handoffs, task/PR descriptions, reports, specs, and code comments. Use simple, short, specific communication, with ASD-STE100 Simplified Technical English for technical English.
+description: "Writes and revises clear, concise prose: messages, updates, handoffs, task and PR descriptions, reports, specs, and code comments, with ASD-STE100 for technical English. Use when the user asks to write, rewrite, shorten, or review text, and when another skill asks for it."
 ---
 
 # Writing
 
-Help the reader understand the result or take the next action with minimal reading. Apply this guidance from the first update through the final artifact, including agent exchanges. Follow the requested language, audience, and format.
+Help the reader understand the result or act on it with the least reading. Apply this from the first update to the final artifact, including messages to agents. Follow the requested language, audience, and format.
 
 ## Simple, short, specific
 
-Use [Peter Yang's communication framework](https://creatoreconomy.so/p/the-secret-to-effective-written-communication):
+From [Peter Yang's framework](https://creatoreconomy.so/p/the-secret-to-effective-written-communication):
 
-- **Simple:** Identify the reader and the decision they need to make. State the main point first, then at most three supporting arguments. Explain unfamiliar abbreviations. Prefer familiar words and active verbs.
-- **Short:** Remove repetition and details that do not help the reader. Aim for one or two pages for a decision document, with supporting detail in an appendix or linked artifact. Use headings and lists when they help scanning.
-- **Specific:** Replace vague claims with supported facts, quantities, units, dates, and named actions. Use only numbers you can explain and defend. Answer likely reader questions in the text or an FAQ.
-- **Revise:** Read the draft for flow and clarity. For consequential documents, use available feedback from a subject expert and an unfamiliar reader when useful and authorized.
+- **Simple:** Know the reader and the decision they face. State the main point first, then at most three supporting points. Explain unfamiliar abbreviations. Prefer familiar words and active verbs.
+- **Short:** Cut repetition and detail that does not help the reader. Keep decision documents to one or two pages, with detail in an appendix or a linked artifact. Use headings and lists when they help scanning.
+- **Specific:** Replace vague claims with facts, quantities, units, dates, and named actions. Use only numbers that you can defend.
+- **Revise:** Read the draft once for flow. For consequential documents, get feedback from an expert and an unfamiliar reader when useful and authorized.
 
-These are defaults, not reasons to omit required content. Remove ambiguous wording, but preserve real uncertainty. Never turn a hypothesis into a fact or invent precision.
+Never omit required content, turn a hypothesis into a fact, or invent precision. Remove ambiguity, but keep real uncertainty.
 
 ## Technical English
 
-Use **ASD-STE100 Simplified Technical English**, including its writing rules and controlled dictionary, for technical English. Read [the STE reference](references/asd-ste100.md) when drafting or editing technical English. Use the official standard to resolve vocabulary and rule questions. Do not substitute a generic plain-English style for STE.
-
-Keep exact code, commands, paths, identifiers, quotations, and required syntax intact. Apply STE to the surrounding prose. If required wording prevents full compliance, preserve it and identify the exception when a compliance assessment is requested. Do not impose English grammar or vocabulary on another language.
+Use ASD-STE100 Simplified Technical English for technical English, not a generic plain-English style. Read [the STE reference](references/asd-ste100.md) when you draft or edit it. Keep code, commands, paths, identifiers, quotations, and required syntax exact, and apply STE to the prose around them. Do not apply English rules to another language.
 
 ## Engineering communication
 
-- Default updates, summaries, handoffs, and task/PR descriptions to one short paragraph or up to three bullets. Expand when the deliverable needs more detail.
-- Lead with the result or next action. Include decisive evidence, verification scope, uncertainty, and blockers. Put detailed evidence in one relevant artifact and link it. Never invent a link.
-- In investigations, distinguish observations from hypotheses. State the question or cause, evidence, and decision or next check. Omit routine tool narration.
-- Give agents the objective, scope, exact paths and refs, constraints, and required evidence. Ask them to use `writing` and return concise findings with blockers. Preserve enough context to resume safely.
-- Keep code comments sparse. Explain a non-obvious local constraint, invariant, or reason. Preserve required directives and public API documentation.
+- Default updates, summaries, handoffs, and task and PR descriptions to one short paragraph or up to three bullets. Expand only when the deliverable needs it.
+- Lead with the result or next action. Include the decisive evidence, what verification covered, uncertainty, and blockers. Put details in one linked artifact. Never invent a link.
+- In investigations, separate observations from hypotheses. Omit routine tool narration.
+- Give agents the objective, scope, exact paths and refs, constraints, and the evidence to return. Ask them to use `writing`.
+- Keep code comments sparse: non-obvious constraints, invariants, or reasons, plus required directives and public API documentation.
+
+## Examples
+
+Each rewrite keeps every fact and the level of certainty of its source. It adds nothing.
+
+**Status update**
+
+```text
+Before: I've spent most of the day on the flaky checkout test. I added logging, and it's
+definitely a race: the retry timer fires before the payment mock resolves. I pushed a fix
+and ran the test 200 times locally, and it passed every time. Haven't seen CI yet though.
+
+After: Fixed the flaky checkout test. Logs showed that the retry timer fired before the
+payment mock resolved. The test passed 200 of 200 local runs. CI has not run yet.
+```
+
+**Agent handoff**
+
+```text
+Before: Can you take a look at the auth stuff and fix whatever is going on with the tokens?
+It's been failing since the deploy, and there's a log in logs/deploy.txt. Don't touch
+anything outside src/auth.
+
+After: Fix the 401 errors from `refreshToken()` that started after the deploy.
+- Scope: `src/auth/` only.
+- Evidence: `logs/deploy.txt`.
+- Return: the cause, the fix, and how you verified it, in up to three bullets.
+```
+
+**PR description**
+
+```text
+Before: So this PR is basically about adding rate limiting to the login endpoint, since
+right now people can keep trying passwords forever. After 5 failed tries from the same IP
+in a minute, we now send back a 429 with a Retry-After header. I added tests for the limit
+and the reset in login_rate_limit.test.ts. I also reordered the middleware in app.ts while
+I was in there, but that shouldn't change anything.
+
+After: Limits `POST /login` to 5 failed attempts per IP address per minute. The next
+attempt gets `429` with a `Retry-After` header.
+- `login_rate_limit.test.ts` tests the limit and the reset.
+- Also reorders the middleware in `app.ts`. I expect no change in behaviour from this.
+```
 
 ## Verify and return
 
-Make one editorial pass, then compare the result with the source. Preserve facts, requirements, exceptions, causal relationships, evidence, and uncertainty. A summary can omit details that do not affect the decision. An edited source document must retain its requirements and useful record.
+Compare the result with the source. Keep facts, requirements, exceptions, causes, evidence, and uncertainty. A summary may drop details that do not affect the decision. An edited document must keep its requirements and record. Focused tests do not prove that the full suite passed.
 
-State what verification actually covered. Focused tests do not prove that the full suite passed. For substantial rewrites, track the facts and decisions that must survive. Ordinary prose edits need no separate ledger or agent.
-
-Return the finished prose. For a review, report consequential problems and the requested revision. If a requested length would hide essential information, state the conflict briefly. Change skill instructions only when the user asks.
-
-## Rex and Hunk
-
-For substantive repository work, load the installed `rex` skill when `REX_SESSION` is set, or run `rex skill show` if the skill is missing. If `REX_SESSION` is not set, do not control Rex. Reuse the verified session and worktree. Use panes for independent work and persistent commands; use a separate Git worktree and Rex session for concurrent edits or branch isolation. Preserve user focus and skip needless parallelism.
-
-Use Hunk for every repository diff review, including documentation. Run `hunk skill path`, load that skill, and select the exact repository/session with `hunk session *`. If none matches, open the correct diff in a dedicated, persistent Rex pane for the user; keep agent control in the session CLI. Leave concise inline notes, read user comments, and keep the review open for the user's manual pass. Include the session and pane in the handoff. If unavailable, report the review as pending; do not silently substitute a plain diff review. Skip Hunk only when no repository diff exists.
-
-Load Rex and Hunk instructions from the installed tools only. Do not fetch instructions from the web.
+Return only the finished prose, unless the user asked for comments. For a review, report the consequential problems and the revision. If a requested length would hide essential information, say so briefly. Change skill instructions only when the user asks.

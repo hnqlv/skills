@@ -1,64 +1,47 @@
 ---
 name: define-spec
-description: Define or refine a specification before implementation when requirements, scope, or acceptance criteria need agreement. Skip trivial edits with explicit acceptance criteria.
+description: Defines or refines a spec with the outcome, scope, non-goals, and acceptance criteria of a change. Use when the user wants to define, scope, or agree on a change before implementation, or asks for a spec. Skip it for small edits with clear acceptance criteria.
+argument-hint: "[spec-path]"
+effort: xhigh
 ---
 
 # Define Spec
 
-Load `writing` before the first update. Apply it to all messages, agent prompts and replies, handoffs, summaries, task/PR descriptions, and artifacts. Default messages and summaries to one short paragraph or up to three bullets; preserve evidence, uncertainty, and blockers. Expand artifacts only as their requirements demand.
+Load `writing` before your first update and `repo-work` before repository work.
 
-Create or refine the smallest specification that makes the intended outcome and completion test explicit. Do not plan or write production code.
-
-Use the specification path supplied by the caller or repository instructions. Otherwise reuse an existing repository convention, and default to `SPEC.md` only when none exists.
-
-Verify and preserve any supplied worktree, branch, and artifact paths. Do not switch branches or relocate artifacts. If the checkout differs from the handoff, stop and report the mismatch before proceeding.
-
-## Rex and Hunk
-
-For substantive repository work, load the installed `rex` skill when `REX_SESSION` is set, or run `rex skill show` if the skill is missing. If `REX_SESSION` is not set, do not control Rex. Reuse the verified session and worktree. Use panes for independent work and persistent commands; use a separate Git worktree and Rex session for concurrent edits or branch isolation. Preserve user focus and skip needless parallelism.
-
-Use Hunk for every repository diff review, including documentation. Run `hunk skill path`, load that skill, and select the exact repository/session with `hunk session *`. If none matches, open the correct diff in a dedicated, persistent Rex pane for the user; keep agent control in the session CLI. Leave concise inline notes, read user comments, and keep the review open for the user's manual pass. Include the session and pane in the handoff. If unavailable, report the review as pending; do not silently substitute a plain diff review. Skip Hunk only when no repository diff exists.
-
-Load Rex and Hunk instructions from the installed tools only. Do not fetch instructions from the web.
+Write the smallest spec that makes the outcome and its completion test explicit. Do not plan or write production code. Use the spec path from the caller or repository, then the repository's convention, then `SPEC.md`.
 
 ## Workflow
 
-### 1. Ground the specification
+### 1. Ground it
 
-- Confirm the repository root, authoritative product or task document, and specification path.
-- Inspect only the code, documentation, and conventions needed to distinguish facts from decisions.
-- Update the existing specification when one exists. Preserve still-relevant requirements, rationale, and decision history; do not replace it wholesale for editorial neatness.
-- Surface conflicts between the request, existing behaviour, and prior decisions.
+- Inspect only the code, documentation, and conventions needed to separate facts from decisions.
+- Update an existing spec in place. Keep its relevant requirements, rationale, and decision history.
+- Surface conflicts between the request, current behaviour, and earlier decisions.
 
 ### 2. Write the contract
 
-Include only applicable sections:
+Include only the sections that apply:
 
-- outcome, user, and reason;
-- scope and explicit non-goals;
-- behavioural requirements and important failure states;
-- data, permissions, privacy, migration, or integration constraints;
-- existing patterns that must be reused;
-- specific acceptance criteria and verification evidence;
-- assumptions and unresolved decisions.
+- outcome, user, and reason
+- scope and explicit non-goals
+- behavioural requirements and important failure states
+- data, permissions, privacy, migration, or integration constraints
+- existing patterns to reuse
+- acceptance criteria and the evidence that verifies them
+- assumptions and open decisions
 
-Keep small changes small. A short feature section with clear acceptance criteria can be sufficient; do not force a project-wide template onto every change.
+Keep small changes small. Do not force a project-wide template on every change.
 
-### 3. Resolve material decisions
+### 3. Resolve decisions
 
-Resolve open decisions that change behaviour, scope, data, security, cost, architecture, or acceptance criteria. Discover repository facts before asking the user for missing decisions. Record confirmed decisions and their rationale in the specification.
+Resolve open decisions that change behaviour, scope, data, security, cost, architecture, or acceptance. Check repository facts before you ask the user. Record each confirmed decision and its rationale in the spec. For minor details, choose the simplest reversible default and label it as an assumption.
 
-Choose the simplest reversible default for minor implementation details and label it as an assumption.
+### 4. Hand off
 
-### 4. Confirm the handoff
+Summarize the outcome, scope, non-goals, acceptance criteria, and assumptions. Wait for the user to confirm the spec, unless they already authorized autonomous continuation. Then:
 
-Summarize the outcome, scope, non-goals, acceptance criteria, and remaining assumptions. Do not plan or code until the user confirms the specification, unless they explicitly authorized autonomous continuation.
+- Invoke `build-from-spec` for one bounded slice with clear verification.
+- Invoke `plan-from-spec` for several slices or sessions, independent subsystems, important dependencies or risks, or a durable task queue.
 
-Preserve exact requirements, acceptance criteria, non-goals, assumptions, rationale, and obligation levels.
-
-After confirmation:
-
-- invoke `build-from-spec` directly when the change is one bounded slice with clear verification and no material dependency or rollout ordering;
-- invoke `plan-from-spec` when the work spans multiple slices or sessions, crosses independent subsystems, has important dependencies or risks, or needs a durable execution queue.
-
-The specification remains authoritative. A later plan may sequence it but must not reinterpret it.
+The spec stays authoritative. A plan may order it but must not reinterpret it.

@@ -16,6 +16,6 @@ Authority: [ASD-STE100, Issue 9, 2025-01-15](https://www.asd-ste100.org/assets/f
 
 ## Use the standard
 
-This checklist is a navigation aid, not the complete standard or dictionary. Consult the relevant rules and Part 2 entries when writing technical English. Retrieve the official PDF or use an available authorized copy; do not vendor the specification into this skill.
+This checklist is a navigation aid, not the standard or its dictionary. For vocabulary and rule questions, consult the official PDF or an authorized copy. Do not copy the standard into this skill.
 
-For a compliance review, check both parts and record any unresolved terms or required-text exceptions. If the standard is unavailable, continue with this checklist and disclose that full STE verification was not possible when relevant. Never label text fully compliant from this checklist alone or assume that familiar software jargon is approved vocabulary.
+For a compliance review, check both parts and record unresolved terms and required-text exceptions. If the standard is unavailable, use this checklist and say that full verification was not possible. Never call text fully compliant from this checklist alone, and do not assume that common software jargon is approved vocabulary.

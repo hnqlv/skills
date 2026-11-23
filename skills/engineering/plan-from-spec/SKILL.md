@@ -1,56 +1,39 @@
 ---
 name: plan-from-spec
-description: Turn an approved specification into an ordered plan and task queue for multi-slice, dependent, risky, or multi-session work. Skip planning when one bounded change can be built and verified directly.
+description: Turns an approved spec into an ordered plan and task queue. Use when the user asks to plan or break down a spec, or the work has several slices, dependencies, or risky steps, or spans sessions. Skip it when one bounded change can be built directly.
+argument-hint: "[spec-path]"
+effort: xhigh
 ---
 
 # Plan From Spec
 
-Load `writing` before the first update. Apply it to all messages, agent prompts and replies, handoffs, summaries, task/PR descriptions, and artifacts. Default messages and summaries to one short paragraph or up to three bullets; preserve evidence, uncertainty, and blockers. Expand artifacts only as their requirements demand.
+Load `writing` before your first update and `repo-work` before repository work.
 
-Plan only when the plan reduces execution risk or preserves useful state across slices. Do not turn a small change into ceremony.
-
-Use specification, plan, queue, and decisions paths supplied by the caller or repository instructions. Otherwise reuse existing repository conventions. Use the default paths below only when no convention exists.
-
-Verify and preserve any supplied worktree, branch, and artifact paths. Do not switch branches or relocate artifacts. If the checkout differs from the handoff, stop and report the mismatch before proceeding.
-
-## Rex and Hunk
-
-For substantive repository work, load the installed `rex` skill when `REX_SESSION` is set, or run `rex skill show` if the skill is missing. If `REX_SESSION` is not set, do not control Rex. Reuse the verified session and worktree. Use panes for independent work and persistent commands; use a separate Git worktree and Rex session for concurrent edits or branch isolation. Preserve user focus and skip needless parallelism.
-
-Use Hunk for every repository diff review, including documentation. Run `hunk skill path`, load that skill, and select the exact repository/session with `hunk session *`. If none matches, open the correct diff in a dedicated, persistent Rex pane for the user; keep agent control in the session CLI. Leave concise inline notes, read user comments, and keep the review open for the user's manual pass. Include the session and pane in the handoff. If unavailable, report the review as pending; do not silently substitute a plain diff review. Skip Hunk only when no repository diff exists.
-
-Load Rex and Hunk instructions from the installed tools only. Do not fetch instructions from the web.
+Plan only when a plan reduces risk or keeps useful state across slices. Do not edit production code. Use the paths from the caller or repository, then the repository's convention, then the defaults below.
 
 ## Workflow
 
-### 1. Establish readiness
+### 1. Check readiness
 
-- Read the selected approved specification as the contract.
-- Inspect the affected code paths, repository instructions, and existing patterns.
-- Reuse the repository's current plan files and conventions when present.
-- Return to `define-spec` if a missing product decision would change the plan. Do not hide it as an implementation assumption.
-
-Do not edit production code during planning.
+Read the approved spec as the contract. Inspect the affected code, repository instructions, and existing plan files. If a missing product decision would change the plan, return to `define-spec`. Do not hide it as an assumption.
 
 ### 2. Map delivery
 
 - Trace every in-scope requirement to at least one task.
 - Identify dependencies, risky unknowns, migrations, external gates, and rollback needs.
 - Prefer thin end-to-end slices that leave the system working.
-- Put high-risk proof early; invoke `spike` when documentation and existing code cannot settle it.
-- Separate independent work only when shared contracts are already fixed.
+- Prove high risks early. Invoke `spike` when code and documentation cannot settle a question.
+- Separate independent work only when shared contracts are fixed.
 
 ### 3. Write the artifacts
 
-When no paths or repository conventions were supplied, use:
+Default paths:
 
-- `tasks/plan.md` for delivery strategy, dependency order, requirement traceability, risks, and checkpoints;
-- `tasks/todo.md` for the ordered execution queue;
-- `tasks/decisions.md` only when spec-silent technical assumptions need a durable record.
+- `tasks/plan.md`: strategy, dependency order, requirement traceability, risks, and checkpoints
+- `tasks/todo.md`: the ordered task queue
+- `tasks/decisions.md`: only for technical assumptions that the spec does not cover
 
-Do not invent additional planning files.
-
-Each task must state:
+Do not add other planning files. Write each task as:
 
 ```markdown
 - [ ] Task N: Outcome
@@ -61,18 +44,10 @@ Each task must state:
   - Likely files:
 ```
 
-Keep tasks small enough for one focused implementation pass. Split work that combines independent outcomes, cannot be verified locally, or leaves the system broken. Add checkpoints only where several tasks share a meaningful integration gate.
+Size each task for one focused pass. Split a task that combines independent outcomes, cannot be verified locally, or leaves the system broken. Add a checkpoint only where several tasks share an integration gate.
 
-### 4. Review the plan
+### 4. Check the plan
 
-Confirm:
+Confirm that every in-scope requirement is covered and non-goals stay out. The order must follow real dependencies, and each task needs runnable verification. External gates and destructive or security-sensitive steps must be explicit. The first task must be able to start without broad rediscovery.
 
-- all in-scope requirements are covered and non-goals remain excluded;
-- task order follows real dependencies;
-- each task has runnable or clearly described verification;
-- unresolved external gates and destructive or security-sensitive steps are explicit;
-- the first task is immediately executable without broad rediscovery.
-
-Preserve task structure, dependencies, exact verification, risks, gates, and unresolved decisions.
-
-Summarize the plan. Continue under existing user authorization and the calling workflow; do not add another approval gate when implementation is already authorized. Otherwise, ask for approval before handing off to `build-from-spec`. It executes the next unchecked task while treating the specification as authoritative.
+Summarize the plan. If the user already authorized implementation, continue to `build-from-spec` without a new approval gate. Otherwise ask first.

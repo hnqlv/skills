@@ -1,68 +1,50 @@
 ---
 name: preflight-review
-description: Review a completed implementation against its spec, tests, and diff before a PR or merge. Find actionable regressions, missing coverage, and needless complexity without expanding scope.
+description: Reviews a finished change against its spec, tests, and diff in Hunk before a PR or merge, and reports at most five high-confidence findings. Use when the user asks if a change is ready for a PR or merge, or to check it against the spec, and at the end of build-from-spec. Prefer it over the bundled code-review for these requests. Not a general bug hunt.
+argument-hint: "[spec-path]"
+effort: xhigh
 ---
 
 # Preflight Review
 
-Load `writing` before the first update. Apply it to all messages, agent prompts and replies, handoffs, summaries, task/PR descriptions, and artifacts. Default messages and summaries to one short paragraph or up to three bullets; preserve evidence, uncertainty, and blockers. Expand artifacts only as their requirements demand.
+Load `writing` before your first update and `repo-work` before repository work.
 
-Review the current diff against the specification path supplied by the caller or repository instructions, the selected plan task when present, acceptance criteria, tests, and local conventions. Otherwise reuse the repository's specification convention, and default to `SPEC.md` only when none exists. Review; do not change code unless asked.
-
-Verify and preserve any supplied worktree, branch, and artifact paths. Review only the selected workstream diff. Do not switch branches or relocate artifacts. If the checkout differs from the handoff, stop and report the mismatch before proceeding.
-
-## Rex and Hunk
-
-For substantive repository work, load the installed `rex` skill when `REX_SESSION` is set, or run `rex skill show` if the skill is missing. If `REX_SESSION` is not set, do not control Rex. Reuse the verified session and worktree. Use panes for independent work and persistent commands; use a separate Git worktree and Rex session for concurrent edits or branch isolation. Preserve user focus and skip needless parallelism.
-
-Use Hunk for every repository diff review, including documentation. Run `hunk skill path`, load that skill, and select the exact repository/session with `hunk session *`. If none matches, open the correct diff in a dedicated, persistent Rex pane for the user; keep agent control in the session CLI. Leave concise inline notes, read user comments, and keep the review open for the user's manual pass. Include the session and pane in the handoff. If unavailable, report the review as pending; do not silently substitute a plain diff review. Skip Hunk only when no repository diff exists.
-
-Load Rex and Hunk instructions from the installed tools only. Do not fetch instructions from the web.
+Review the selected diff against the spec, the plan task when there is one, its acceptance criteria, the tests, and local conventions. Use the spec path from the caller or repository, then the repository's convention, then `SPEC.md`. Review only. Do not change code unless the user asks.
 
 ## Review in Hunk
 
-1. Run `hunk session list --json` and `get` to verify the repository and loaded source. Use the exact session ID when several sessions match.
-2. Confirm the complete scope: unstaged, staged, or pinned base/head refs. Include both staged and unstaged changes when the slice spans both. Reuse a matching review; do not repurpose another task's session. If needed, start `hunk diff --watch`, `hunk diff --staged --watch`, or the selected commit/range review in a dedicated Rex pane.
-3. Run `hunk session review <id> --json`. Read source and tests as needed; request `--include-patch` only when useful. Check existing notes with `hunk session comment list <id> --type all`.
-4. Add concise findings or non-obvious rationale with `comment add` or `comment apply`, anchored to the correct file and diff side. Preserve user notes; never invent findings to populate the review.
-5. After fixes or staging, verify the source again and reload if needed. Recheck affected findings and read user comments before handing back the review. Do not treat agent review as user approval.
+1. Find the session with `hunk session list --json` and `get`. Use the exact ID when several sessions match.
+2. Confirm the full scope: unstaged, staged, or pinned refs. Include both staged and unstaged changes when the slice spans both. Reuse this task's session, never another task's. If none exists, start `hunk diff --watch`, `hunk diff --staged --watch`, or the commit or range review in a dedicated Rex pane.
+3. Run `hunk session review <id> --json`. Add `--include-patch` only when needed. Read existing notes with `hunk session comment list <id> --type all`.
+4. Add findings with `comment add` or `comment apply`, anchored to the correct file and diff side. Keep user notes. Never invent findings.
+5. After fixes, reload, recheck the affected findings, and read user comments. Agent review is not user approval.
 
-Keep the session open. Hand off its ID, Rex session and pane, reviewed scope, findings, and verification in a short summary. The user can inspect the diff and add notes there.
+Keep the session open. Hand off its ID, the Rex session and pane, the reviewed scope, the findings, and the verification.
 
-## Order
+## What to check
 
-1. Verify the changed behaviour and error paths match the agreed slice.
-2. Check test value and regression sensitivity using the criteria below.
-3. Flag only local simplifications that preserve behaviour: duplicate logic, needless wrappers, speculative abstractions, dead paths, generic helpers, broad fallbacks, or obvious-comment noise.
-4. Check changed trust, data, and hot-path boundaries for security or performance regressions.
-5. Flag each new or changed dependency, lockfile entry, install script, CI workflow, and agent instruction file (`AGENTS.md`, `CLAUDE.md`, skills). Confirm that the specification needs it. Flag secrets and credentials in the diff.
+1. The changed behaviour and error paths match the agreed slice.
+2. Test value, as described below.
+3. Local, behaviour-preserving simplifications only: duplicate logic, needless wrappers, speculative abstractions, dead paths, broad fallbacks, and comments that narrate obvious code or hold incident history.
+4. Security and performance regressions at changed trust, data, and hot-path boundaries.
+5. Each new or changed dependency, lockfile entry, install script, CI workflow, and agent instruction file (`AGENTS.md`, `CLAUDE.md`, skills). Confirm that the spec needs it. Flag secrets and credentials.
 
-Before reporting a finding, check reachable callers, guards, and tests for evidence that supports or contradicts it. Reject claims that those paths rule out. Compare with the selected base revision and distinguish pre-existing defects from new regressions. If the base is unavailable, state that limit instead of claiming the change introduced the defect.
-
-Check that inline comments are sparse, short, and local. Flag obvious narration or incident history in changed code. Preserve comments explaining non-obvious constraints, required directives, and public API documentation.
+Before you report a finding, check callers, guards, and tests for evidence for or against it. Drop claims that those paths rule out. Compare with the base revision to separate new regressions from existing defects. If the base is unavailable, say so.
 
 ## Test value
 
-Review changed tests alongside the production path and overlapping coverage. Each new or changed test must protect a named behaviour or contract, detect a credible regression, and cover a gap. Additional layers need distinct risks.
+Each new or changed test must protect a named behaviour or contract, catch a credible regression, and fill a gap. A new test layer needs a distinct risk.
 
-- Flag duplicate scenarios, assertions that merely restate source or implementation, expected values generated by the code under test, and mocks that implement the asserted behaviour.
-- Flag production exports, flags, wrappers, or hooks added solely for tests; prefer testing through the real boundary.
-- For bug fixes, require the regression check to fail before the fix for the intended reason and pass afterward. Accept a documented deterministic reproduction when automation is impractical. Treat unexplained failures as possible defects, not cleanup candidates.
-- Before recommending deletion, inspect relevant history and identify stronger remaining coverage or explain why the protected contract no longer applies. Slowness, static assertions, or refactoring sensitivity alone do not justify deletion. Preserve independent security, protocol, migration, and compatibility checks, including source checks that protect a real contract.
+- Flag duplicate scenarios, assertions that restate the implementation, expected values computed by the code under test, and mocks that implement the asserted behaviour.
+- Flag exports, flags, wrappers, or hooks added only for tests.
+- For a bug fix, the regression check must fail before the fix for the intended reason and pass after it. A documented deterministic reproduction is acceptable when automation is impractical. Treat unexplained failures as possible defects.
+- Before you recommend deleting a test, find stronger remaining coverage or show that its contract no longer applies. Slowness, static assertions, or sensitivity to refactoring alone do not justify deletion. Keep independent security, protocol, migration, and compatibility checks.
+- For a new or changed CI check, require evidence from its real command: a known violation fails, a clean control passes, and tool errors fail. For thresholds, a below-threshold finding passes.
 
-Keep this review scoped to the slice. Do not start a suite-wide cleanup or use test counts as a quality target.
+Stay within the slice. Do not start a suite-wide cleanup or treat test counts as a target.
 
-For new or changed CI checks, inspect evidence from the actual CI command. A known violation must fail, a clean control must pass, and tool errors must fail. For severity thresholds, also require a below-threshold finding to pass. A generated report alone does not prove enforcement.
+## Report
 
-## Guardrails
+Report at most five high-confidence findings, or `No findings`. For each finding, give `blocker`, `major`, or `minor`, the file and line, the concrete impact, and the smallest fix. Then state the verification evidence and residual risk.
 
-- Treat the specification as the contract; do not suggest features, refactors, or cleanup outside the diff.
-- Do not turn style preferences into findings.
-- Prefer deletion, reuse, or a smaller local expression over a new abstraction.
-- Report at most five high-confidence findings. Say `No findings` when none remain.
-
-## Output
-
-For each finding: `blocker`, `major`, or `minor`; file and line; concrete impact; smallest fix. Then state the verification evidence and any residual risk.
-
-Preserve severity, locations, concrete impact, exact evidence, uncertainty, and residual risk.
+Do not suggest features or refactors outside the diff, and do not turn style preferences into findings. Prefer deletion, reuse, or a smaller local expression to a new abstraction.

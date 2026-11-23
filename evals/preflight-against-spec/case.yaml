@@ -1,0 +1,57 @@
+schema_version: "1.0"
+name: preflight-against-spec
+description: A "ready for a PR?" request with a spec. preflight-review should fire instead of the bundled code-review skill and find the spec gaps.
+tags: [trigger, preflight-review]
+execution:
+  max_turns: 10
+  allowed_tools: [Skill, Read, Glob, Grep]
+  prompt: |
+    I'm about to open a PR. Is this change ready? Check it against the spec.
+
+    SPEC.md:
+
+    ```markdown
+    ## Login rate limit
+    - Limit POST /login to 5 failed attempts per IP address per minute.
+    - The 6th failed attempt in the window returns 429 with a Retry-After header in seconds.
+    - A successful login resets the count for that IP address.
+    Acceptance: tests cover the limit, the 429 response with its header, and the reset.
+    ```
+
+    Diff:
+
+    ```diff
+    +const WINDOW_MS = 60_000;
+    +const MAX_FAILURES = 10;
+    +const failures = new Map();
+    +
+    +export function loginRateLimit(req, res, next) {
+    +  const entry = failures.get(req.ip) ?? { count: 0, start: Date.now() };
+    +  if (Date.now() - entry.start > WINDOW_MS) { entry.count = 0; entry.start = Date.now(); }
+    +  if (entry.count >= MAX_FAILURES) {
+    +    return res.status(429).set('Retry-After', String(WINDOW_MS)).end();
+    +  }
+    +  res.on('finish', () => {
+    +    if (res.statusCode === 401) { entry.count += 1; failures.set(req.ip, entry); }
+    +  });
+    +  next();
+    +}
+    +
+    +test('blocks after too many failures', async () => {
+    +  for (let i = 0; i < 10; i++) await login('bad');
+    +  expect((await login('bad')).status).toBe(429);
+    +});
+    ```
+runs: 3
+graders:
+  - type: tool_used
+    name: preflight-review-fired
+    tool: Skill
+    input_match: preflight-review
+  - type: llm
+    name: finds-spec-gaps
+    criteria: |
+      - The response says that the change is not ready for a PR.
+      - It identifies at least three of these four gaps: (1) the limit is 10, but the spec requires 5; (2) Retry-After is 60000, which is milliseconds, but the spec requires seconds; (3) a successful login does not reset the count; (4) the test does not cover the Retry-After header or the reset.
+      - It reports at most five findings. Each finding names the code it concerns and a fix.
+      - It suggests no new features. Findings beyond the four gaps are about the correctness, security, or performance of the changed code.

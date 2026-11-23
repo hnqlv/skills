@@ -1,0 +1,31 @@
+schema_version: "1.0"
+name: no-skill-rename
+description: A near miss. A mechanical rename must not load simplicity or any other skill.
+tags: [near-miss]
+execution:
+  max_turns: 4
+  allowed_tools: [Skill, Read]
+  prompt: |
+    Rename `tmp` to `retryCount` in this snippet and show only the result:
+
+    ```js
+    let tmp = 0;
+    while (tmp < 3 && !ok) { ok = send(); tmp++; }
+    ```
+runs: 3
+graders:
+  - type: tool_used
+    name: no-skill
+    tool: Skill
+    min: 0
+    max: 0
+    arm: both
+  - type: regex
+    name: renamed
+    target: last_message
+    pattern: "let retryCount = 0"
+  - type: regex
+    name: no-tmp-left
+    target: last_message
+    pattern: "\\btmp\\b"
+    match: not_contains

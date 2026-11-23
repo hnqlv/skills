@@ -1,0 +1,5 @@
+{
+  "name": "henrique-skills",
+  "description": "Engineering and productivity skills. This manifest lets `claude plugin eval` load the skills from their category folders.",
+  "skills": ["./skills/engineering/", "./skills/productivity/"]
+}

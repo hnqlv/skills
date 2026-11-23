@@ -1,0 +1,39 @@
+schema_version: "1.0"
+name: writing-status-update
+description: A rewrite request for a wordy update. writing should fire and keep every fact and its uncertainty.
+tags: [trigger, writing]
+execution:
+  max_turns: 6
+  allowed_tools: [Skill, Read]
+  prompt: |
+    Rewrite this update for my team channel:
+
+    Hey all, so just a quick update on the migration stuff. I've been working through it most of the week and it's mostly going OK I think. We moved the users and orders tables over to the new cluster on Tuesday and so far nothing seems to be broken, although honestly we haven't really looked at the reporting jobs yet which could be a problem since they use some of the old views. The plan is to do the payments table next Monday assuming nobody objects. Let me know if there are any questions or concerns!
+runs: 3
+graders:
+  - type: tool_used
+    name: writing-fired
+    tool: Skill
+    input_match: writing
+  - type: llm
+    name: short
+    criteria: |
+      Judge only the rewritten update. Ignore any note to the requester after it.
+
+      - The rewrite leads with the current state or the next action, not with a greeting or background.
+      - It is at most about 80 words, as one short paragraph or a lead line with at most three bullets.
+  - type: llm
+    name: faithful
+    criteria: |
+      Judge only the rewritten update. Ignore any note to the requester after it. The user asked to rewrite this source:
+
+      > Hey all, so just a quick update on the migration stuff. I've been working through it most of the week and it's mostly going OK I think. We moved the users and orders tables over to the new cluster on Tuesday and so far nothing seems to be broken, although honestly we haven't really looked at the reporting jobs yet which could be a problem since they use some of the old views. The plan is to do the payments table next Monday assuming nobody objects. Let me know if there are any questions or concerns!
+
+      - The rewrite keeps these facts. The users and orders tables moved to the new cluster on Tuesday. No breakage has been seen so far. The reporting jobs are not checked yet, and they use old views. The payments table is planned for next Monday unless someone objects.
+      - It keeps the uncertainty. It does not claim that nothing is broken or that the reporting jobs are safe.
+      - It adds no facts, numbers, owners, commitments, or dates that the source does not contain.
+  - type: regex
+    name: no-semicolons
+    target: last_message
+    pattern: ";"
+    match: not_contains

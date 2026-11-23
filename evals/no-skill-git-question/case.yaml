@@ -1,0 +1,23 @@
+schema_version: "1.0"
+name: no-skill-git-question
+description: A near miss. A short factual answer must not load writing or any other skill.
+tags: [near-miss]
+execution:
+  max_turns: 4
+  allowed_tools: [Skill, Read]
+  prompt: |
+    In two sentences: what is the difference between git merge and git rebase?
+runs: 3
+graders:
+  - type: tool_used
+    name: no-skill
+    tool: Skill
+    min: 0
+    max: 0
+    arm: both
+  - type: llm
+    name: correct-and-short
+    criteria: |
+      - The answer is at most two sentences.
+      - It says that merge joins two histories with a merge commit and keeps the existing commits.
+      - It says that rebase replays commits onto a new base and so rewrites their history.

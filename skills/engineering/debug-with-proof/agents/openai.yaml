@@ -1,3 +1,0 @@
-interface:
-  display_name: "Debug With Proof"
-  short_description: "Reproduce bugs before fixing them"

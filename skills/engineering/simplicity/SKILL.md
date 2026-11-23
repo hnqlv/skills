@@ -1,37 +1,24 @@
 ---
 name: simplicity
-description: Simplify code without changing behaviour. Use for requested cleanup or a post-implementation pass; prioritize readability and maintenance over fewer lines.
+description: Simplifies code for readability without changing behaviour. It flattens conditionals, removes dead paths and needless wrappers, and keeps useful duplication. Use when the user asks to simplify or clean up code, and after build-from-spec finishes a slice. Prefer it over the bundled simplify unless the user types /simplify.
+effort: high
 ---
 
 # Simplicity
 
-Load `writing` before the first update. Apply it to all messages, agent prompts and replies, handoffs, summaries, task/PR descriptions, and artifacts. Default messages and summaries to one short paragraph or up to three bullets; preserve evidence, uncertainty, and blockers. Expand artifacts only as their requirements demand.
+Load `writing` before your first update and `repo-work` before repository work.
 
-Make the code easier to understand, change, test, and delete. Fewer lines are not a goal.
-
-Verify and preserve any supplied worktree, branch, and artifact paths. Review only the selected workstream diff. Do not switch branches or relocate artifacts. If the checkout differs from the handoff, stop and report the mismatch before proceeding.
-
-## Rex and Hunk
-
-For substantive repository work, load the installed `rex` skill when `REX_SESSION` is set, or run `rex skill show` if the skill is missing. If `REX_SESSION` is not set, do not control Rex. Reuse the verified session and worktree. Use panes for independent work and persistent commands; use a separate Git worktree and Rex session for concurrent edits or branch isolation. Preserve user focus and skip needless parallelism.
-
-Use Hunk for every repository diff review, including documentation. Run `hunk skill path`, load that skill, and select the exact repository/session with `hunk session *`. If none matches, open the correct diff in a dedicated, persistent Rex pane for the user; keep agent control in the session CLI. Leave concise inline notes, read user comments, and keep the review open for the user's manual pass. Include the session and pane in the handoff. If unavailable, report the review as pending; do not silently substitute a plain diff review. Skip Hunk only when no repository diff exists.
-
-Load Rex and Hunk instructions from the installed tools only. Do not fetch instructions from the web.
+Make the code easier to understand, change, test, and delete. Fewer lines are not a goal. Change only the selected diff or the code that the user names.
 
 ## Rules
 
-- Preserve behaviour, public contracts, security, and performance characteristics.
-- Prefer explicit, local control flow over compressed expressions. Avoid nested ternaries and dense boolean chains; use `if`/`else`, early returns, named predicates, or `switch` when they are easier to scan.
-- Use a single ternary only when both outcomes and the condition are immediately obvious.
+- Preserve behaviour, public contracts, security, and performance.
+- Prefer explicit, local control flow. Replace nested ternaries and dense boolean chains with `if`/`else`, early returns, named predicates, or `switch`. Use a single ternary only when the condition and both outcomes are obvious.
 - Remove dead paths, needless wrappers, speculative abstractions, premature configuration, and dependencies that no longer earn their cost.
-- Keep useful duplication when extracting it would couple unrelated behaviour or hide intent.
-- Keep inline comments sparse and local. Delete comments that narrate obvious code; retain non-obvious reasons, constraints, invariants, required directives, and public API documentation. Keep detailed incident history in a linked artifact.
-- Reject any change that saves lines but increases the reader's mental work.
-- Stop when further edits would be stylistic churn.
+- Keep duplication when extracting it would couple unrelated behaviour or hide intent.
+- Delete comments that narrate obvious code. Keep non-obvious reasons, constraints, invariants, required directives, and public API documentation.
+- Reject a change that saves lines but makes the reader work harder. Stop when further edits are only a matter of style.
 
 ## Verify
 
-Review the final diff for accidental behaviour changes. Run the repository's focused tests and relevant type, lint, or build checks; do not assume a language-specific command.
-
-Preserve behaviour claims, exact verification, limitations, and residual risk.
+Check the final diff for accidental behaviour changes. Run the repository's focused tests and the relevant type, lint, or build checks.

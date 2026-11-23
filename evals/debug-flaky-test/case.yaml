@@ -1,0 +1,37 @@
+schema_version: "1.0"
+name: debug-flaky-test
+description: A flaky test report. debug-with-proof should fire, find the boundary cause, and reproduce it deterministically instead of only adding sleep.
+tags: [trigger, debug-with-proof]
+execution:
+  max_turns: 10
+  allowed_tools: [Skill, Read, Glob, Grep]
+  prompt: |
+    This test fails about one run in ten on CI. Fix it.
+
+    ```js
+    // session.test.js
+    test('session expires after 1 second', async () => {
+      const session = createSession({ ttlMs: 1000 });
+      await sleep(1000);
+      expect(session.isExpired()).toBe(true);
+    });
+
+    // session.js
+    export function createSession({ ttlMs }) {
+      const created = Date.now();
+      return { isExpired: () => Date.now() - created > ttlMs };
+    }
+    ```
+runs: 3
+graders:
+  - type: tool_used
+    name: debug-with-proof-fired
+    tool: Skill
+    input_match: debug-with-proof
+  - type: llm
+    name: proves-the-cause
+    criteria: |
+      - The response names the boundary cause: when exactly 1000 ms pass, `Date.now() - created > ttlMs` is false, so the session is not expired yet.
+      - It gives a deterministic reproduction, such as fake timers or a controlled clock that advances exactly 1000 ms. Rerunning the test many times is not enough.
+      - Its fix is not only a longer sleep.
+      - It does not claim that it ran a test or a reproduction, because it had no tool to run one.

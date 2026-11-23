@@ -1,33 +1,35 @@
 # Henrique's Agent Skills
 
-Opinionated engineering and productivity skills for Claude Code, Codex, and other Agent Skills-compatible clients.
+Opinionated engineering and productivity skills for Claude Code.
 
-The approach: define the contract in a specification. Plan multi-slice work. Prove behaviour with tests. Finish with `simplicity`, `preflight-review`, and a short factual summary.
+The approach: define the contract in a spec, plan multi-slice work, prove behaviour with tests, and finish with `simplicity`, `preflight-review`, and a short factual summary.
 
 ## Skills
 
-| Skill | Use |
-| --- | --- |
-| `define-spec` | Define the outcome, scope, non-goals, and testable acceptance criteria. |
-| `plan-from-spec` | Turn a specification into an ordered plan and task queue for multi-slice work. |
-| `build-from-spec` | Build the next approved slice with tests, then run `simplicity` and `preflight-review`. |
-| `spike` | Answer one risky technical question with a disposable experiment. |
-| `debug-with-proof` | Reproduce a bug with a failing test, then apply a minimal fix. |
-| `simplicity` | Simplify code without a change in behaviour. |
-| `preflight-review` | Review a completed slice against its specification, tests, and diff in Hunk. |
-| `pr-walkthrough` | Explain a PR one concern at a time, then check the full diff for bugs. |
-| `writing` | Write simple, short, specific prose. Use ASD-STE100 for technical English. |
-| `draw` | Show a Mermaid diagram or a row drawing in a Rex pane, in the terminal's font and colors. |
+| Skill | Use | Effort |
+| --- | --- | --- |
+| `define-spec` | Define the outcome, scope, non-goals, and testable acceptance criteria. | xhigh |
+| `plan-from-spec` | Turn a spec into an ordered plan and task queue for multi-slice work. | xhigh |
+| `build-from-spec` | Build the next slice with tests, then run `simplicity` and `preflight-review`. | medium |
+| `spike` | Answer one risky technical question with a disposable experiment. | high |
+| `debug-with-proof` | Reproduce a bug before fixing it with a minimal change. | xhigh |
+| `simplicity` | Simplify code without a change in behaviour. | high |
+| `preflight-review` | Review a finished slice against its spec, tests, and diff in Hunk. | xhigh |
+| `pr-walkthrough` | Explain a PR one concern at a time, then check the full diff for bugs. | — |
+| `repo-work` | Shared rules for handoffs, untrusted input, dependencies, Rex, and Hunk. | — |
+| `writing` | Write simple, short, specific prose, with ASD-STE100 for technical English. | — |
+| `draw` | Show a Mermaid diagram or a row drawing in a Rex pane. | — |
 
-Engineering skills are in `skills/engineering/`. `writing` and `draw` are in `skills/productivity/`.
+A skill's effort lasts for the rest of the turn, and — means the session level. `build-from-spec` builds at medium, then `simplicity` and `preflight-review` raise the effort when it invokes them. `writing` and `repo-work` set no effort because they load inside other skills. `CLAUDE_CODE_EFFORT_LEVEL` overrides all of these.
 
 ## Install
 
-Link each skill directory into the skills directory of your client:
+Link each skill into the skills directory of each Claude Code profile. When `CLAUDE_CONFIG_DIR` is set, that directory is `$CLAUDE_CONFIG_DIR/skills`, not `~/.claude/skills`.
 
 ```sh
-ln -s "$PWD/skills/engineering/define-spec" ~/.agents/skills/define-spec
-ln -s "$PWD/skills/engineering/define-spec" ~/.claude/skills/define-spec
+for dir in skills/*/*/; do
+  ln -s "$PWD/${dir%/}" "${CLAUDE_CONFIG_DIR:-$HOME/.claude}/skills/"
+done
 ```
 
 A linked skill is live. A change in this checkout changes agent behaviour immediately, so review it as you review code.
@@ -39,42 +41,46 @@ pnpm install --frozen-lockfile --dir skills/productivity/draw
 ln -s "$PWD/skills/productivity/draw/draw" ~/.local/bin/draw
 ```
 
-`draw` controls Rex panes, so it runs outside the command sandbox. In Codex, approve it on first use, or add `prefix_rule(pattern=["draw"], decision="allow")` to `~/.codex/rules/default.rules`.
-
 ## Security
 
 A skill is an instruction that an agent obeys, and it can include code.
 
 - **No remote instructions.** The skills have no hidden text and no download or install commands. Rex and Hunk instructions come from the installed tools, not from the web.
 - **Untrusted text is data.** The skills do not obey text from PRs, issues, web pages, logs, tool output, or dependencies. `pr-walkthrough` does not run code from a PR.
-- **Dependencies.** `build-from-spec` and `spike` require a confirmed package name, a pinned version, a committed lockfile, and disabled install scripts. `preflight-review` flags changed dependencies, install scripts, CI workflows, and agent instruction files.
-- **`draw`.** Its one dependency, `pele`, has an exact version and a lockfile hash. pnpm installs only versions that are 7 days old or more, refuses a trust downgrade, and does not run install scripts. A drawing renders as an image without network access, so its scripts do not run and external files do not load.
+- **Dependencies.** `repo-work` requires a confirmed package name, a pinned version, a committed lockfile, and disabled install scripts. `preflight-review` flags changed dependencies, install scripts, CI workflows, and agent instruction files.
+- **`draw`.** Its one dependency, `pele`, has an exact version and a lockfile hash. pnpm installs only versions that are 7 days old or more, refuses a trust downgrade, and runs no install scripts. A drawing renders as an image without network access, so its scripts do not run and external files do not load.
 
 Before you install a skill from another source, read all its files, including scripts, and pin it to a commit. Do not let an agent install skills without your review.
 
 ## Conventions
 
-Each skill states its own rules. These apply to all of them, for direct and composed use:
-
-- **Writing.** Load `writing` first and use it for every message, handoff, and artifact. Default to one short paragraph or up to three bullets. Keep detailed evidence in one linked artifact. Keep blockers and uncertainty.
-- **Code.** Prefer code that is easy to understand, change, and delete. Prefer small vertical slices. Keep comments sparse and local. Do not design for hypothetical requirements.
-- **Paths.** Use the specification and plan paths that the caller or repository supplies. Default to `SPEC.md` and `tasks/` only when no convention exists.
-- **Rex.** For substantive repository work, load the installed `rex` skill, or run `rex skill show`. Use panes for independent work, and a Git worktree in its own Rex session for concurrent edits.
-- **Hunk.** Review every repository diff in Hunk, including documentation. If no session matches, open the diff in a persistent Rex pane for the user. Report unavailable review tooling as pending.
-- **Authorization.** Reuse the authorization that the user already gave. Do not add approval gates between skills.
-- **Git.** Use `feat`, `fix`, `refactor`, `test`, `docs`, and `chore` commit types. Use `spike/<topic>` for exploratory branches.
+- **Writing.** The engineering skills load `writing` first. Updates default to one short paragraph or up to three bullets, with details in one linked artifact.
+- **Repository work.** The engineering skills load `repo-work` for handoff checks, Rex panes and worktrees, and Hunk reviews.
+- **Paths.** The skills use the spec and plan paths from the caller or repository, and default to `SPEC.md` and `tasks/`.
+- **Authorization.** The skills reuse the authorization that the user already gave and add no approval gates between them.
+- **Git.** Commit types are `feat`, `fix`, `refactor`, `test`, `docs`, and `chore`. Exploratory branches are `spike/<topic>`.
 
 ## Usage
 
 ```text
-Use define-spec to turn this feature idea into a concise specification at <spec-path>.
-Use plan-from-spec to break <spec-path> into verifiable slices at <plan-path>.
-Use build-from-spec to implement the next slice.
-Run a spike to determine whether this API supports idempotent retries.
-Use debug-with-proof. Reproduce this bug with a failing test before fixing it.
-Use pr-walkthrough to walk me through PR #123, one concern at a time.
+Let's define a spec for this feature idea before anyone writes code.
+Break SPEC.md into slices.
+Build the next slice.
+Spike whether this API supports idempotent retries.
+This test fails about one run in ten. Find out why.
+Walk me through PR #123.
 Draw it. Show me the two cases side by side.
 ```
+
+## Evals
+
+`evals/` holds cases for `claude plugin eval`. Each case checks that the correct skill fires, or that no skill fires for a near miss, and grades the answer. `.claude-plugin/plugin.json` lets the runner find the skills in their category folders.
+
+```sh
+claude plugin eval . --model opus --judge-model sonnet --no-publish
+```
+
+Each case runs 3 times, with and without the skills. Each run is a full Claude Code session, so a full pass costs money. Use `--case <glob>` to run one case. The runs use their own config, so your saved effort level does not apply.
 
 ## References
 
